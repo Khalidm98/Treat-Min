@@ -22,4 +22,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/icons/facebook.png
+    - assets/icons/google.png
+    - assets/images/doctor.png
     - assets/images/logo.png

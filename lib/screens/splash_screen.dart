@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/screens/MainScreen.dart';
+
+import './get_started_screen.dart';
+// import './main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class _SplashScreenState extends State<SplashScreen>
   AnimationController _controller;
   Animation<double> _opacity;
   Animation<double> _width;
+
+  void _expand() => setState(() {});
 
   @override
   void initState() {
@@ -32,10 +36,10 @@ class _SplashScreenState extends State<SplashScreen>
     if (_width == null) {
       _width = Tween(begin: 0.0, end: MediaQuery.of(context).size.width * 0.8)
           .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-      _width.addListener(() => setState(() {}));
+      _width.addListener(_expand);
       _controller.forward().then((_) {
         Future.delayed(const Duration(seconds: 2), () {
-          Navigator.pushReplacementNamed(context, MainScreen.routeName);
+          Navigator.pushReplacementNamed(context, GetStartedScreen.routeName);
         });
       });
     }
@@ -43,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
+    _width.removeListener(_expand);
     _controller.dispose();
     super.dispose();
   }

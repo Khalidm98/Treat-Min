@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './screens/MainScreen.dart';
-import './screens/SplashScreen.dart';
+import './screens/auth_screen.dart';
+import './screens/get_started_screen.dart';
+import './screens/main_screen.dart';
+import './screens/splash_screen.dart';
 
 void main() {
   // Set device orientation to only Portrait up
@@ -19,10 +21,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
+        accentColor: Colors.indigo,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(),
       routes: {
+        AuthScreen.routeName: (ctx) => AuthScreen(),
+        GetStartedScreen.routeName: (ctx) => GetStartedScreen(),
         MainScreen.routeName: (ctx) => MainScreen(),
       },
     );
