@@ -59,10 +59,7 @@ class InputField extends StatelessWidget {
                 stops: [0.7, 1],
               ),
             ),
-            child: Text(
-              label,
-              style: TextStyle(color: Colors.white),
-            ),
+            child: Text(label, style: const TextStyle(color: Colors.white)),
           ),
         ),
       ],

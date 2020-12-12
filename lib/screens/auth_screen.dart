@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import './main_screen.dart';
+import './tabs_screen.dart';
 import '../widgets/app_raised_button.dart';
 import '../widgets/input_field.dart';
 
@@ -18,6 +18,12 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   AuthMode _mode = AuthMode.signUp;
   final FocusNode _passNode = FocusNode();
+
+  @override
+  void dispose() {
+    _passNode.dispose();
+    super.dispose();
+  }
 
   void _switchMode() {
     if (_mode == AuthMode.signUp) {
@@ -37,11 +43,24 @@ class _AuthScreenState extends State<AuthScreen> {
         'assets/icons/${social == Social.google ? 'google' : 'facebook'}.png',
         height: 30,
       ),
-      label: Text(
-        '${_mode == AuthMode.signUp ? 'Sign Up' : 'Log In'} with ${social == Social.google ? 'Google' : 'Facebook'}',
-        textScaleFactor: 1.3,
-        style: TextStyle(
-          color: social == Social.google ? Colors.black : Colors.white,
+      label: AnimatedCrossFade(
+        duration: const Duration(milliseconds: 500),
+        crossFadeState: _mode == AuthMode.signUp
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        firstChild: Text(
+          'Sign Up with ${social == Social.google ? 'Google' : 'Facebook'}',
+          textScaleFactor: 1.3,
+          style: TextStyle(
+            color: social == Social.google ? Colors.black : Colors.white,
+          ),
+        ),
+        secondChild: Text(
+          'Log In with ${social == Social.google ? 'Google' : 'Facebook'}',
+          textScaleFactor: 1.3,
+          style: TextStyle(
+            color: social == Social.google ? Colors.black : Colors.white,
+          ),
         ),
       ),
     );
@@ -61,11 +80,23 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Text(
-                      _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
-                      textScaleFactor: 2,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    child: AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 500),
+                      crossFadeState: _mode == AuthMode.signUp
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      firstChild: Text(
+                        'Sign Up',
+                        textScaleFactor: 2,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      secondChild: Text(
+                        'Log In',
+                        textScaleFactor: 2,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   Form(
@@ -94,13 +125,25 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: AppRaisedButton(
-                            label:
-                                _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, MainScreen.routeName);
-                            },
+                          child: AnimatedCrossFade(
+                            duration: const Duration(milliseconds: 500),
+                            crossFadeState: _mode == AuthMode.signUp
+                                ? CrossFadeState.showFirst
+                                : CrossFadeState.showSecond,
+                            firstChild: AppRaisedButton(
+                              label: 'Sign Up',
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                    context, TabsScreen.routeName);
+                              },
+                            ),
+                            secondChild: AppRaisedButton(
+                              label: 'Log In',
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                    context, TabsScreen.routeName);
+                              },
+                            ),
                           ),
                         ),
                       ],

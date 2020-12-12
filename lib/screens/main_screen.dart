@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatelessWidget {
-  static const routeName = '/main';
+// import '../widgets/app_raised_button.dart';
 
+class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Add Widgets'),
-      ),
-    );
+    return Center(child: Text('Main Screen'));
   }
 }
