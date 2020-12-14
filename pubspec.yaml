@@ -14,6 +14,7 @@ dependencies:
 
   cupertino_icons: ^0.1.3
   carousel_slider: ^2.3.1
+  material_floating_search_bar: ^0.2.4
 
 dev_dependencies:
   flutter_test:
@@ -23,15 +24,5 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/icons/facebook.png
-    - assets/icons/google.png
-    - assets/icons/heart_filled.png
-    - assets/icons/heart_outline.png
-#    - assets/icons/medicine_filled.png
-    - assets/icons/medicine_outline.png
-    - assets/icons/profile_filled.png
-    - assets/icons/profile_outline.png
-    - assets/icons/settings_filled.png
-    - assets/icons/settings_outline.png
-    - assets/images/doctor.png
-    - assets/images/logo.png
+    - assets/icons/
+    - assets/images/
