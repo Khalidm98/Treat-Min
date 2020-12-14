@@ -2,6 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+const String doctorCardFontFamily = 'Montserrat';
+const Color doctorCardFontColor = Color(0xff335f7e);
+const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
+const double doctorCardIconsWidth = 12.0;
+const double doctorCardIconsHeight = 12.0;
+
 class DoctorCard extends StatefulWidget {
   @override
   _DoctorCardState createState() => _DoctorCardState();
@@ -15,7 +21,7 @@ class _DoctorCardState extends State<DoctorCard> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.green,
+            color: Color(0xff56c596),
             borderRadius: BorderRadius.circular(2.0),
           ),
           margin: EdgeInsets.fromLTRB(37, 15, 37, 0),
@@ -24,15 +30,20 @@ class _DoctorCardState extends State<DoctorCard> {
             padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
             child: Text(
               "Hospital 1",
-              style: TextStyle(fontSize: 20.0),
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.white,
+                fontFamily: doctorCardFontFamily,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2.0),
-            color: Colors.yellow,
-          ),
+              borderRadius: BorderRadius.circular(2.0),
+              color: Colors.white,
+              border: Border.all(color: Color(0xffe0f0ee))),
           margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -54,15 +65,21 @@ class _DoctorCardState extends State<DoctorCard> {
                         "Dr.Ahmed Khaled",
                         style: TextStyle(
                           fontSize: 20.0,
+                          color: doctorCardFontColor,
+                          fontFamily: doctorCardFontFamily,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
                       child: Text(
-                        "Orthodontic Specialist",
-                        style: TextStyle(fontSize: 13.0),
-                        textAlign: TextAlign.left,
+                        "ORTHODONTIC SPECIALIST",
+                        style: TextStyle(
+                          fontSize: 10.0,
+                          color: doctorCardFontColor,
+                          fontFamily: doctorCardFontFamily,
+                        ),
                       ),
                     ),
                   ],
@@ -75,33 +92,43 @@ class _DoctorCardState extends State<DoctorCard> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: doctorCardIconsPadding,
                         child: Image.asset(
                           "assets/icons/filled_heart.png",
+                          width: doctorCardIconsWidth,
+                          height: doctorCardIconsHeight,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: doctorCardIconsPadding,
                         child: Image.asset(
                           "assets/icons/filled_heart.png",
+                          width: doctorCardIconsWidth,
+                          height: doctorCardIconsHeight,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: doctorCardIconsPadding,
                         child: Image.asset(
                           "assets/icons/filled_heart.png",
+                          width: doctorCardIconsWidth,
+                          height: doctorCardIconsHeight,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: doctorCardIconsPadding,
                         child: Image.asset(
                           "assets/icons/filled_heart.png",
+                          width: doctorCardIconsWidth,
+                          height: doctorCardIconsHeight,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: doctorCardIconsPadding,
                         child: Image.asset(
                           "assets/icons/empty_heart.png",
+                          width: doctorCardIconsWidth,
+                          height: doctorCardIconsHeight,
                         ),
                       ),
                     ],
@@ -114,8 +141,16 @@ class _DoctorCardState extends State<DoctorCard> {
         Container(
           margin: EdgeInsets.fromLTRB(37, 0, 37, 0),
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(1.0),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xffdfefef).withOpacity(0.8),
+                spreadRadius: 1,
+                blurRadius: 20,
+                offset: Offset(0, 20), // changes position of shadow
+              ),
+            ],
           ),
           child: Row(
             children: [
@@ -126,11 +161,19 @@ class _DoctorCardState extends State<DoctorCard> {
                     children: [
                       Row(
                         children: [
-                          Text("Monday"),
+                          Text("Monday",
+                              style: TextStyle(
+                                color: doctorCardFontColor,
+                                fontFamily: doctorCardFontFamily,
+                              )),
                           SizedBox(
                             width: 15,
                           ),
-                          Text("12:00 - 05:00"),
+                          Text("12:00 - 05:00",
+                              style: TextStyle(
+                                color: doctorCardFontColor,
+                                fontFamily: doctorCardFontFamily,
+                              )),
                         ],
                       ),
                       SizedBox(
@@ -138,11 +181,19 @@ class _DoctorCardState extends State<DoctorCard> {
                       ),
                       Row(
                         children: [
-                          Text("Saturday"),
+                          Text("Saturday",
+                              style: TextStyle(
+                                color: doctorCardFontColor,
+                                fontFamily: doctorCardFontFamily,
+                              )),
                           SizedBox(
                             width: 15,
                           ),
-                          Text("01:00 - 08:00"),
+                          Text("01:00 - 08:00",
+                              style: TextStyle(
+                                color: doctorCardFontColor,
+                                fontFamily: doctorCardFontFamily,
+                              )),
                         ],
                       ),
                     ],
@@ -150,18 +201,35 @@ class _DoctorCardState extends State<DoctorCard> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(15, 1, 0, 0),
+                margin: EdgeInsets.fromLTRB(5, 1, 0, 0),
                 child: Column(
                   children: [
-                    Text("350 EGP"),
+                    Text(
+                      "350 EGP",
+                      style: TextStyle(
+                        color: doctorCardFontColor,
+                        fontFamily: doctorCardFontFamily,
+                      ),
+                    ),
                     SizedBox(height: 6),
                     SizedBox(
                       width: 100,
-                      height: 20,
+                      height: 23,
                       child: RaisedButton(
-                        color: Colors.lightGreen.shade400,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        color: Color(0xff61c556),
                         onPressed: () {},
-                        child: Text("Book Now!"),
+                        child: Text(
+                          "Book Now!",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: doctorCardFontFamily,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11.0,
+                          ),
+                        ),
                       ),
                     )
                   ],

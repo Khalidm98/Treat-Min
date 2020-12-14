@@ -3,6 +3,8 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:treat_min/widgets/doctor_card.dart';
 
 class BrowseScreen extends StatelessWidget {
+  static const routeName = '/browse';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
