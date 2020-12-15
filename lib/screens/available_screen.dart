@@ -5,6 +5,6 @@ class AvailableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Available Screen'));
+    return Scaffold(body: Center(child: Text('Available Screen')));
   }
 }
