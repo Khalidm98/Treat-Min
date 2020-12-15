@@ -22,7 +22,6 @@ class DataSearch extends SearchDelegate<String> {
         },
       )
     ];
-    throw UnimplementedError();
   }
 
   @override
@@ -35,14 +34,12 @@ class DataSearch extends SearchDelegate<String> {
         onPressed: () {
           close(context, null);
         });
-    throw UnimplementedError();
   }
 
   @override
   Widget buildResults(BuildContext context) {
     //TODO:return this Doctor info here
     return DoctorCard();
-    throw UnimplementedError();
   }
 
   @override
@@ -68,11 +65,14 @@ class DataSearch extends SearchDelegate<String> {
                   ]),
             ),
             onTap: () {
+              query = suggestedHospitals[index];
+              if (!recentHospitals.contains(query)) {
+                recentHospitals.add(query);
+              }
+
               showResults(context);
             },
           );
         });
-
-    throw UnimplementedError();
   }
 }
