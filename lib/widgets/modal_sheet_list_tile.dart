@@ -32,12 +32,25 @@ class _ModalSheetListTileState extends State<ModalSheetListTile> {
         onTap: () {
           onSwitchChange();
         },
-        child: CustomSwitchButton(
-          checked: widget.val,
-          unCheckedColor: Colors.white,
-          checkedColor: Colors.white,
-          animationDuration: Duration(milliseconds: 200),
-          backgroundColor: Color(0xff56c596),
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 0.5,
+                blurRadius: 2,
+                offset: Offset(0, 0),
+              ) // changes position of shadow
+            ],
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: CustomSwitchButton(
+            checked: widget.val,
+            unCheckedColor: Color(0xff56c596),
+            checkedColor: Colors.white,
+            animationDuration: Duration(milliseconds: 200),
+            backgroundColor: widget.val ? Color(0xff56c596) : Colors.white,
+          ),
         ),
       ),
     );

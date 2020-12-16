@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:treat_min/widgets/doctor_card.dart';
 import 'package:treat_min/SearchBar.dart';
 import 'package:treat_min/widgets/modal_sheet_list_tile.dart';
+import 'dart:ui';
 
 class BrowseScreen extends StatefulWidget {
   static const routeName = '/browse';
@@ -18,33 +19,36 @@ class _BrowseScreenState extends State<BrowseScreen> {
       showModalBottomSheet(
           context: context,
           builder: (context) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  color: Color(0xff56c596),
-                  width: double.infinity,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        "Sort By",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: doctorCardFontFamily,
-                          fontSize: 26.0,
-                          fontWeight: FontWeight.bold,
+            return BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    color: Color(0xff56c596),
+                    width: double.infinity,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text(
+                          "Sort By",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: doctorCardFontFamily,
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                ModalSheetListTile(
-                    text: "Price Low to High", val: isSwitched[0]),
-                ModalSheetListTile(
-                    text: "Price High to Low", val: isSwitched[1]),
-                ModalSheetListTile(text: "Nearest", val: isSwitched[2]),
-              ],
+                  ModalSheetListTile(
+                      text: "Price Low to High", val: isSwitched[0]),
+                  ModalSheetListTile(
+                      text: "Price High to Low", val: isSwitched[1]),
+                  ModalSheetListTile(text: "Nearest", val: isSwitched[2]),
+                ],
+              ),
             );
           });
     }
