@@ -7,6 +7,8 @@ class InputField extends StatelessWidget {
   final String label;
   final bool obscureText;
   final Function onFieldSubmitted;
+  final Function onTap ;
+  final TextEditingController controller;
 
   const InputField({
     this.focusNode,
@@ -15,6 +17,8 @@ class InputField extends StatelessWidget {
     @required this.label,
     this.obscureText = false,
     this.onFieldSubmitted,
+    this.onTap,
+    this.controller,
   });
 
   @override
@@ -37,10 +41,12 @@ class InputField extends StatelessWidget {
                 borderSide: BorderSide(color: Theme.of(context).primaryColor),
               ),
             ),
+            controller: controller,
             focusNode: focusNode,
             keyboardType: keyboardType,
             obscureText: obscureText,
             onFieldSubmitted: onFieldSubmitted,
+            onTap: onTap,
           ),
         ),
         Align(
@@ -56,7 +62,7 @@ class InputField extends StatelessWidget {
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                stops: [0.7, 1],
+               stops: [0.7, 1],
               ),
             ),
             child: Text(label, style: const TextStyle(color: Colors.white)),
