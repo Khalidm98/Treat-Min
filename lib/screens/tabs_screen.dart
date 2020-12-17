@@ -22,6 +22,25 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: SafeArea(
+        child: CarouselSlider(
+          carouselController: _slider,
+          options: CarouselOptions(
+            height: double.infinity,
+            initialPage: _currentIndex,
+            viewportFraction: 1,
+            enlargeCenterPage: true,
+            enableInfiniteScroll: false,
+            onPageChanged: (index, _) {
+              setState(() => _currentIndex = index);
+            },
+          ),
+          items: [
+            MainScreen(),
+            BrowseScreen(),
+            SettingsScreen(),
+            AccountScreen(),
+          ],
       body: CarouselSlider(
         carouselController: _slider,
         options: CarouselOptions(
@@ -40,12 +59,6 @@ class _TabsScreenState extends State<TabsScreen> {
             }
           },
         ),
-        items: [
-          MainScreen(),
-          BrowseScreen(),
-          SettingsScreen(),
-          AccountScreen(),
-        ],
       ),
       bottomNavigationBar: NavigationBar(
         index: _currentIndex,
