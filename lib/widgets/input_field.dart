@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
+  final TextEditingController controller;
   final FocusNode focusNode;
   final String hintText;
   final TextInputType keyboardType;
   final String label;
   final bool obscureText;
   final Function onFieldSubmitted;
+  final Function onTap;
 
   const InputField({
+    this.controller,
     this.focusNode,
     this.hintText,
     this.keyboardType,
     @required this.label,
     this.obscureText = false,
     this.onFieldSubmitted,
+    this.onTap,
   });
 
   @override
@@ -37,10 +41,12 @@ class InputField extends StatelessWidget {
                 borderSide: BorderSide(color: Theme.of(context).primaryColor),
               ),
             ),
+            controller: controller,
             focusNode: focusNode,
             keyboardType: keyboardType,
             obscureText: obscureText,
             onFieldSubmitted: onFieldSubmitted,
+            onTap: onTap,
           ),
         ),
         Align(

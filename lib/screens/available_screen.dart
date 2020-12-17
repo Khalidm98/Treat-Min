@@ -111,5 +111,6 @@ class AvailableScreen extends StatelessWidget {
         // scrollDirection: Axis.vertical,
       ),
     );
+    return Scaffold(body: Center(child: Text('Available Screen')));
   }
 }

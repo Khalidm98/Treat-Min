@@ -26,9 +26,17 @@ class _NavigationBarState extends State<NavigationBar> {
   Color indicatorColor;
   int currentIndex;
 
+  List<Widget> get items => widget.items;
+
   @override
   void initState() {
     super.initState();
+    currentIndex = widget.index;
+  }
+
+  @override
+  void didUpdateWidget(NavigationBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
     currentIndex = widget.index;
   }
 
@@ -41,7 +49,7 @@ class _NavigationBarState extends State<NavigationBar> {
     }
   }
 
-  _select(int index) {
+  void _select(int index) {
     widget.onTap(index);
     setState(() => currentIndex = index);
   }
@@ -49,21 +57,21 @@ class _NavigationBarState extends State<NavigationBar> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 62,
       width: double.infinity,
       child: Stack(
         children: <Widget>[
           Positioned(
             top: 2,
             child: Row(
-              children: widget.items.map((item) {
-                final int index = widget.items.indexOf(item);
+              children: items.map((item) {
+                final int index = items.indexOf(item);
                 return GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () => _select(index),
                   child: Container(
                     height: 30,
-                    width: width / widget.items.length,
+                    width: width / items.length,
                     margin: const EdgeInsets.symmetric(vertical: 15),
                     alignment: Alignment.center,
                     child: widget.activeItems == null
@@ -81,25 +89,16 @@ class _NavigationBarState extends State<NavigationBar> {
               }).toList(),
             ),
           ),
-          Positioned(
+          AnimatedPositioned(
             top: 0,
-            width: width,
-            child: AnimatedAlign(
-              // icons count = 4
-              // x: -1 ... 1
-              // icon width = total width / 4
-              // icon width in x: 0.5
-              // indicator width = icon with / 3
-              // indicator width in x: 0.17
-              // x alignment = -1 + 0.17 + index * 2 * (1 - 0.17) / (count - 1)
-              alignment: Alignment(-0.825 + currentIndex * 0.55, 0),
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
-              child: Container(
-                color: indicatorColor,
-                width: width / widget.items.length / 3,
-                height: 2,
-              ),
+            left: (width / items.length) * (currentIndex + 0.25),
+            // (width / count) / 4 + (width / count) * index
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.linear,
+            child: Container(
+              color: indicatorColor,
+              width: width / items.length / 2,
+              height: 2,
             ),
           ),
         ],
