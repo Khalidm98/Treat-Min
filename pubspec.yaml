@@ -35,3 +35,9 @@ flutter:
     - assets/icons/settings_outline.png
     - assets/images/doctor.png
     - assets/images/logo.png
+    - assets/icons/tooth.png
+    - assets/icons/heart.png
+    - assets/icons/stomach.png
+    - assets/icons/lungs.png
+    - assets/icons/liver.png
+
