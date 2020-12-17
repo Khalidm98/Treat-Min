@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 import './account_screen.dart';
 import './browse_screen.dart';
 import './main_screen.dart';
@@ -14,13 +15,32 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  int _currentIndex = 0;
   CarouselController _slider = CarouselController();
+  int _currentIndex = 0;
   int _nextIndex;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: SafeArea(
+        child: CarouselSlider(
+          carouselController: _slider,
+          options: CarouselOptions(
+            height: double.infinity,
+            initialPage: _currentIndex,
+            viewportFraction: 1,
+            enlargeCenterPage: true,
+            enableInfiniteScroll: false,
+            onPageChanged: (index, _) {
+              setState(() => _currentIndex = index);
+            },
+          ),
+          items: [
+            MainScreen(),
+            BrowseScreen(),
+            SettingsScreen(),
+            AccountScreen(),
+          ],
       body: CarouselSlider(
         carouselController: _slider,
         options: CarouselOptions(
@@ -39,12 +59,6 @@ class _TabsScreenState extends State<TabsScreen> {
             }
           },
         ),
-        items: [
-          MainScreen(),
-          BrowseScreen(),
-          SettingsScreen(),
-          AccountScreen(),
-        ],
       ),
       bottomNavigationBar: NavigationBar(
         index: _currentIndex,

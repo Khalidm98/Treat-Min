@@ -7,6 +7,7 @@ import 'dart:ui';
 class AvailableScreen extends StatelessWidget {
   static const routeName = '/available';
   final List<bool> isSwitched = [false, false, false];
+
   void onSortClick(BuildContext context) {
     showModalBottomSheet(
         context: context,
