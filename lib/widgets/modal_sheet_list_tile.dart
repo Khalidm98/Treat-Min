@@ -3,19 +3,22 @@ import 'package:custom_switch_button/custom_switch_button.dart';
 
 class ModalSheetListTile extends StatefulWidget {
   final String text;
-  bool val;
-
-  ModalSheetListTile({@required this.text, @required this.val});
+  final bool value;
+  ModalSheetListTile({@required this.text, @required this.value});
   @override
-  _ModalSheetListTileState createState() => _ModalSheetListTileState();
+  _ModalSheetListTileState createState() =>
+      _ModalSheetListTileState(this.value);
 }
 
 class _ModalSheetListTileState extends State<ModalSheetListTile> {
+  bool val;
+
+  _ModalSheetListTileState(this.val);
   @override
   Widget build(BuildContext context) {
     void onSwitchChange() {
       setState(() {
-        widget.val = !widget.val;
+        this.val = !this.val;
       });
     }
 
@@ -45,11 +48,11 @@ class _ModalSheetListTileState extends State<ModalSheetListTile> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: CustomSwitchButton(
-            checked: widget.val,
+            checked: widget.value,
             unCheckedColor: Color(0xff56c596),
             checkedColor: Colors.white,
             animationDuration: Duration(milliseconds: 200),
-            backgroundColor: widget.val ? Color(0xff56c596) : Colors.white,
+            backgroundColor: widget.value ? Color(0xff56c596) : Colors.white,
           ),
         ),
       ),
