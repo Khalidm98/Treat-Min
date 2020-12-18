@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:carousel_slider/carousel_slider.dart';
 
 import './account_screen.dart';
@@ -16,8 +15,9 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  int _currentIndex = 0;
   CarouselController _slider = CarouselController();
+  int _currentIndex = 0;
+  int _nextIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,14 @@ class _TabsScreenState extends State<TabsScreen> {
           viewportFraction: 1,
           enlargeCenterPage: true,
           enableInfiniteScroll: false,
-          onPageChanged: (index, _) {
-            setState(() => _currentIndex = index);
+          onPageChanged: (index, reason) {
+            if (reason == CarouselPageChangedReason.controller) {
+              if (index == _nextIndex) {
+                setState(() => _currentIndex = index);
+              }
+            } else {
+              setState(() => _currentIndex = index);
+            }
           },
         ),
         items: [
@@ -42,10 +48,11 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
       ),
       bottomNavigationBar: NavigationBar(
+        index: _currentIndex,
         onTap: (index) {
+          _nextIndex = index;
           _slider.animateToPage(index);
         },
-        index: _currentIndex,
         items: [
           Image.asset('assets/icons/heart_outline.png'),
           Image.asset('assets/icons/medicine_outline.png'),

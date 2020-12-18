@@ -5,6 +5,6 @@ class SelectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Select Screen'));
+    return Scaffold(body: Center(child: Text('Select Screen')));
   }
 }
