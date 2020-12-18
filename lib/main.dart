@@ -39,5 +39,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// Created khalid branch
