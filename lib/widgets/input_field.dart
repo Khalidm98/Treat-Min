@@ -8,8 +8,6 @@ class InputField extends StatelessWidget {
   final String label;
   final bool obscureText;
   final Function onFieldSubmitted;
-  final Function onTap ;
-  final TextEditingController controller;
   final Function onTap;
 
   const InputField({
@@ -21,8 +19,6 @@ class InputField extends StatelessWidget {
     this.obscureText = false,
     this.onFieldSubmitted,
     this.onTap,
-    this.controller,
-
   });
 
   @override
@@ -66,7 +62,7 @@ class InputField extends StatelessWidget {
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-               stops: [0.7, 1],
+                stops: [0.7, 1],
               ),
             ),
             child: Text(label, style: const TextStyle(color: Colors.white)),
