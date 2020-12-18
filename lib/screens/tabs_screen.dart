@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
 import './account_screen.dart';
 import './browse_screen.dart';
 import './main_screen.dart';

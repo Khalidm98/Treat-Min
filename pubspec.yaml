@@ -17,24 +17,24 @@ dependencies:
   flutter_verification_code: ^0.2.1
   step_progress_indicator: ^0.2.5+8
   flutter_gallery: ^2.4.0+20400
+  custom_switch_button: ^0.5.0
+  toggle_switch: ^0.1.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
+
+
   uses-material-design: true
 
   assets:
-    - assets/icons/facebook.png
-    - assets/icons/google.png
-    - assets/icons/heart_filled.png
-    - assets/icons/heart_outline.png
-#    - assets/icons/medicine_filled.png
-    - assets/icons/medicine_outline.png
-    - assets/icons/profile_filled.png
-    - assets/icons/profile_outline.png
-    - assets/icons/settings_filled.png
-    - assets/icons/settings_outline.png
-    - assets/images/doctor.png
-    - assets/images/logo.png
+    - assets/icons/
+    - assets/images/

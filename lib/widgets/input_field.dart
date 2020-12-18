@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
+  final TextEditingController controller;
   final FocusNode focusNode;
   final String hintText;
   final TextInputType keyboardType;
@@ -9,8 +10,10 @@ class InputField extends StatelessWidget {
   final Function onFieldSubmitted;
   final Function onTap ;
   final TextEditingController controller;
+  final Function onTap;
 
   const InputField({
+    this.controller,
     this.focusNode,
     this.hintText,
     this.keyboardType,
@@ -19,6 +22,7 @@ class InputField extends StatelessWidget {
     this.onFieldSubmitted,
     this.onTap,
     this.controller,
+
   });
 
   @override
