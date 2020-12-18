@@ -3,29 +3,26 @@ import 'package:flutter/material.dart';
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+    return SafeArea(
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Container(
-                height: 120,
-                width: 120,
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundImage: AssetImage('assets/images/health.png'),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: CircleAvatar(
-                      backgroundColor: Color(0xff34bba3),
-                      radius: 16,
-                      child: Icon(
-                        Icons.photo_camera,
-                        color: Colors.white,
-                        size: 20,
-                      ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              height: 120,
+              width: 120,
+              child: CircleAvatar(
+                radius: 60,
+                backgroundImage: AssetImage('assets/images/health.png'),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: CircleAvatar(
+                    backgroundColor: Color(0xff34bba3),
+                    radius: 16,
+                    child: Icon(
+                      Icons.photo_camera,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
                 ),
@@ -46,6 +43,7 @@ class AccountScreen extends StatelessWidget {
             ListTile(
               leading: Icon(
                 Icons.account_circle,
+                size: 35,
               ),
               title: Text('Name',
                   style: TextStyle(
@@ -61,16 +59,17 @@ class AccountScreen extends StatelessWidget {
                 color: Colors.teal[800],
               ),
             ),
-            SizedBox(
-              width: 300,
+            Divider(
+              color: Colors.black,
+              indent: 40,
+              endIndent: 40,
               height: 0,
-              child: Divider(
-                color: Colors.black,
-                //indent: 200,
-              ),
             ),
             ListTile(
-              leading: Icon(Icons.date_range),
+              leading: Icon(
+                Icons.date_range,
+                size: 35,
+              ),
               trailing: Icon(
                 Icons.edit,
                 color: Colors.teal[800],
@@ -85,16 +84,17 @@ class AccountScreen extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontFamily: 'Montserrat')),
             ),
-            SizedBox(
-              width: 300,
+            Divider(
+              color: Colors.black,
+              indent: 40,
+              endIndent: 40,
               height: 0,
-              child: Divider(
-                color: Colors.black,
-                //indent: 200,
-              ),
             ),
             ListTile(
-              leading: Icon(Icons.phone_android),
+              leading: Icon(
+                Icons.phone_android,
+                size: 35,
+              ),
               trailing: Icon(
                 Icons.edit,
                 color: Colors.teal[800],
@@ -109,23 +109,27 @@ class AccountScreen extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontFamily: 'Montserrat')),
             ),
-            Text(
-              'Health Condition',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 35,
-                  color: Colors.teal[800],
-                  fontFamily: 'Montserrat'),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+              width: double.infinity,
+              child: Text(
+                'Health Condition',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                    color: Colors.teal[800],
+                    fontFamily: 'Montserrat'),
+                textAlign: TextAlign.left,
+              ),
             ),
             Card(
-              //color: Colors.grey[300],
               shadowColor: Colors.blueGrey,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Text(
                   'Hello Mohamed,You are 28 years old.\nYour pressure is good. It\'s 80/120.\n'
                   'Your fat is 7%.\nYour blood sugar level is usual.\nYour last PCR test '
-                  'in 1/12/2020 was negative.\nTreat-Min wish you a good health always.\n',
+                  'in 1/12/2020 was negative.\nTreat-Min wish you a good health always.',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.teal[800],

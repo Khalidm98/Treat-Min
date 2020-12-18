@@ -48,6 +48,9 @@ class AvailableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, String> clinic =
+        (ModalRoute.of(context).settings.arguments) as Map<String, String>;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -57,23 +60,17 @@ class AvailableScreen extends StatelessWidget {
             }
             //
             ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/icons/Tooth.png",
-              width: 25.0,
-              height: 25.0,
+        title: Center(
+          child: FittedBox(
+            fit: BoxFit.fitHeight,
+            child: Text(
+              clinic['name'],
+              style: TextStyle(fontFamily: 'Montserrat'),
+              textScaleFactor: 1.2,
             ),
-            SizedBox(
-              width: 5.0,
-            ),
-            Text(
-              "Dentist",
-              style: TextStyle(fontSize: 25.0),
-            ),
-          ],
+          ),
         ),
+        actionsIconTheme: IconThemeData(size: 20),
         actions: [
           IconButton(
             icon: Icon(
@@ -84,13 +81,19 @@ class AvailableScreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: Image.asset("assets/icons/Filter.png"),
-            onPressed: () {
-              print("Hey!");
-            },
+            icon: Image.asset(
+              "assets/icons/Filter.png",
+              width: 25,
+              height: 25,
+            ),
+            onPressed: () {},
           ),
           IconButton(
-            icon: Image.asset("assets/icons/Sort.png"),
+            icon: Image.asset(
+              "assets/icons/Sort.png",
+              width: 25,
+              height: 25,
+            ),
             onPressed: () {
               onSortClick(context);
             },
@@ -99,6 +102,7 @@ class AvailableScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+          SizedBox(height: 11),
           DoctorCard(),
           DoctorCard(),
           DoctorCard(),
@@ -108,6 +112,7 @@ class AvailableScreen extends StatelessWidget {
           DoctorCard(),
           DoctorCard(),
           DoctorCard(),
+          SizedBox(height: 11),
         ],
         // scrollDirection: Axis.vertical,
       ),

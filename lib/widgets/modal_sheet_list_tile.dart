@@ -48,11 +48,11 @@ class _ModalSheetListTileState extends State<ModalSheetListTile> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: CustomSwitchButton(
-            checked: widget.value,
+            checked: this.val,
             unCheckedColor: Color(0xff56c596),
             checkedColor: Colors.white,
             animationDuration: Duration(milliseconds: 200),
-            backgroundColor: widget.value ? Color(0xff56c596) : Colors.white,
+            backgroundColor: this.val ? Color(0xff56c596) : Colors.white,
           ),
         ),
       ),
