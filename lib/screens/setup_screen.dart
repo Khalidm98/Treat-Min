@@ -12,6 +12,6 @@ class SetupScreen extends StatefulWidget {
 class _SetupScreenState extends State<SetupScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('Setup Screen')));
+    return Center(child: Text('Setup Screen'));
   }
 }
