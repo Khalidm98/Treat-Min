@@ -36,10 +36,11 @@ class SelectScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Container(
-            child: AddingListView(),
-            height: 500,
-            margin: EdgeInsets.only(left: 10, right: 10),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: AddingListView(),
+            ),
           ),
         ],
       ),
