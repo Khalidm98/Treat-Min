@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import './tabs_screen.dart';
+import './verification_screen.dart';
 import '../widgets/app_raised_button.dart';
 import '../widgets/input_field.dart';
 
@@ -34,29 +35,21 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _buildSocialButton(Social social) {
-    return RaisedButton.icon(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      color: social == Social.google ? Colors.white : Colors.indigo[600],
-      onPressed: () {},
-      icon: Image.asset(
-        'assets/icons/${social == Social.google ? 'google' : 'facebook'}.png',
-        height: 30,
-      ),
-      label: AnimatedCrossFade(
-        duration: const Duration(milliseconds: 500),
-        crossFadeState: _mode == AuthMode.signUp
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
-        firstChild: Text(
-          'Sign Up with ${social == Social.google ? 'Google' : 'Facebook'}',
-          textScaleFactor: 1.3,
-          style: TextStyle(
-            color: social == Social.google ? Colors.black : Colors.white,
-          ),
+      child: RaisedButton.icon(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        color: social == Social.google ? Colors.white : Colors.indigo[600],
+        onPressed: () {},
+        icon: Image.asset(
+          'assets/icons/${social == Social.google ? 'google' : 'facebook'}.png',
+          height: 30,
         ),
-        secondChild: Text(
-          'Log In with ${social == Social.google ? 'Google' : 'Facebook'}',
+        label: Text(
+          '${_mode == AuthMode.signUp ? 'Sign Up' : 'Log In'} with '
+          '${social == Social.google ? 'Google' : 'Facebook'}',
           textScaleFactor: 1.3,
           style: TextStyle(
             color: social == Social.google ? Colors.black : Colors.white,
@@ -72,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
       body: SafeArea(
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+          onTap: () => FocusScope.of(context).unfocus(),
           child: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -80,64 +73,81 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 500),
-                      crossFadeState: _mode == AuthMode.signUp
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      firstChild: Text(
-                        'Sign Up',
-                        textScaleFactor: 2,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      secondChild: Text(
-                        'Log In',
-                        textScaleFactor: 2,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    child: Text(
+                      _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                      textScaleFactor: 2,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Form(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: InputField(
-                            label: 'Email Address',
-                            hintText: 'test@example.com',
-                            keyboardType: TextInputType.emailAddress,
-                            onFieldSubmitted: (_) {
-                              _passNode.requestFocus();
-                            },
+                  AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 500),
+                    crossFadeState: _mode == AuthMode.signUp
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    firstChild: Form(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: InputField(
+                              label: 'Email Address',
+                              textFormField: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'test@example.com',
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                              ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: InputField(
-                            label: 'Password',
-                            hintText: '********',
-                            obscureText: true,
-                            focusNode: _passNode,
-                            onFieldSubmitted: (_) {},
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: AnimatedCrossFade(
-                            duration: const Duration(milliseconds: 500),
-                            crossFadeState: _mode == AuthMode.signUp
-                                ? CrossFadeState.showFirst
-                                : CrossFadeState.showSecond,
-                            firstChild: AppRaisedButton(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: AppRaisedButton(
                               label: 'Sign Up',
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
-                                    context, TabsScreen.routeName);
+                                    context, VerificationScreen.routeName);
                               },
                             ),
-                            secondChild: AppRaisedButton(
+                          ),
+                        ],
+                      ),
+                    ),
+                    secondChild: Form(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: InputField(
+                              label: 'Email Address',
+                              textFormField: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'test@example.com',
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                onFieldSubmitted: (_) {
+                                  _passNode.requestFocus();
+                                },
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: InputField(
+                              label: 'Password',
+                              textFormField: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: '********',
+                                ),
+                                obscureText: true,
+                                focusNode: _passNode,
+                                onFieldSubmitted: (_) {},
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: AppRaisedButton(
                               label: 'Log In',
                               onPressed: () {
                                 Navigator.pushReplacementNamed(
@@ -145,28 +155,21 @@ class _AuthScreenState extends State<AuthScreen> {
                               },
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   Divider(thickness: 3, height: 30, indent: 10, endIndent: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    width: double.infinity,
-                    child: _buildSocialButton(Social.google),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    width: double.infinity,
-                    child: _buildSocialButton(Social.facebook),
-                  ),
+                  _buildSocialButton(Social.google),
+                  _buildSocialButton(Social.facebook),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         text:
-                            '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t'} have an account? ',
+                            '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t '} '
+                            'have an account? ',
                         style: TextStyle(color: Colors.grey),
                         children: <TextSpan>[
                           TextSpan(

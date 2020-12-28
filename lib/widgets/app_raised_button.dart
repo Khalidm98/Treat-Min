@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class AppRaisedButton extends StatelessWidget {
   final Function onPressed;
   final String label;
+  final Color color;
 
-  const AppRaisedButton({@required this.onPressed, @required this.label});
+  const AppRaisedButton({
+    @required this.onPressed,
+    @required this.label,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +24,15 @@ class AppRaisedButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           gradient: LinearGradient(
-            colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColorDark,
-            ],
+            colors: color == null
+                ? [
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).primaryColorDark,
+                  ]
+                : [
+                    Colors.red,
+                    Colors.red[800],
+                  ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             stops: [0.7, 1],
@@ -34,7 +44,6 @@ class AppRaisedButton extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontFamily: 'Montserrat',
           ),
         ),
       ),
