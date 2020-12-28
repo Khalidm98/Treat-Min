@@ -1,25 +1,10 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final String hintText;
-  final TextInputType keyboardType;
   final String label;
-  final bool obscureText;
-  final Function onFieldSubmitted;
-  final Function onTap;
+  final TextFormField textFormField;
 
-  const InputField({
-    this.controller,
-    this.focusNode,
-    this.hintText,
-    this.keyboardType,
-    @required this.label,
-    this.obscureText = false,
-    this.onFieldSubmitted,
-    this.onTap,
-  });
+  const InputField({@required this.label, @required this.textFormField});
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +13,7 @@ class InputField extends StatelessWidget {
         Container(
           height: 80,
           alignment: Alignment.bottomCenter,
-          child: TextFormField(
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: TextStyle(color: Colors.grey, height: 1.5),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Theme.of(context).primaryColor),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Theme.of(context).primaryColor),
-              ),
-            ),
-            controller: controller,
-            focusNode: focusNode,
-            keyboardType: keyboardType,
-            obscureText: obscureText,
-            onFieldSubmitted: onFieldSubmitted,
-            onTap: onTap,
-          ),
+          child: textFormField,
         ),
         Align(
           alignment: Alignment(-0.8, 0),
