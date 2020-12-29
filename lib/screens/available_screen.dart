@@ -22,7 +22,7 @@ class AvailableScreen extends StatelessWidget {
                   width: double.infinity,
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Text(
                         "Sort By",
                         style: TextStyle(
@@ -50,16 +50,8 @@ class AvailableScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, String> clinic =
         (ModalRoute.of(context).settings.arguments) as Map<String, String>;
-
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }
-            //
-            ),
         title: Center(
           child: FittedBox(
             fit: BoxFit.fitHeight,
@@ -79,14 +71,6 @@ class AvailableScreen extends StatelessWidget {
             onPressed: () {
               showSearch(context: context, delegate: DataSearch());
             },
-          ),
-          IconButton(
-            icon: Image.asset(
-              "assets/icons/Filter.png",
-              width: 25,
-              height: 25,
-            ),
-            onPressed: () {},
           ),
           IconButton(
             icon: Image.asset(

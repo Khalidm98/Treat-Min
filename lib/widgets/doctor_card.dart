@@ -185,91 +185,101 @@ class _DoctorCardState extends State<DoctorCard> {
                             showDialog(
                               context: context,
                               builder: (_) {
-                                return AlertDialog(
-                                  scrollable: true,
-                                  insetPadding:
-                                      EdgeInsets.symmetric(horizontal: 22),
-                                  contentPadding: EdgeInsets.all(0),
-                                  content: Container(
-                                    padding: EdgeInsets.all(20),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CircleAvatar(
-                                          child: Image.asset(
-                                            'assets/icons/tooth_filled.png',
+                                return BackdropFilter(
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                  child: AlertDialog(
+                                    scrollable: true,
+                                    insetPadding:
+                                        EdgeInsets.symmetric(horizontal: 22),
+                                    contentPadding: EdgeInsets.all(0),
+                                    content: Container(
+                                      padding: EdgeInsets.all(20),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                13,
+                                            backgroundColor: Color(0xFF205072),
+                                            child: CircleAvatar(
+                                              child: Image.asset(
+                                                'assets/icons/tooth.png',
 
-                                            // fit: BoxFit.scaleDown,
+                                                // fit: BoxFit.scaleDown,
+                                              ),
+                                              backgroundColor: Colors.white,
+                                              radius: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  14,
+                                            ),
                                           ),
-                                          backgroundColor: Color(0xFF205072),
-                                          radius: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              14,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            "Dr. Ahmed Khaled",
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              "Dr. Ahmed Khaled",
+                                              style: TextStyle(
+                                                color: Color(0xFF205072),
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textScaleFactor: 1.7,
+                                            ),
+                                          ),
+                                          Text(
+                                            "ORTHODONTIC SPECIALIST",
                                             style: TextStyle(
                                               color: Color(0xFF205072),
                                               fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            textScaleFactor: 1.7,
-                                          ),
-                                        ),
-                                        Text(
-                                          "ORTHODONTIC SPECIALIST",
-                                          style: TextStyle(
-                                            color: Color(0xFF205072),
-                                            fontFamily: 'Montserrat',
-                                          ),
-                                        ),
-                                        RatingHearts(
-                                            iconWidth: 30, iconHeight: 30),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 0, 20),
-                                          child: Text(
-                                            "Rating from 22 visitors",
-                                            style: TextStyle(
-                                              fontSize: 15.0,
-                                              color: Color(0xFF205072),
-                                              fontFamily: 'Montserrat',
                                             ),
                                           ),
-                                        ),
-                                        Container(
-                                          child: BookNowDropDownList(),
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Color(0xFF205072),
+                                          RatingHearts(
+                                              iconWidth: 30, iconHeight: 30),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 0, 20),
+                                            child: Text(
+                                              "Rating from 22 visitors",
+                                              style: TextStyle(
+                                                fontSize: 15.0,
+                                                color: Color(0xFF205072),
+                                                fontFamily: 'Montserrat',
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Container(
-                                          padding:
-                                              EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                          width: (MediaQuery.of(context)
-                                                  .size
-                                                  .width) /
-                                              1.15,
-                                          child: AppRaisedButton(
-                                            label: 'Book Now',
-                                            onPressed: () {},
+                                          Container(
+                                            child: BookNowDropDownList(),
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Color(0xFF205072),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFF3F3F3),
-                                      border: Border.all(
-                                        width: 10.0,
-                                        color: Colors.grey,
+                                          Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                0, 20, 0, 0),
+                                            width: (MediaQuery.of(context)
+                                                    .size
+                                                    .width) /
+                                                1.15,
+                                            child: AppRaisedButton(
+                                              label: 'Book Now',
+                                              onPressed: () {},
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Color(0xFF205072),
+                                            width: 6,
+                                          )),
                                     ),
                                   ),
                                 );
