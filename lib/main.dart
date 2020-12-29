@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
             borderSide: BorderSide(color: Colors.green),
           ),
         ),
+        cursorColor: Colors.green,
       ),
       home: SplashScreen(),
       routes: {

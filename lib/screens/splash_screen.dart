@@ -39,7 +39,8 @@ class _SplashScreenState extends State<SplashScreen>
       _width.addListener(_expand);
       _controller.forward().then((_) {
         Future.delayed(const Duration(seconds: 2), () {
-          Navigator.pushReplacementNamed(context, GetStartedScreen.routeName);
+          Navigator.of(context)
+              .pushReplacementNamed(GetStartedScreen.routeName);
         });
       });
     }

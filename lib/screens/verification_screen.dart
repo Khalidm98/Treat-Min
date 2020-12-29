@@ -1,109 +1,174 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_verification_code/flutter_verification_code.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-import '../screens/setup_screen.dart';
+
+import './setup_screen.dart';
+import '../widgets/app_raised_button.dart';
 
 class VerificationScreen extends StatefulWidget {
   static const routeName = '/verify';
+
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
 }
 
-
 class _VerificationScreenState extends State<VerificationScreen> {
-  bool _onEditing = true;
-  String _code;
+  List<TextEditingController> _controllers = List();
+  List<FocusNode> _focusNodes = List();
+  TapGestureRecognizer _resendCode;
+  double _side;
+  Color _color;
+
+  @override
+  void initState() {
+    super.initState();
+    for (int i = 0; i < 3; i++) {
+      _controllers.add(TextEditingController());
+      _focusNodes.add(FocusNode());
+    }
+    _controllers.add(TextEditingController());
+    _resendCode = TapGestureRecognizer()
+      ..onTap = () {
+        print('Resend');
+      };
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_side == null) {
+      _side = (MediaQuery.of(context).size.width - 140) / 4;
+      _color = Theme.of(context).primaryColor;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controllers.forEach((controller) => controller.dispose());
+    _focusNodes.forEach((focusNode) => focusNode.dispose());
+    _resendCode.dispose();
+    super.dispose();
+  }
+
+  Widget _codeInputField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 50),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [3, 2, 1, 0].map((index) {
+          return SizedBox(
+            width: _side,
+            height: _side,
+            child: TextField(
+              onChanged: index == 0
+                  ? (num) {
+                      if (num.isNotEmpty) {
+                        if (num.length == 2) {
+                          _controllers[0].text = num[1];
+                        }
+                        FocusScope.of(context).unfocus();
+                      }
+                      setState(() {});
+                    }
+                  : (num) {
+                      if (num.isNotEmpty) {
+                        if (num.length == 2) {
+                          _controllers[index].text = num[1];
+                        }
+                        _focusNodes[index - 1].requestFocus();
+                      }
+                      setState(() {});
+                    },
+              controller: _controllers[index],
+              cursorColor:
+                  _controllers[index].text.isEmpty ? Colors.green : Colors.white,
+              decoration: InputDecoration(
+                counterText: '',
+                fillColor: _color,
+                filled: _controllers[index].text.isNotEmpty,
+              ),
+              focusNode: index == 3 ? null : _focusNodes[index],
+              keyboardType: TextInputType.number,
+              maxLength: 2,
+              style: const TextStyle(
+                fontSize: 24,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('verify code')),
-          backgroundColor: Colors.green,
-        ),
-        body: Center(
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.all(40),
           child: Column(
-            children: <Widget>[
-              StepProgressIndicator(
-                totalSteps: 6,
-                currentStep: 2,
-                selectedColor: Colors.greenAccent,
-                unselectedColor: Colors.blueGrey,
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(
-                  child: Text(
-                    'Enter your code',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ),
-              ),
-              Center(
-                child: VerificationCode(
-                  textStyle: TextStyle(fontSize: 20.0, color: Colors.greenAccent[900]),
-                  keyboardType: TextInputType.number,
-                  // in case underline color is null it will use primaryColor: Colors.red from Theme
-                  underlineColor: Colors.amber,
-                  length: 4,
-                  // clearAll is NOT required, you can delete it
-                  // takes any widget, so you can implement your design
-                  clearAll: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'clear all',
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/logo.png'),
+                    SizedBox(height: 50),
+                    Text(
+                      'Verify your email address\nwith the code sent to you',
+                      textScaleFactor: 1.25,
                       style: TextStyle(
-                          fontSize: 14.0,
-                          decoration: TextDecoration.underline,
-                          color: Colors.blue[700]),
-                    ),
-                  ),
-                  onCompleted: (String value) {
-                    setState(() {
-                      _code = value;
-                    });
-                  },
-                  onEditing: (bool value) {
-                    setState(() {
-                      _onEditing = value;
-                    });
-                    if (!_onEditing) FocusScope.of(context).unfocus();
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(
-                  child: _onEditing
-                      ? Text('Please enter full code')
-                      : Text('Your code: $_code'),
-                ),
-
-
-                ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(
-                  child: ClipOval(
-                    child: Material(
-                      color: Colors.green, // button color
-                      child: InkWell(
-                        splashColor: Colors.teal, // inkwell color
-                        child: SizedBox(width: 56, height: 56, child: Icon(Icons.check , color: Colors.white,)),
-                        onTap: () {Navigator.pushReplacementNamed(context, SetupScreen.routeName);},
+                        color: Theme.of(context).accentColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )
+                    _codeInputField(),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Didn\'t receive the code? ',
+                        style: const TextStyle(color: Colors.grey),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Resend',
+                            style: TextStyle(
+                              color: Theme.of(context).accentColor,
+                            ),
+                            recognizer: _resendCode,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-
+              AppRaisedButton(
+                label: 'Continue',
+                onPressed: () {
+                  Navigator.of(context).pushNamed(SetupScreen.routeName);
+                },
+              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: FloatingActionButton(
+          child: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          splashColor: Theme.of(context).primaryColor,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
     );
- //
   }
 }

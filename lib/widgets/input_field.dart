@@ -15,8 +15,8 @@ class InputField extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: textFormField,
         ),
-        Align(
-          alignment: Alignment(-0.8, 0),
+        Positioned(
+          left: 20,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
