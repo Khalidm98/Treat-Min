@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+import './auth_screen.dart';
+
 class SettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -14,7 +16,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff56c596),
-        title: Center(child: Text('Settings')),
+        title: Text('Settings'),
+        centerTitle: true,
       ),
       body: ListView(
         padding: EdgeInsets.all(15),
@@ -67,7 +70,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               trailing: CircleAvatar(
                 backgroundColor: Color(0xff56c596),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(AuthScreen.routeName);
+                  },
                   icon: Icon(Icons.logout),
                   color: Colors.white,
                 ),

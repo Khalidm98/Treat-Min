@@ -32,7 +32,8 @@ class GetStartedScreen extends StatelessWidget {
               AppRaisedButton(
                 label: 'GET STARTED',
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, AuthScreen.routeName);
+                  Navigator.of(context)
+                      .pushReplacementNamed(AuthScreen.routeName);
                 },
               ),
             ],

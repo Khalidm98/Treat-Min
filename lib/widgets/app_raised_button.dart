@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppRaisedButton extends StatelessWidget {
-  final Function onPressed;
   final String label;
+  final Function onPressed;
   final Color color;
 
   const AppRaisedButton({
-    @required this.onPressed,
     @required this.label,
+    @required this.onPressed,
     this.color,
   });
 
