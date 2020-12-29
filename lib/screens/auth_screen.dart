@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import './tabs_screen.dart';
 import '../widgets/app_raised_button.dart';
 import '../widgets/input_field.dart';
-import '../screens/varfication_screen.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
+import '../screens/verification_screen.dart';
+
 enum AuthMode { signUp, logIn }
 enum Social { google, facebook }
 
@@ -69,7 +69,6 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SafeArea(
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -100,131 +99,126 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     ),
                   ),
-
                   Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0),
-                  child: AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 500),
-                    crossFadeState: _mode == AuthMode.signUp
-                        ? CrossFadeState.showFirst
-                        : CrossFadeState.showSecond,
-                    firstChild:Form(
-                      child: Column(
-                        children:<Widget> [
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: InputField(
-                              label: 'User name ',
-                              hintText: 'Someone',
-                              keyboardType: TextInputType.name,
-                              onFieldSubmitted: (_) {
-                                _passNode.requestFocus();
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: InputField(
-                              label: 'Email Address',
-                              hintText: 'test@example.com',
-                              keyboardType: TextInputType.emailAddress,
-                              onFieldSubmitted: (_) {
-                                _passNode.requestFocus();
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: InputField(
-                              label: 'Password',
-                              hintText: '********',
-                              obscureText: true,
-                              focusNode: _passNode,
-                              onFieldSubmitted: (_) {},
-                            ),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: AnimatedCrossFade(
-                              duration: const Duration(milliseconds: 500),
-                              crossFadeState: _mode == AuthMode.signUp
-                                  ? CrossFadeState.showFirst
-                                  : CrossFadeState.showSecond,
-                              firstChild: AppRaisedButton(
-                                label: 'Sign Up',
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, VerficationScreen.routeName);
-                                },
-                              ),
-                              secondChild: AppRaisedButton(
-                                label: 'Log In',
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, TabsScreen.routeName);
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    child: AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 500),
+                      crossFadeState: _mode == AuthMode.signUp
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      firstChild: Form(
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: InputField(
+                                label: 'User name ',
+                                hintText: 'Someone',
+                                keyboardType: TextInputType.name,
+                                onFieldSubmitted: (_) {
+                                  _passNode.requestFocus();
                                 },
                               ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: InputField(
+                                label: 'Email Address',
+                                hintText: 'test@example.com',
+                                keyboardType: TextInputType.emailAddress,
+                                onFieldSubmitted: (_) {
+                                  _passNode.requestFocus();
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: InputField(
+                                label: 'Password',
+                                hintText: '********',
+                                obscureText: true,
+                                focusNode: _passNode,
+                                onFieldSubmitted: (_) {},
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: AnimatedCrossFade(
+                                duration: const Duration(milliseconds: 500),
+                                crossFadeState: _mode == AuthMode.signUp
+                                    ? CrossFadeState.showFirst
+                                    : CrossFadeState.showSecond,
+                                firstChild: AppRaisedButton(
+                                  label: 'Sign Up',
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, VerificationScreen.routeName);
+                                  },
+                                ),
+                                secondChild: AppRaisedButton(
+                                  label: 'Log In',
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, TabsScreen.routeName);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    secondChild: Form(
-                      child: Column(
-                        children: [
-
-
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: InputField(
-                              label: 'Email Address',
-                              hintText: 'test@example.com',
-                              keyboardType: TextInputType.emailAddress,
-                              onFieldSubmitted: (_) {
-                                _passNode.requestFocus();
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: InputField(
-                              label: 'Password',
-                              hintText: '********',
-                              obscureText: true,
-                              focusNode: _passNode,
-                              onFieldSubmitted: (_) {},
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: AnimatedCrossFade(
-                              duration: const Duration(milliseconds: 500),
-                              crossFadeState: _mode == AuthMode.signUp
-                                  ? CrossFadeState.showFirst
-                                  : CrossFadeState.showSecond,
-                              firstChild: AppRaisedButton(
-                                label: 'Sign Up',
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, VerficationScreen.routeName);
-                                },
-                              ),
-                              secondChild: AppRaisedButton(
-                                label: 'Log In',
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, TabsScreen.routeName);
+                      secondChild: Form(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: InputField(
+                                label: 'Email Address',
+                                hintText: 'test@example.com',
+                                keyboardType: TextInputType.emailAddress,
+                                onFieldSubmitted: (_) {
+                                  _passNode.requestFocus();
                                 },
                               ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: InputField(
+                                label: 'Password',
+                                hintText: '********',
+                                obscureText: true,
+                                focusNode: _passNode,
+                                onFieldSubmitted: (_) {},
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: AnimatedCrossFade(
+                                duration: const Duration(milliseconds: 500),
+                                crossFadeState: _mode == AuthMode.signUp
+                                    ? CrossFadeState.showFirst
+                                    : CrossFadeState.showSecond,
+                                firstChild: AppRaisedButton(
+                                  label: 'Sign Up',
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, VerificationScreen.routeName);
+                                  },
+                                ),
+                                secondChild: AppRaisedButton(
+                                  label: 'Log In',
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, TabsScreen.routeName);
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
                   Divider(thickness: 3, height: 30, indent: 10, endIndent: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),

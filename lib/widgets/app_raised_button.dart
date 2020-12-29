@@ -3,21 +3,24 @@ import 'package:flutter/material.dart';
 class AppRaisedButton extends StatelessWidget {
   final Function onPressed;
   final String label;
+  final double borderRad;
 
-  const AppRaisedButton({@required this.onPressed, @required this.label});
+  const AppRaisedButton(
+      {@required this.onPressed, @required this.label, this.borderRad = 10});
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
       onPressed: this.onPressed,
       padding: const EdgeInsets.symmetric(horizontal: 0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRad)),
       child: Container(
         height: 50,
         width: double.infinity,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(borderRad),
           gradient: LinearGradient(
             colors: [
               Theme.of(context).primaryColor,

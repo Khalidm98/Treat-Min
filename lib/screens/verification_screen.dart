@@ -1,22 +1,16 @@
-
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
-import '../screens/signup_sreen.dart';
 import '../screens/setup_screen.dart';
 
-class VerficationScreen extends StatefulWidget {
+class VerificationScreen extends StatefulWidget {
   static const routeName = '/Verfication_screen';
   @override
   __verficationScreenState createState() => __verficationScreenState();
 }
 
-
-class __verficationScreenState extends State<VerficationScreen> {
+class __verficationScreenState extends State<VerificationScreen> {
   bool _onEditing = true;
   String _code;
 
@@ -48,7 +42,8 @@ class __verficationScreenState extends State<VerficationScreen> {
               ),
               Center(
                 child: VerificationCode(
-                  textStyle: TextStyle(fontSize: 20.0, color: Colors.greenAccent[900]),
+                  textStyle:
+                      TextStyle(fontSize: 20.0, color: Colors.greenAccent[900]),
                   keyboardType: TextInputType.number,
                   // in case underline color is null it will use primaryColor: Colors.red from Theme
                   underlineColor: Colors.amber,
@@ -85,30 +80,35 @@ class __verficationScreenState extends State<VerficationScreen> {
                       ? Text('Please enter full code')
                       : Text('Your code: $_code'),
                 ),
-
-
-                ),
+              ),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Center(
-                  child: ClipOval(
-                    child: Material(
-                      color: Colors.green, // button color
-                      child: InkWell(
-                        splashColor: Colors.teal, // inkwell color
-                        child: SizedBox(width: 56, height: 56, child: Icon(Icons.check , color: Colors.white,)),
-                        onTap: () {Navigator.pushReplacementNamed(context, SetupScreen.routeName);},
-                      ),
+                    child: ClipOval(
+                  child: Material(
+                    color: Colors.green, // button color
+                    child: InkWell(
+                      splashColor: Colors.teal, // inkwell color
+                      child: SizedBox(
+                          width: 56,
+                          height: 56,
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                          )),
+                      onTap: () {
+                        Navigator.pushReplacementNamed(
+                            context, SetupScreen.routeName);
+                      },
                     ),
-                  )
-                ),
+                  ),
+                )),
               ),
-
             ],
           ),
         ),
       ),
     );
- //
+    //
   }
 }

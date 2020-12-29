@@ -1,6 +1,8 @@
 import 'dart:ui';
-
+import 'rating_hearts.dart';
 import 'package:flutter/material.dart';
+import 'package:treat_min/widgets/booknow_dropdown_list.dart';
+import 'package:treat_min/widgets/app_raised_button.dart';
 
 const String doctorCardFontFamily = 'Montserrat';
 const Color doctorCardFontColor = Color(0xff335f7e);
@@ -88,52 +90,9 @@ class _DoctorCardState extends State<DoctorCard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 15),
-                  child: Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: doctorCardIconsPadding,
-                          child: Image.asset(
-                            "assets/icons/filled_heart.png",
-                            width: doctorCardIconsWidth,
-                            height: doctorCardIconsHeight,
-                          ),
-                        ),
-                        Padding(
-                          padding: doctorCardIconsPadding,
-                          child: Image.asset(
-                            "assets/icons/filled_heart.png",
-                            width: doctorCardIconsWidth,
-                            height: doctorCardIconsHeight,
-                          ),
-                        ),
-                        Padding(
-                          padding: doctorCardIconsPadding,
-                          child: Image.asset(
-                            "assets/icons/filled_heart.png",
-                            width: doctorCardIconsWidth,
-                            height: doctorCardIconsHeight,
-                          ),
-                        ),
-                        Padding(
-                          padding: doctorCardIconsPadding,
-                          child: Image.asset(
-                            "assets/icons/filled_heart.png",
-                            width: doctorCardIconsWidth,
-                            height: doctorCardIconsHeight,
-                          ),
-                        ),
-                        Padding(
-                          padding: doctorCardIconsPadding,
-                          child: Image.asset(
-                            "assets/icons/empty_heart.png",
-                            width: doctorCardIconsWidth,
-                            height: doctorCardIconsHeight,
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: RatingHearts(
+                    iconHeight: doctorCardIconsHeight,
+                    iconWidth: doctorCardIconsWidth,
                   ),
                 )
               ],
@@ -222,7 +181,102 @@ class _DoctorCardState extends State<DoctorCard> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           color: Color(0xff61c556),
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  scrollable: true,
+                                  insetPadding:
+                                      EdgeInsets.symmetric(horizontal: 22),
+                                  contentPadding: EdgeInsets.all(0),
+                                  content: Container(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          child: Image.asset(
+                                            'assets/icons/tooth_filled.png',
+
+                                            // fit: BoxFit.scaleDown,
+                                          ),
+                                          backgroundColor: Color(0xFF205072),
+                                          radius: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              14,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "Dr. Ahmed Khaled",
+                                            style: TextStyle(
+                                              color: Color(0xFF205072),
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textScaleFactor: 1.7,
+                                          ),
+                                        ),
+                                        Text(
+                                          "ORTHODONTIC SPECIALIST",
+                                          style: TextStyle(
+                                            color: Color(0xFF205072),
+                                            fontFamily: 'Montserrat',
+                                          ),
+                                        ),
+                                        RatingHearts(
+                                            iconWidth: 30, iconHeight: 30),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 0, 0, 20),
+                                          child: Text(
+                                            "Rating from 22 visitors",
+                                            style: TextStyle(
+                                              fontSize: 15.0,
+                                              color: Color(0xFF205072),
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          child: BookNowDropDownList(),
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Color(0xFF205072),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                          width: (MediaQuery.of(context)
+                                                  .size
+                                                  .width) /
+                                              1.15,
+                                          child: AppRaisedButton(
+                                            borderRad: 100,
+                                            label: 'Book Now',
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFFF3F3F3),
+                                      border: Border.all(
+                                        width: 10.0,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                           child: Text(
                             "Book Now!",
                             style: TextStyle(
