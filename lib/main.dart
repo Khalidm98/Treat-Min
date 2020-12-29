@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         SelectScreen.routeName: (_) => SelectScreen(),
         SetupScreen.routeName: (_) => SetupScreen(),
         TabsScreen.routeName: (_) => TabsScreen(),
-        VerificationScreen.routeName:(_) => VerificationScreen(),
+        VerificationScreen.routeName: (_) => VerificationScreen(),
       },
     );
   }

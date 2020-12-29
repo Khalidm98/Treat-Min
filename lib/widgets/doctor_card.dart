@@ -258,7 +258,6 @@ class _DoctorCardState extends State<DoctorCard> {
                                                   .width) /
                                               1.15,
                                           child: AppRaisedButton(
-                                            borderRad: 100,
                                             label: 'Book Now',
                                             onPressed: () {},
                                           ),
