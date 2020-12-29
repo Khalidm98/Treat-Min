@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 import './account_screen.dart';
-import './browse_screen.dart';
+// import './browse_screen.dart';
 import './main_screen.dart';
 import './settings_screen.dart';
 import '../widgets/navigation_bar.dart';
@@ -41,7 +42,7 @@ class _TabsScreenState extends State<TabsScreen> {
         ),
         items: [
           MainScreen(),
-          BrowseScreen(),
+          // BrowseScreen(),
           SettingsScreen(),
           AccountScreen(),
         ],
@@ -53,14 +54,14 @@ class _TabsScreenState extends State<TabsScreen> {
           _slider.animateToPage(index);
         },
         items: [
-          Image.asset('assets/icons/heart_outline.png'),
-          Image.asset('assets/icons/medicine_outline.png'),
-          Image.asset('assets/icons/settings_outline.png'),
-          Image.asset('assets/icons/profile_outline.png'),
+          Image.asset('assets/icons/heart_outlined.png'),
+          // Image.asset('assets/icons/medicine_outlined.png'),
+          Image.asset('assets/icons/settings_outlined.png'),
+          Image.asset('assets/icons/profile_outlined.png'),
         ],
         activeItems: [
           Image.asset('assets/icons/heart_filled.png'),
-          Image.asset('assets/icons/medicine_outline.png'),
+          // Image.asset('assets/icons/medicine_outlined.png'),
           Image.asset('assets/icons/settings_filled.png'),
           Image.asset('assets/icons/profile_filled.png'),
         ],
