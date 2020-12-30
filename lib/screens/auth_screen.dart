@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import './tabs_screen.dart';
 import './verification_screen.dart';
-import '../widgets/app_raised_button.dart';
 import '../widgets/input_field.dart';
 
 enum AuthMode { signUp, logIn }
@@ -42,13 +41,9 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _buildSocialButton(Social social) {
-    return Container(
-      width: double.infinity,
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: RaisedButton.icon(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        color: social == Social.google ? Colors.white : Colors.indigo[600],
         onPressed: () {},
         icon: Image.asset(
           'assets/icons/${social == Social.google ? 'google' : 'facebook'}.png',
@@ -57,17 +52,15 @@ class _AuthScreenState extends State<AuthScreen> {
         label: Text(
           '${_mode == AuthMode.signUp ? 'Sign Up' : 'Log In'} with '
           '${social == Social.google ? 'Google' : 'Facebook'}',
-          textScaleFactor: 1.3,
-          style: TextStyle(
-            color: social == Social.google ? Colors.black : Colors.white,
-          ),
         ),
+        color: social == Social.google ? Colors.white : Colors.indigo[600],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: GestureDetector(
@@ -80,9 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
             children: [
               Text(
                 _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
-                textScaleFactor: 2,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: theme.textTheme.headline4,
               ),
               SizedBox(height: 40),
               AnimatedCrossFade(
@@ -107,8 +98,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: AppRaisedButton(
-                          label: 'Sign Up',
+                        child: RaisedButton(
+                          child: Text('Sign Up'),
                           onPressed: () {
                             Navigator.of(context)
                                 .pushNamed(VerificationScreen.routeName);
@@ -150,8 +141,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: AppRaisedButton(
-                          label: 'Log In',
+                        child: RaisedButton(
+                          child: Text('Log In'),
                           onPressed: () {
                             Navigator.of(context)
                                 .pushReplacementNamed(TabsScreen.routeName);
@@ -165,24 +156,20 @@ class _AuthScreenState extends State<AuthScreen> {
               Divider(thickness: 3, height: 30, indent: 10, endIndent: 10),
               _buildSocialButton(Social.google),
               _buildSocialButton(Social.facebook),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t '} '
-                        'have an account? ',
-                    style: const TextStyle(color: Colors.grey),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: _mode == AuthMode.signUp ? 'Log In' : 'Sign Up',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        recognizer: _switchMode,
-                      ),
-                    ],
-                  ),
+              SizedBox(height: 20),
+              RichText(
+                text: TextSpan(
+                  text: '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t'}'
+                      ' have an account? ',
+                  style: theme.textTheme.subtitle1
+                      .copyWith(color: theme.hintColor),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: _mode == AuthMode.signUp ? 'Log In' : 'Sign Up',
+                      style: TextStyle(color: theme.primaryColorDark),
+                      recognizer: _switchMode,
+                    ),
+                  ],
                 ),
               ),
             ],

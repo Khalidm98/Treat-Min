@@ -60,15 +60,9 @@ class AvailableScreen extends StatelessWidget {
             }
             //
             ),
-        title: Center(
-          child: FittedBox(
-            fit: BoxFit.fitHeight,
-            child: Text(
-              clinic['name'],
-              style: TextStyle(fontFamily: 'Montserrat'),
-              textScaleFactor: 1.2,
-            ),
-          ),
+        title: FittedBox(
+          fit: BoxFit.fitHeight,
+          child: Text(clinic['name']),
         ),
         actionsIconTheme: IconThemeData(size: 20),
         actions: [

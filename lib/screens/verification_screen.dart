@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import './setup_screen.dart';
-import '../widgets/app_raised_button.dart';
 
 class VerificationScreen extends StatefulWidget {
   static const routeName = '/verify';
@@ -15,8 +14,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
   List<TextEditingController> _controllers = List();
   List<FocusNode> _focusNodes = List();
   TapGestureRecognizer _resendCode;
-  double _side;
-  Color _color;
 
   @override
   void initState() {
@@ -33,15 +30,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_side == null) {
-      _side = (MediaQuery.of(context).size.width - 140) / 4;
-      _color = Theme.of(context).primaryColor;
-    }
-  }
-
-  @override
   void dispose() {
     _controllers.forEach((controller) => controller.dispose());
     _focusNodes.forEach((focusNode) => focusNode.dispose());
@@ -49,15 +37,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
     super.dispose();
   }
 
-  Widget _codeInputField() {
+  Widget _codeInputField(ThemeData theme) {
+    final side = (MediaQuery.of(context).size.width - 140) / 4;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [3, 2, 1, 0].map((index) {
           return SizedBox(
-            width: _side,
-            height: _side,
+            width: side,
+            height: side,
             child: TextField(
               onChanged: index == 0
                   ? (num) {
@@ -79,21 +68,18 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       setState(() {});
                     },
               controller: _controllers[index],
-              cursorColor:
-                  _controllers[index].text.isEmpty ? Colors.green : Colors.white,
+              cursorColor: _controllers[index].text.isEmpty
+                  ? theme.primaryColorLight
+                  : Colors.white,
               decoration: InputDecoration(
                 counterText: '',
-                fillColor: _color,
+                fillColor: theme.primaryColor,
                 filled: _controllers[index].text.isNotEmpty,
               ),
               focusNode: index == 3 ? null : _focusNodes[index],
               keyboardType: TextInputType.number,
               maxLength: 2,
-              style: const TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+              style: theme.textTheme.headline5.copyWith(color: Colors.white),
               textAlign: TextAlign.center,
             ),
           );
@@ -104,6 +90,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: GestureDetector(
@@ -120,24 +107,20 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     Image.asset('assets/images/logo.png'),
                     SizedBox(height: 50),
                     Text(
-                      'Verify your email address\nwith the code sent to you',
-                      textScaleFactor: 1.25,
-                      style: TextStyle(
-                        color: Theme.of(context).accentColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      'Verify your email\nwith code sent to you',
+                      style: theme.textTheme.headline5,
+                      textAlign: TextAlign.center,
                     ),
-                    _codeInputField(),
+                    _codeInputField(theme),
                     RichText(
                       text: TextSpan(
                         text: 'Didn\'t receive the code? ',
-                        style: const TextStyle(color: Colors.grey),
+                        style: theme.textTheme.subtitle1
+                          .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
                           TextSpan(
                             text: 'Resend',
-                            style: TextStyle(
-                              color: Theme.of(context).accentColor,
-                            ),
+                            style: TextStyle(color: theme.accentColor),
                             recognizer: _resendCode,
                           ),
                         ],
@@ -146,8 +129,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ],
                 ),
               ),
-              AppRaisedButton(
-                label: 'Continue',
+              RaisedButton(
+                child: Text('Continue'),
                 onPressed: () {
                   Navigator.of(context).pushNamed(SetupScreen.routeName);
                 },
@@ -165,7 +148,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
           },
           elevation: 0,
           backgroundColor: Colors.transparent,
-          splashColor: Theme.of(context).primaryColor,
+          splashColor: theme.primaryColor,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,

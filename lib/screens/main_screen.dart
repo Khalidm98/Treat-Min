@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import './select_screen.dart';
-import '../widgets/app_raised_button.dart';
 
 class MainScreen extends StatelessWidget {
   @override
@@ -14,27 +13,27 @@ class MainScreen extends StatelessWidget {
           children: [
             Image.asset('assets/images/logo.png'),
             SizedBox(height: 80),
-            AppRaisedButton(
-              label: 'Outpatient Clinic',
+            RaisedButton(
+              child: Text('Outpatient Clinic'),
               onPressed: () {
                 Navigator.of(context).pushNamed(SelectScreen.routeName);
               },
             ),
             SizedBox(height: 30),
-            AppRaisedButton(
-              label: 'Services',
+            RaisedButton(
+              child: Text('Services'),
               onPressed: () {},
             ),
             SizedBox(height: 30),
-            AppRaisedButton(
-              label: 'Special Rooms',
+            RaisedButton(
+              child: Text('Special Rooms'),
               onPressed: () {},
             ),
             SizedBox(height: 30),
-            AppRaisedButton(
-              label: 'Emergency',
+            RaisedButton(
               onPressed: () {},
-              color: Colors.red,
+              color: Theme.of(context).errorColor,
+              child: Text('Emergency'),
             ),
           ],
         ),

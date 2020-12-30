@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './auth_screen.dart';
-import '../widgets/app_raised_button.dart';
 
 class GetStartedScreen extends StatelessWidget {
   static const routeName = '/get-started';
@@ -19,18 +17,14 @@ class GetStartedScreen extends StatelessWidget {
               Image.asset('assets/images/logo.png'),
               Text(
                 'Care close to home',
-                textScaleFactor: 1.5,
-                style: TextStyle(
-                  color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headline5,
               ),
               Image.asset(
                 'assets/images/doctor.png',
                 height: MediaQuery.of(context).size.height * 0.4,
               ),
-              AppRaisedButton(
-                label: 'GET STARTED',
+              RaisedButton(
+                child: Text('GET STARTED'),
                 onPressed: () {
                   Navigator.of(context)
                       .pushReplacementNamed(AuthScreen.routeName);
