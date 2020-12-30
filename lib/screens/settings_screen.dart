@@ -3,32 +3,55 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import './auth_screen.dart';
 
+enum Language { Arabic, English }
+
 class SettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  Language _language = Language.English;
   bool _notification = false;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xff56c596),
-        title: Text('Settings'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text('Settings')),
       body: ListView(
         padding: EdgeInsets.all(15),
         children: [
-          SettingCard('App language'),
-          Divider(height: 10),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: ListTile(
+              tileColor: Colors.grey[300],
+              title: Text('App Language', style: theme.textTheme.headline6),
+              trailing: ToggleSwitch(
+                labels: ['English', 'Arabic'],
+                minWidth: 75,
+                minHeight: 30,
+                cornerRadius: 10,
+                activeBgColor: theme.primaryColorLight,
+                inactiveBgColor: Colors.white,
+                onToggle: (index) {
+                  if (index == 0) {
+                    _language = Language.English;
+                  } else {
+                    _language = Language.Arabic;
+                  }
+                  print(_language);
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 15),
           Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             margin: EdgeInsets.all(0),
-            color: Color(0xFFE0ECDE),
+            color: Colors.grey[300],
             child: SwitchListTile(
               value: _notification,
               onChanged: (newVal) {
@@ -36,23 +59,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
               title: Text(
                 'Send Notifications',
-                style: const TextStyle(fontSize: 24),
+                style: theme.textTheme.headline6,
               ),
               activeColor: Colors.white,
-              activeTrackColor: Color(0xff56c596),
-              inactiveThumbColor: Color(0xff56c596),
+              activeTrackColor: theme.primaryColorLight,
+              inactiveThumbColor: theme.primaryColorLight,
               inactiveTrackColor: Colors.white,
             ),
           ),
-          Divider(height: 10),
+          SizedBox(height: 15),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: ListTile(
-              enabled: true,
-              tileColor: Color(0xFFE0ECDE),
-              title: Text('My Account', style: TextStyle(fontSize: 24)),
+              tileColor: Colors.grey[300],
+              title: Text('My Account', style: theme.textTheme.headline6),
               leading: CircleAvatar(
-                backgroundColor: Color(0xff56c596),
+                backgroundColor: theme.primaryColorLight,
                 child: Icon(
                   Icons.account_circle,
                   color: Colors.white,
@@ -61,63 +83,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          Divider(height: 10),
+          SizedBox(height: 15),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: ListTile(
-              tileColor: Color(0xFFE0ECDE),
-              title: Text('Log out', style: TextStyle(fontSize: 24)),
+              tileColor: Colors.grey[300],
+              title: Text('Log Out', style: theme.textTheme.headline6),
               trailing: CircleAvatar(
-                backgroundColor: Color(0xff56c596),
-                child: IconButton(
-                  onPressed: () {
+                backgroundColor: theme.primaryColorLight,
+                child: InkWell(
+                  child: Icon(Icons.logout, color: Colors.white),
+                  onTap: () {
                     Navigator.of(context)
                         .pushReplacementNamed(AuthScreen.routeName);
                   },
-                  icon: Icon(Icons.logout),
-                  color: Colors.white,
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class SettingCard extends StatefulWidget {
-  final String text;
-
-  SettingCard(this.text);
-
-  @override
-  _SettingCardState createState() => _SettingCardState();
-}
-
-class _SettingCardState extends State<SettingCard> {
-  bool val = true;
-
-  void changeVal(bool newVal) {
-    val = newVal;
-  }
-
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      margin: EdgeInsets.all(0),
-      color: Color(0xFFE0ECDE),
-      child: ListTile(
-        title: Text(widget.text, style: TextStyle(fontSize: 24)),
-        trailing: ToggleSwitch(
-          fontSize: 12,
-          cornerRadius: 10,
-          labels: ['English', 'Arabic'],
-          activeBgColor: Color(0xff56c596),
-          inactiveBgColor: Colors.white,
-          minWidth: 60,
-          minHeight: 30,
-        ),
       ),
     );
   }

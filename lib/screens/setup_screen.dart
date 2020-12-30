@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import './tabs_screen.dart';
-import '../widgets/app_raised_button.dart';
 import '../widgets/input_field.dart';
 
 class SetupScreen extends StatefulWidget {
@@ -62,9 +61,8 @@ class _SetupScreenState extends State<SetupScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 50),
                 child: Text(
                   'Account Setup',
-                  textScaleFactor: 2,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline4,
                 ),
               ),
               Form(
@@ -74,7 +72,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     InputField(
                       label: 'Name',
                       textFormField: TextFormField(
-                        decoration: InputDecoration(hintText: 'your name here'),
+                        decoration: InputDecoration(hintText: 'Your Name Here'),
                         textCapitalization: TextCapitalization.words,
                         onFieldSubmitted: (_) {
                           _focusNodes[0].requestFocus();
@@ -135,8 +133,8 @@ class _SetupScreenState extends State<SetupScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50, bottom: 30),
-                child: AppRaisedButton(
-                  label: 'Finish',
+                child: RaisedButton(
+                  child: Text('Finish'),
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         TabsScreen.routeName, (route) => false);
