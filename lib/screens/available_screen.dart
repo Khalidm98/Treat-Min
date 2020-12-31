@@ -76,7 +76,7 @@ class AvailableScreen extends StatelessWidget {
           ),
           IconButton(
             icon: Image.asset(
-              "assets/icons/Filter.png",
+              "assets/icons/filter.png",
               width: 25,
               height: 25,
             ),
@@ -84,7 +84,7 @@ class AvailableScreen extends StatelessWidget {
           ),
           IconButton(
             icon: Image.asset(
-              "assets/icons/Sort.png",
+              "assets/icons/sort.png",
               width: 25,
               height: 25,
             ),

@@ -3,147 +3,75 @@ import 'package:flutter/material.dart';
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final accent = theme.accentColor;
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 120,
-                width: 120,
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundImage: AssetImage('assets/images/health.png'),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: CircleAvatar(
-                      backgroundColor: Color(0xff34bba3),
-                      radius: 16,
-                      child: Icon(
-                        Icons.photo_camera,
-                        color: Colors.white,
-                        size: 20,
-                      ),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: Stack(
+              fit: StackFit.passthrough,
+              children: [
+                Image.asset('assets/images/health.png', height: 120),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: CircleAvatar(
+                    backgroundColor: theme.primaryColor,
+                    radius: 15,
+                    child: Icon(
+                      Icons.photo_camera,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 30),
-              Text(
-                'New Patient',
-                style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.teal[800],
-                ),
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                leading: Icon(Icons.account_circle, size: 35),
-                title: Text(
-                  'Name',
-                  style: TextStyle(
-                    color: Colors.teal[800],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  'Mohamed Salah',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                trailing: Icon(
-                  Icons.edit,
-                  color: Colors.teal[800],
-                ),
-              ),
-              Divider(
-                color: Colors.black,
-                indent: 40,
-                endIndent: 40,
-                height: 0,
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                leading: Icon(
-                  Icons.date_range,
-                  size: 35,
-                ),
-                trailing: Icon(
-                  Icons.edit,
-                  color: Colors.teal[800],
-                ),
-                title: Text(
-                  'Date of birth',
-                  style: TextStyle(
-                    color: Colors.teal[800],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  '15/6/1992',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Divider(
-                color: Colors.black,
-                indent: 40,
-                endIndent: 40,
-                height: 0,
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                leading: Icon(
-                  Icons.phone_android,
-                  size: 35,
-                ),
-                trailing: Icon(
-                  Icons.edit,
-                  color: Colors.teal[800],
-                ),
-                title: Text(
-                  'Phone Number',
-                  style: TextStyle(
-                    color: Colors.teal[800],
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  '0112 861 1970',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                width: double.infinity,
-                child: Text(
-                  'Health Condition',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.teal[800],
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-              Card(
-                shadowColor: Colors.blueGrey,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    'Hello Mohamed,You are 28 years old.\nYour pressure is good. It\'s 80/120.\n'
-                    'Your fat is 7%.\nYour blood sugar level is usual.\nYour last PCR test '
-                    'in 1/12/2020 was negative.\nTreat-Min wish you a good health always.',
-                    style: TextStyle(fontSize: 15, color: Colors.teal[800]),
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
-        ),
+          Divider(height: 0),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.account_circle, color: accent, size: 40),
+            trailing: Icon(Icons.edit, color: theme.accentColor),
+            title: Text('Name'),
+            subtitle: Text('Mohamed Salah'),
+          ),
+          Divider(height: 0),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.date_range, color: accent, size: 40),
+            trailing: Icon(Icons.edit, color: theme.accentColor),
+            title: Text('Date of Birth'),
+            subtitle: Text('15/6/1992'),
+          ),
+          Divider(height: 0),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.phone_android, color: accent, size: 40),
+            trailing: Icon(Icons.edit, color: accent),
+            title: Text('Phone Number'),
+            subtitle: Text('0112 861 1970'),
+          ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
+            child: Text('Health Condition', style: theme.textTheme.headline5),
+          ),
+          Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                'Age: 28 years\n'
+                'Blood Pressure: 120/80 (Normal)\n'
+                'Body Fats: 7% (Normal)\n'
+                'PCR Test Result: Negative',
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

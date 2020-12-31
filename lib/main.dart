@@ -35,7 +35,8 @@ class MyApp extends StatelessWidget {
         primaryColorLight: greenLight,
         accentColor: blue,
         errorColor: red,
-        primarySwatch: Colors.teal,
+        dividerColor: blue,
+        colorScheme: ColorScheme.light(primary: green),
         appBarTheme: const AppBarTheme(centerTitle: true),
         buttonTheme: ButtonThemeData(
           shape: RoundedRectangleBorder(
@@ -61,7 +62,8 @@ class MyApp extends StatelessWidget {
           headline4:
           const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
           headline5: const TextStyle(fontWeight: FontWeight.w700, color: blue),
-          subtitle1: const TextStyle(fontWeight: FontWeight.w500),
+          subtitle1: const TextStyle(fontWeight: FontWeight.w700),
+          bodyText2: const TextStyle(fontWeight: FontWeight.w500),
         ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: greenLight,
