@@ -95,7 +95,7 @@ class _DoctorCardState extends State<DoctorCard> {
                         Padding(
                           padding: doctorCardIconsPadding,
                           child: Image.asset(
-                            "assets/icons/filled_heart.png",
+                            "assets/icons/rate_filled.png",
                             width: doctorCardIconsWidth,
                             height: doctorCardIconsHeight,
                           ),
@@ -103,7 +103,7 @@ class _DoctorCardState extends State<DoctorCard> {
                         Padding(
                           padding: doctorCardIconsPadding,
                           child: Image.asset(
-                            "assets/icons/filled_heart.png",
+                            "assets/icons/rate_filled.png",
                             width: doctorCardIconsWidth,
                             height: doctorCardIconsHeight,
                           ),
@@ -111,7 +111,7 @@ class _DoctorCardState extends State<DoctorCard> {
                         Padding(
                           padding: doctorCardIconsPadding,
                           child: Image.asset(
-                            "assets/icons/filled_heart.png",
+                            "assets/icons/rate_filled.png",
                             width: doctorCardIconsWidth,
                             height: doctorCardIconsHeight,
                           ),
@@ -119,7 +119,7 @@ class _DoctorCardState extends State<DoctorCard> {
                         Padding(
                           padding: doctorCardIconsPadding,
                           child: Image.asset(
-                            "assets/icons/filled_heart.png",
+                            "assets/icons/rate_filled.png",
                             width: doctorCardIconsWidth,
                             height: doctorCardIconsHeight,
                           ),
@@ -127,7 +127,7 @@ class _DoctorCardState extends State<DoctorCard> {
                         Padding(
                           padding: doctorCardIconsPadding,
                           child: Image.asset(
-                            "assets/icons/empty_heart.png",
+                            "assets/icons/rate_outlined.png",
                             width: doctorCardIconsWidth,
                             height: doctorCardIconsHeight,
                           ),
