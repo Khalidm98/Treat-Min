@@ -101,7 +101,7 @@ class _DoctorCardState extends State<DoctorCard> {
                                                                   radius: 65,
                                                                   child:*/
                                         CircleAvatar(
-                                          backgroundColor: theme.accentColor,
+                                          backgroundColor: theme.primaryColor,
                                           radius: 60,
                                           child: Image.asset(
                                             'assets/images/correct_icon.png',
