@@ -14,6 +14,7 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
   String dropdownValue;
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         hint: Padding(
@@ -23,15 +24,11 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
         value: dropdownValue,
         icon: Icon(
           Icons.arrow_drop_down_sharp,
-          color: Color(0xFF205072),
+          color: theme.accentColor,
         ),
         iconSize: 40,
         elevation: 1,
-        style: TextStyle(
-          color: Color(0xFF205072),
-          fontFamily: 'Montserrat',
-          fontSize: 20,
-        ),
+        style: theme.textTheme.headline6,
         onChanged: (String newValue) {
           setState(() {
             dropdownValue = newValue;

@@ -116,7 +116,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       text: TextSpan(
                         text: 'Didn\'t receive the code? ',
                         style: theme.textTheme.subtitle1
-                          .copyWith(color: theme.hintColor),
+                            .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
                           TextSpan(
                             text: 'Resend',

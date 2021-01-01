@@ -4,6 +4,7 @@ import 'doctor_card.dart';
 class RatingHearts extends StatelessWidget {
   final double iconWidth;
   final double iconHeight;
+
   RatingHearts({@required this.iconHeight, @required this.iconWidth});
 
   @override
@@ -14,7 +15,7 @@ class RatingHearts extends StatelessWidget {
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/filled_heart.png",
+            "assets/icons/rate_filled.png",
             width: iconWidth,
             height: iconHeight,
           ),
@@ -22,7 +23,7 @@ class RatingHearts extends StatelessWidget {
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/filled_heart.png",
+            "assets/icons/rate_filled.png",
             width: iconWidth,
             height: iconHeight,
           ),
@@ -30,7 +31,7 @@ class RatingHearts extends StatelessWidget {
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/filled_heart.png",
+            "assets/icons/rate_filled.png",
             width: iconWidth,
             height: iconHeight,
           ),
@@ -38,7 +39,7 @@ class RatingHearts extends StatelessWidget {
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/filled_heart.png",
+            "assets/icons/rate_filled.png",
             width: iconWidth,
             height: iconHeight,
           ),
@@ -46,7 +47,7 @@ class RatingHearts extends StatelessWidget {
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/empty_heart.png",
+            "assets/icons/rate_outlined.png",
             width: iconWidth,
             height: iconHeight,
           ),

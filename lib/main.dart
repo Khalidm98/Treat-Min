@@ -60,10 +60,11 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           button: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
           headline4:
-          const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
+              const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
           headline5: const TextStyle(fontWeight: FontWeight.w700, color: blue),
           subtitle1: const TextStyle(fontWeight: FontWeight.w700),
           bodyText2: const TextStyle(fontWeight: FontWeight.w500),
+          caption: const TextStyle(fontWeight: FontWeight.w500),
         ),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: greenLight,

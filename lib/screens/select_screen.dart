@@ -40,36 +40,27 @@ class SelectScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.symmetric(
-                  horizontal: BorderSide(color: Colors.grey[300]),
-                ),
-              ),
-              child: ListView.builder(
-                shrinkWrap: true,
+            Divider(thickness: 1, height: 1, indent: 20, endIndent: 20),
+            Expanded(
+              child: ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: clinics.length,
+                separatorBuilder: (_, index) {
+                  return Divider(thickness: 1, height: 1);
+                },
                 itemBuilder: (_, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.symmetric(
-                        horizontal: BorderSide(color: Colors.grey[300]),
-                      ),
+                  return ListTile(
+                    leading: Image.asset(clinics[index]['icon'], height: 30),
+                    title: Text(
+                      clinics[index]['name'],
+                      style: theme.textTheme.headline5,
                     ),
-                    child: ListTile(
-                      leading: Image.asset(clinics[index]['icon'], height: 30),
-                      title: Text(
-                        clinics[index]['name'],
-                        style: theme.textTheme.headline5,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          AvailableScreen.routeName,
-                          arguments: clinics[index],
-                        );
-                      },
-                    ),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        AvailableScreen.routeName,
+                        arguments: clinics[index],
+                      );
+                    },
                   );
                 },
               ),

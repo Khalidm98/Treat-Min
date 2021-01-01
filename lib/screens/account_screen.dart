@@ -15,11 +15,11 @@ class AccountScreen extends StatelessWidget {
               fit: StackFit.passthrough,
               children: [
                 Image.asset('assets/images/health.png', height: 120),
-                Align(
-                  alignment: Alignment.bottomRight,
+                Padding(
+                  padding: const EdgeInsets.only(top: 85, left: 85),
                   child: CircleAvatar(
-                    backgroundColor: theme.primaryColor,
-                    radius: 15,
+                    backgroundColor: theme.accentColor,
+                    radius: 18,
                     child: Icon(
                       Icons.photo_camera,
                       color: Colors.white,
@@ -70,6 +70,164 @@ class AccountScreen extends StatelessWidget {
                 'PCR Test Result: Negative',
               ),
             ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
+            child:
+                Text('Current Reservations', style: theme.textTheme.headline5),
+          ),
+          Card(
+            margin: EdgeInsets.only(bottom: 5),
+            shadowColor: Colors.blueGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Dr. Ahmed Khaled",
+                    style: theme.textTheme.headline6
+                        .copyWith(fontWeight: FontWeight.w700),
+                  ),
+                  Text(
+                    "ORTHODONTIC SPECIALIST",
+                    style: theme.textTheme.caption,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Saturday",
+                      ),
+                      Text(
+                        "01:00 - 08:00",
+                      ),
+                      SizedBox(
+                        height: 30,
+                        width: 85,
+                        child: OutlineButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: Text(
+                            'Cancel',
+                            style: theme.textTheme.subtitle2.copyWith(
+                                color: theme.errorColor,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          borderSide: BorderSide(color: theme.errorColor),
+                          splashColor: theme.errorColor.withOpacity(0.1),
+                          highlightedBorderColor: theme.errorColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.only(bottom: 5),
+            shadowColor: Colors.blueGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Dr. Ahmed Khaled",
+                    style: theme.textTheme.headline6
+                        .copyWith(fontWeight: FontWeight.w700),
+                  ),
+                  Text(
+                    "ORTHODONTIC SPECIALIST",
+                    style: theme.textTheme.caption,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Saturday",
+                      ),
+                      Text(
+                        "01:00 - 08:00",
+                      ),
+                      SizedBox(
+                        height: 30,
+                        width: 85,
+                        child: OutlineButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: Text(
+                            'Cancel',
+                            style: theme.textTheme.subtitle2.copyWith(
+                                color: theme.errorColor,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          borderSide: BorderSide(color: theme.errorColor),
+                          splashColor: theme.errorColor.withOpacity(0.1),
+                          highlightedBorderColor: theme.errorColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.only(bottom: 5),
+            shadowColor: Colors.blueGrey,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Dr. Ahmed Khaled",
+                    style: theme.textTheme.headline6
+                        .copyWith(fontWeight: FontWeight.w700),
+                  ),
+                  Text(
+                    "ORTHODONTIC SPECIALIST",
+                    style: theme.textTheme.caption,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Saturday",
+                      ),
+                      Text(
+                        "01:00 - 08:00",
+                      ),
+                      SizedBox(
+                        height: 30,
+                        width: 85,
+                        child: OutlineButton(
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: Text(
+                            'Cancel',
+                            style: theme.textTheme.subtitle2.copyWith(
+                                color: theme.errorColor,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          borderSide: BorderSide(color: theme.errorColor),
+                          splashColor: theme.errorColor.withOpacity(0.1),
+                          highlightedBorderColor: theme.errorColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 25,
           )
         ],
       ),
