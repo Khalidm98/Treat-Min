@@ -60,7 +60,7 @@ class _NavigationBarState extends State<NavigationBar> {
       height: 62,
       width: double.infinity,
       child: Stack(
-        children: <Widget>[
+        children: [
           Positioned(
             top: 2,
             child: Row(

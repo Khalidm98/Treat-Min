@@ -20,25 +20,58 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    const Color greenLight = const Color(0xFF60C0A0);
+    const Color green = const Color(0xFF40B080);
+    const Color greenDark = const Color(0xFF20A060);
+    const Color blue = const Color(0xFF205070);
+    const Color red = const Color(0xFFA01010);
     return MaterialApp(
       title: 'Treat-Min',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        primarySwatch: Colors.green,
-        accentColor: Colors.indigo,
         fontFamily: 'Montserrat',
+        primaryColor: green,
+        primaryColorDark: greenDark,
+        primaryColorLight: greenLight,
+        accentColor: blue,
+        errorColor: red,
+        dividerColor: blue,
+        colorScheme: ColorScheme.light(primary: green),
+        appBarTheme: const AppBarTheme(centerTitle: true),
+        buttonTheme: ButtonThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          buttonColor: greenDark,
+          height: 50,
+          minWidth: double.infinity,
+          textTheme: ButtonTextTheme.primary,
+        ),
         inputDecorationTheme: InputDecorationTheme(
-          hintStyle: TextStyle(color: Colors.grey, height: 1.5),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.green),
+            borderSide: const BorderSide(color: greenDark),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.green),
+            borderSide: const BorderSide(color: greenDark),
           ),
         ),
+        textTheme: const TextTheme(
+          button: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          headline4:
+          const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
+          headline5: const TextStyle(fontWeight: FontWeight.w700, color: blue),
+          subtitle1: const TextStyle(fontWeight: FontWeight.w700),
+          bodyText2: const TextStyle(fontWeight: FontWeight.w500),
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: greenLight,
+          selectionColor: greenLight,
+          selectionHandleColor: greenLight,
+        ),
+        useTextSelectionTheme: true,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(),
       routes: {

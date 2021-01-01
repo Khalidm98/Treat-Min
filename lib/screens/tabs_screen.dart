@@ -57,13 +57,13 @@ class _TabsScreenState extends State<TabsScreen> {
           Image.asset('assets/icons/heart_outlined.png'),
           // Image.asset('assets/icons/medicine_outlined.png'),
           Image.asset('assets/icons/settings_outlined.png'),
-          Image.asset('assets/icons/profile_outlined.png'),
+          Image.asset('assets/icons/account_outlined.png'),
         ],
         activeItems: [
           Image.asset('assets/icons/heart_filled.png'),
           // Image.asset('assets/icons/medicine_outlined.png'),
           Image.asset('assets/icons/settings_filled.png'),
-          Image.asset('assets/icons/profile_filled.png'),
+          Image.asset('assets/icons/account_filled.png'),
         ],
       ),
     );

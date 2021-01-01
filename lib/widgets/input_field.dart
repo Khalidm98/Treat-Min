@@ -8,6 +8,7 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Stack(
       children: [
         Container(
@@ -15,23 +16,23 @@ class InputField extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: textFormField,
         ),
-        Align(
-          alignment: Alignment(-0.8, 0),
+        Positioned(
+          left: 20,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColorDark,
-                ],
+                colors: [theme.primaryColor, theme.primaryColorDark],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                stops: [0.7, 1],
+                stops: [0.1, 0.9],
               ),
             ),
-            child: Text(label, style: const TextStyle(color: Colors.white)),
+            child: Text(
+              label,
+              style: theme.textTheme.subtitle1.copyWith(color: Colors.white),
+            ),
           ),
         ),
       ],
