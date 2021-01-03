@@ -41,7 +41,7 @@ class _ModalSheetListTileState extends State<ModalSheetListTile> {
                 spreadRadius: 0.5,
                 blurRadius: 2,
                 offset: Offset(0, 0),
-              ) // changes position of shadow
+              )
             ],
             borderRadius: BorderRadius.circular(20),
           ),

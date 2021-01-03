@@ -14,6 +14,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Language _language = Language.English;
   bool _notification = false;
 
+  void _logOut() {
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: const Text('Are you sure you want to log out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -89,14 +110,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListTile(
               tileColor: Colors.grey[300],
               title: Text('Log Out', style: theme.textTheme.headline6),
-              trailing: CircleAvatar(
-                backgroundColor: theme.primaryColorLight,
-                child: InkWell(
+              trailing: InkWell(
+                onTap: () => _logOut(),
+                splashColor: theme.primaryColorDark,
+                child: CircleAvatar(
+                  backgroundColor: theme.primaryColorLight,
                   child: Icon(Icons.logout, color: Colors.white),
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(AuthScreen.routeName);
-                  },
                 ),
               ),
             ),

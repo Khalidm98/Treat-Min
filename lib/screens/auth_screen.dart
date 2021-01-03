@@ -15,10 +15,12 @@ class AuthScreen extends StatefulWidget {
   _AuthScreenState createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
   AuthMode _mode = AuthMode.signUp;
   TapGestureRecognizer _switchMode;
-  final FocusNode _passNode = FocusNode();
+  AnimationController _controller;
+  Animation<double> _opacity;
 
   @override
   void initState() {
@@ -27,23 +29,33 @@ class _AuthScreenState extends State<AuthScreen> {
       ..onTap = () {
         if (_mode == AuthMode.signUp) {
           setState(() => _mode = AuthMode.logIn);
+          _controller.forward();
         } else {
           setState(() => _mode = AuthMode.signUp);
+          _controller.reverse();
         }
       };
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _opacity = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
   }
 
   @override
   void dispose() {
     _switchMode.dispose();
-    _passNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   Widget _buildSocialButton(Social social) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: RaisedButton.icon(
+      child: ElevatedButton.icon(
         onPressed: () {},
         icon: Image.asset(
           'assets/icons/${social == Social.google ? 'google' : 'facebook'}.png',
@@ -53,7 +65,14 @@ class _AuthScreenState extends State<AuthScreen> {
           '${_mode == AuthMode.signUp ? 'Sign Up' : 'Log In'} with '
           '${social == Social.google ? 'Google' : 'Facebook'}',
         ),
-        color: social == Social.google ? Colors.white : Colors.indigo[600],
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(
+            social == Social.google ? Colors.white : Colors.indigo[600],
+          ),
+          foregroundColor: MaterialStateProperty.all<Color>(
+            social == Social.google ? Colors.black : Colors.white,
+          )
+        ),
       ),
     );
   }
@@ -76,81 +95,59 @@ class _AuthScreenState extends State<AuthScreen> {
                 style: theme.textTheme.headline4,
               ),
               SizedBox(height: 40),
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 500),
-                crossFadeState: _mode == AuthMode.signUp
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                firstChild: Form(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: InputField(
-                          label: 'Email Address',
-                          textFormField: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'test@example.com',
-                            ),
-                            keyboardType: TextInputType.emailAddress,
+              Form(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: InputField(
+                        label: 'Email Address',
+                        textFormField: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'test@example.com',
                           ),
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: _mode == AuthMode.logIn
+                              ? TextInputAction.next
+                              : null,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: RaisedButton(
-                          child: Text('Sign Up'),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(VerificationScreen.routeName);
-                          },
-                        ),
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      constraints: BoxConstraints(
+                        maxHeight: _mode == AuthMode.signUp ? 0 : 100,
                       ),
-                    ],
-                  ),
-                ),
-                secondChild: Form(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: InputField(
-                          label: 'Email Address',
-                          textFormField: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: 'test@example.com',
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            onFieldSubmitted: (_) {
-                              _passNode.requestFocus();
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: FadeTransition(
+                        opacity: _opacity,
                         child: InputField(
                           label: 'Password',
                           textFormField: TextFormField(
                             decoration: InputDecoration(hintText: '********'),
                             obscureText: true,
-                            focusNode: _passNode,
-                            onFieldSubmitted: (_) {},
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: RaisedButton(
-                          child: Text('Log In'),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed(TabsScreen.routeName);
-                          },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: ElevatedButton(
+                        child: Text(
+                          _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
                         ),
+                        onPressed: _mode == AuthMode.signUp
+                            ? () {
+                                Navigator.of(context)
+                                    .pushNamed(VerificationScreen.routeName);
+                              }
+                            : () {
+                                Navigator.of(context)
+                                    .pushReplacementNamed(TabsScreen.routeName);
+                              },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
               Divider(

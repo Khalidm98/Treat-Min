@@ -13,27 +13,31 @@ class MainScreen extends StatelessWidget {
           children: [
             Image.asset('assets/images/logo.png'),
             SizedBox(height: 80),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Outpatient Clinic'),
               onPressed: () {
                 Navigator.of(context).pushNamed(SelectScreen.routeName);
               },
             ),
             SizedBox(height: 30),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Services'),
               onPressed: () {},
             ),
             SizedBox(height: 30),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Special Rooms'),
               onPressed: () {},
             ),
             SizedBox(height: 30),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () {},
-              color: Theme.of(context).errorColor,
               child: Text('Emergency'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Theme.of(context).errorColor,
+                ),
+              ),
             ),
           ],
         ),

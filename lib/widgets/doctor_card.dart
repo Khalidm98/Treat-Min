@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
+
 import 'rating_hearts.dart';
 import 'package:flutter/material.dart';
 import 'package:treat_min/widgets/booknow_dropdown_list.dart';
@@ -21,22 +23,21 @@ class _DoctorCardState extends State<DoctorCard> {
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: AlertDialog(
             scrollable: true,
-            insetPadding: EdgeInsets.symmetric(horizontal: 22),
-            contentPadding: EdgeInsets.all(0),
+            insetPadding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.zero,
             content: Container(
-              padding: EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width - 50,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                border: Border.all(color: theme.accentColor, width: 5),
+              ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
                     radius: MediaQuery.of(context).size.height / 13,
                     backgroundColor: theme.accentColor,
                     child: CircleAvatar(
-                      child: Image.asset(
-                        'assets/icons/tooth.png',
-
-                        // fit: BoxFit.scaleDown,
-                      ),
+                      child: Image.asset('assets/icons/tooth.png'),
                       backgroundColor: Colors.white,
                       radius: MediaQuery.of(context).size.height / 14,
                     ),
@@ -44,9 +45,8 @@ class _DoctorCardState extends State<DoctorCard> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Dr.Ahmed Khaled",
+                      "Dr. Ahmed Khaled",
                       style: theme.textTheme.headline5,
-                      //textScaleFactor: 1.7,
                     ),
                   ),
                   Text(
@@ -54,88 +54,78 @@ class _DoctorCardState extends State<DoctorCard> {
                     style: theme.textTheme.subtitle2,
                   ),
                   RatingHearts(iconWidth: 30, iconHeight: 30),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Text(
-                      "Rating from 22 visitors",
-                      style: theme.textTheme.bodyText2,
-                    ),
+                  Text(
+                    "Rating from 22 visitors",
+                    style: theme.textTheme.bodyText2,
                   ),
+                  SizedBox(height: 20),
                   Container(
                     child: BookNowDropDownList(),
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xFF205072),
-                      ),
+                      border: Border.all(color: theme.accentColor),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    width: (MediaQuery.of(context).size.width) / 1.15,
-                    child: RaisedButton(
-                      child: Text('Book Now'),
-                      color: theme.accentColor,
-                      onPressed: () {
-                        Navigator.pop(context);
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: AlertDialog(
-                                    contentPadding: EdgeInsets.all(0),
-                                    insetPadding: EdgeInsets.all(0),
-                                    content: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        /*    CircleAvatar(
-                                                                  backgroundColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  radius: 65,
-                                                                  child:*/
-                                        CircleAvatar(
-                                          backgroundColor: theme.primaryColor,
-                                          radius: 60,
-                                          child: Image.asset(
-                                            'assets/images/correct_icon.png',
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                        // ),
-                                        Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 20),
-                                            child: Text(
-                                                'Your Appointment Has Been Reserved Successfully! ',
-                                                textAlign: TextAlign.center,
-                                                style: theme.textTheme.headline5
-                                                    .copyWith(
-                                                        color: Colors.white))),
-                                      ],
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                ),
-                              );
-                            });
-                      },
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    child: Text('Book Now'),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        theme.accentColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _bookSuccess(theme);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _bookSuccess(ThemeData theme) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: AlertDialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: theme.primaryColor,
+                    radius: 60,
+                    child: Image.asset(
+                      'assets/images/correct_icon.png',
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 20,
+                    ),
+                    child: Text(
+                      'Your Appointment Has Been Reserved Successfully!',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.headline5
+                          .copyWith(color: Colors.white),
                     ),
                   ),
                 ],
               ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Color(0xFF205072),
-                    width: 6,
-                  )),
             ),
           ),
         );
@@ -247,9 +237,15 @@ class _DoctorCardState extends State<DoctorCard> {
                       SizedBox(
                         width: 100,
                         height: 25,
-                        child: RaisedButton(
-                          color: theme.primaryColor,
-                          padding: EdgeInsets.all(5),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              theme.primaryColor,
+                            ),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              const EdgeInsets.all(5),
+                            ),
+                          ),
                           child: FittedBox(
                             child: Text(
                               "Book Now",

@@ -25,7 +25,18 @@ class _VerificationScreenState extends State<VerificationScreen> {
     _controllers.add(TextEditingController());
     _resendCode = TapGestureRecognizer()
       ..onTap = () {
-        print('Resend');
+        showDialog(
+          context: context,
+          child: AlertDialog(
+            title: const Text('We will send a new code to your email address'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
       };
   }
 
@@ -129,7 +140,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ],
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Continue'),
                 onPressed: () {
                   Navigator.of(context).pushNamed(SetupScreen.routeName);

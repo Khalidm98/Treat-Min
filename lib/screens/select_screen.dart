@@ -27,8 +27,7 @@ class SelectScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, color: theme.accentColor),
                   hintText: 'Enter Search',
-                  hintStyle: theme.textTheme.subtitle1
-                      .copyWith(color: theme.accentColor),
+                  hintStyle: TextStyle(color: theme.accentColor),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(color: theme.accentColor),

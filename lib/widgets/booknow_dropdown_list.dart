@@ -12,6 +12,7 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
     'Tuesday 12:00-15:00'
   ];
   String dropdownValue;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -37,8 +38,8 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
         items: schedule.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Container(
-              padding: EdgeInsets.only(left: 10),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
               child: Text(value),
             ),
           );

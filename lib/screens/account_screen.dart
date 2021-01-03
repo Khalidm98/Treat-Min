@@ -78,11 +78,9 @@ class AccountScreen extends StatelessWidget {
           ),
           Card(
             margin: EdgeInsets.only(bottom: 5),
-            shadowColor: Colors.blueGrey,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -97,27 +95,14 @@ class AccountScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Saturday",
-                      ),
-                      Text(
-                        "01:00 - 08:00",
-                      ),
+                      Text("Saturday"),
+                      Text("01:00 - 08:00"),
                       SizedBox(
                         height: 30,
                         width: 85,
-                        child: OutlineButton(
-                          padding: EdgeInsets.all(0),
+                        child: OutlinedButton(
                           onPressed: () {},
-                          child: Text(
-                            'Cancel',
-                            style: theme.textTheme.subtitle2.copyWith(
-                                color: theme.errorColor,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          borderSide: BorderSide(color: theme.errorColor),
-                          splashColor: theme.errorColor.withOpacity(0.1),
-                          highlightedBorderColor: theme.errorColor,
+                          child: Text('Cancel'),
                         ),
                       ),
                     ],
@@ -128,11 +113,9 @@ class AccountScreen extends StatelessWidget {
           ),
           Card(
             margin: EdgeInsets.only(bottom: 5),
-            shadowColor: Colors.blueGrey,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -147,27 +130,14 @@ class AccountScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Saturday",
-                      ),
-                      Text(
-                        "01:00 - 08:00",
-                      ),
+                      Text("Saturday"),
+                      Text("01:00 - 08:00"),
                       SizedBox(
                         height: 30,
                         width: 85,
-                        child: OutlineButton(
-                          padding: EdgeInsets.all(0),
+                        child: OutlinedButton(
                           onPressed: () {},
-                          child: Text(
-                            'Cancel',
-                            style: theme.textTheme.subtitle2.copyWith(
-                                color: theme.errorColor,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          borderSide: BorderSide(color: theme.errorColor),
-                          splashColor: theme.errorColor.withOpacity(0.1),
-                          highlightedBorderColor: theme.errorColor,
+                          child: Text('Cancel'),
                         ),
                       ),
                     ],
@@ -178,11 +148,9 @@ class AccountScreen extends StatelessWidget {
           ),
           Card(
             margin: EdgeInsets.only(bottom: 5),
-            shadowColor: Colors.blueGrey,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -197,27 +165,14 @@ class AccountScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Saturday",
-                      ),
-                      Text(
-                        "01:00 - 08:00",
-                      ),
+                      Text("Saturday"),
+                      Text("01:00 - 08:00"),
                       SizedBox(
                         height: 30,
                         width: 85,
-                        child: OutlineButton(
-                          padding: EdgeInsets.all(0),
+                        child: OutlinedButton(
                           onPressed: () {},
-                          child: Text(
-                            'Cancel',
-                            style: theme.textTheme.subtitle2.copyWith(
-                                color: theme.errorColor,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          borderSide: BorderSide(color: theme.errorColor),
-                          splashColor: theme.errorColor.withOpacity(0.1),
-                          highlightedBorderColor: theme.errorColor,
+                          child: Text('Cancel'),
                         ),
                       ),
                     ],
@@ -226,9 +181,7 @@ class AccountScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 25,
-          )
+          SizedBox(height: 25)
         ],
       ),
     );

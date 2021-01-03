@@ -36,16 +36,64 @@ class MyApp extends StatelessWidget {
         accentColor: blue,
         errorColor: red,
         dividerColor: blue,
-        colorScheme: ColorScheme.light(primary: green),
         appBarTheme: const AppBarTheme(centerTitle: true),
-        buttonTheme: ButtonThemeData(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<OutlinedBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            backgroundColor: MaterialStateProperty.all<Color>(greenDark),
+            overlayColor: MaterialStateProperty.all<Color>(
+              greenLight.withOpacity(0.2),
+            ),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              const TextStyle(
+                fontSize: 20,
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            minimumSize: MaterialStateProperty.all<Size>(
+              const Size(double.infinity, 50),
+            ),
           ),
-          buttonColor: greenDark,
-          height: 50,
-          minWidth: double.infinity,
-          textTheme: ButtonTextTheme.primary,
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<OutlinedBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            side: MaterialStateProperty.all<BorderSide>(
+              const BorderSide(color: red),
+            ),
+            backgroundColor: MaterialStateProperty.all<Color>(
+              red.withOpacity(0.2),
+            ),
+            overlayColor: MaterialStateProperty.all<Color>(
+              red.withOpacity(0.4),
+            ),
+            foregroundColor: MaterialStateProperty.all<Color>(red),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              const TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            overlayColor: MaterialStateProperty.all<Color>(
+              blue.withOpacity(0.2),
+            ),
+            foregroundColor: MaterialStateProperty.all<Color>(blue),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              const TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
@@ -58,7 +106,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         textTheme: const TextTheme(
-          button: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          button: const TextStyle(fontWeight: FontWeight.w700),
           headline4:
               const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
           headline5: const TextStyle(fontWeight: FontWeight.w700, color: blue),

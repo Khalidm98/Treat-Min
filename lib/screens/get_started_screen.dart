@@ -23,7 +23,7 @@ class GetStartedScreen extends StatelessWidget {
                 'assets/images/doctor.png',
                 height: MediaQuery.of(context).size.height * 0.4,
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('GET STARTED'),
                 onPressed: () {
                   Navigator.of(context)

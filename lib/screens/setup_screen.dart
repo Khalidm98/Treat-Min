@@ -11,21 +11,11 @@ class SetupScreen extends StatefulWidget {
 }
 
 class _SetupScreenState extends State<SetupScreen> {
-  List<FocusNode> _focusNodes = List();
   TextEditingController _dateController = TextEditingController();
   DateTime _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
 
   @override
-  void initState() {
-    super.initState();
-    for (int i = 0; i < 3; i++) {
-      _focusNodes.add(FocusNode());
-    }
-  }
-
-  @override
   void dispose() {
-    _focusNodes.forEach((focusNode) => focusNode.dispose());
     _dateController.dispose();
     super.dispose();
   }
@@ -36,15 +26,13 @@ class _SetupScreenState extends State<SetupScreen> {
       initialDate: _date,
       firstDate: DateTime.now().subtract(Duration(days: 365 * 80 + 20)),
       lastDate: DateTime.now().subtract(Duration(days: 365 * 12 + 3)),
+      helpText: 'SELECT YOUR DATE OF BIRTH',
     );
     if (picked != null) {
       _date = picked;
       _dateController.text = _date.toString().substring(0, 10);
-    } else {
-      _dateController.text = '';
     }
     setState(() {});
-    // FocusScope.of(context).unfocus();
   }
 
   @override
@@ -74,9 +62,7 @@ class _SetupScreenState extends State<SetupScreen> {
                       textFormField: TextFormField(
                         decoration: InputDecoration(hintText: 'Your Name Here'),
                         textCapitalization: TextCapitalization.words,
-                        onFieldSubmitted: (_) {
-                          _focusNodes[0].requestFocus();
-                        },
+                        textInputAction: TextInputAction.next,
                       ),
                     ),
                     SizedBox(height: 30),
@@ -84,11 +70,8 @@ class _SetupScreenState extends State<SetupScreen> {
                       label: 'Password',
                       textFormField: TextFormField(
                         decoration: InputDecoration(hintText: '********'),
-                        focusNode: _focusNodes[0],
                         obscureText: true,
-                        onFieldSubmitted: (_) {
-                          _focusNodes[1].requestFocus();
-                        },
+                        textInputAction: TextInputAction.next,
                       ),
                     ),
                     SizedBox(height: 30),
@@ -96,36 +79,37 @@ class _SetupScreenState extends State<SetupScreen> {
                       label: 'Confirm Password',
                       textFormField: TextFormField(
                         decoration: InputDecoration(hintText: '********'),
-                        focusNode: _focusNodes[1],
                         obscureText: true,
-                        onFieldSubmitted: (_) {
-                          _focusNodes[2].requestFocus();
-                        },
+                        textInputAction: TextInputAction.next,
                       ),
                     ),
                     SizedBox(height: 30),
                     InputField(
                       label: 'Phone',
                       textFormField: TextFormField(
-                        decoration: InputDecoration(hintText: '01## ### ####'),
-                        focusNode: _focusNodes[2],
+                        decoration: InputDecoration(
+                          hintText: '01## ### ####',
+                          counterText: '',
+                        ),
                         keyboardType: TextInputType.phone,
-                        onFieldSubmitted: (_) {},
+                        maxLength: 11,
+                        onFieldSubmitted: (_) {
+                          _pickDate();
+                        },
                       ),
                     ),
                     SizedBox(height: 30),
-                    InputField(
-                      label: 'Date of Birth',
-                      textFormField: TextFormField(
-                        decoration: InputDecoration(hintText: 'YYYY-MM-DD'),
-                        controller: _dateController,
-                        onTap: () {
-                          _pickDate();
-                          // _pickDate().then((_) {
-                          //   FocusScope.of(context).unfocus();
-                          // });
-                        },
-                        onFieldSubmitted: (_) {},
+                    GestureDetector(
+                      onTap: () => _pickDate(),
+                      child: AbsorbPointer(
+                        child: InputField(
+                          label: 'Date of Birth',
+                          textFormField: TextFormField(
+                            decoration: InputDecoration(hintText: 'YYYY-MM-DD'),
+                            controller: _dateController,
+                            onFieldSubmitted: (_) {},
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -133,7 +117,7 @@ class _SetupScreenState extends State<SetupScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50, bottom: 30),
-                child: RaisedButton(
+                child: ElevatedButton(
                   child: Text('Finish'),
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
