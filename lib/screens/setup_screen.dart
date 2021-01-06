@@ -1,23 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './tabs_screen.dart';
+import '../providers/user_data.dart';
 import '../widgets/input_field.dart';
 
 class SetupScreen extends StatefulWidget {
-  static const routeName = '/setup';
+  static const String routeName = '/setup';
 
   @override
   _SetupScreenState createState() => _SetupScreenState();
 }
 
 class _SetupScreenState extends State<SetupScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  bool _passObscure = true;
+  bool _confirmObscure = true;
   TextEditingController _dateController = TextEditingController();
   DateTime _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
+  Map<String, String> _account = {
+    'id': DateTime.now().toIso8601String(),
+    'photo': '',
+  };
 
   @override
   void dispose() {
     _dateController.dispose();
     super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    await Provider.of<UserData>(context, listen: false).signUp(_account);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
   }
 
   Future<void> _pickDate() async {
@@ -54,6 +73,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 ),
               ),
               Form(
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -63,14 +83,33 @@ class _SetupScreenState extends State<SetupScreen> {
                         decoration: InputDecoration(hintText: 'Your Name Here'),
                         textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
+                        onSaved: (value) => _account['name'] = value,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Name cannot be empty!';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     SizedBox(height: 30),
                     InputField(
                       label: 'Password',
                       textFormField: TextFormField(
-                        decoration: InputDecoration(hintText: '********'),
-                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: '********',
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _passObscure = !_passObscure;
+                              });
+                            },
+                            child: Icon(_passObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                          ),
+                        ),
+                        obscureText: _passObscure,
                         textInputAction: TextInputAction.next,
                       ),
                     ),
@@ -78,8 +117,20 @@ class _SetupScreenState extends State<SetupScreen> {
                     InputField(
                       label: 'Confirm Password',
                       textFormField: TextFormField(
-                        decoration: InputDecoration(hintText: '********'),
-                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: '********',
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _confirmObscure = !_confirmObscure;
+                              });
+                            },
+                            child: Icon(_confirmObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                          ),
+                        ),
+                        obscureText: _confirmObscure,
                         textInputAction: TextInputAction.next,
                       ),
                     ),
@@ -93,8 +144,13 @@ class _SetupScreenState extends State<SetupScreen> {
                         ),
                         keyboardType: TextInputType.phone,
                         maxLength: 11,
-                        onFieldSubmitted: (_) {
-                          _pickDate();
+                        onFieldSubmitted: (_) => _pickDate(),
+                        onSaved: (value) => _account['phone'] = value,
+                        validator: (value) {
+                          if (int.tryParse(value) == null) {
+                            return 'Phone must contain numbers only!';
+                          }
+                          return null;
                         },
                       ),
                     ),
@@ -107,7 +163,8 @@ class _SetupScreenState extends State<SetupScreen> {
                           textFormField: TextFormField(
                             decoration: InputDecoration(hintText: 'YYYY-MM-DD'),
                             controller: _dateController,
-                            onFieldSubmitted: (_) {},
+                            onSaved: (_) =>
+                                _account['birth'] = _date.toIso8601String(),
                           ),
                         ),
                       ),
@@ -119,10 +176,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 padding: const EdgeInsets.only(top: 50, bottom: 30),
                 child: ElevatedButton(
                   child: Text('Finish'),
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        TabsScreen.routeName, (route) => false);
-                  },
+                  onPressed: _submit,
                 ),
               ),
             ],
