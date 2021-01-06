@@ -9,7 +9,7 @@ enum AuthMode { signUp, logIn }
 enum Social { google, facebook }
 
 class AuthScreen extends StatefulWidget {
-  static const routeName = '/auth';
+  static const String routeName = '/auth';
 
   @override
   _AuthScreenState createState() => _AuthScreenState();
@@ -21,6 +21,7 @@ class _AuthScreenState extends State<AuthScreen>
   TapGestureRecognizer _switchMode;
   AnimationController _controller;
   Animation<double> _opacity;
+  bool _passObscure = true;
 
   @override
   void initState() {
@@ -71,7 +72,7 @@ class _AuthScreenState extends State<AuthScreen>
           ),
           foregroundColor: MaterialStateProperty.all<Color>(
             social == Social.google ? Colors.black : Colors.white,
-          )
+          ),
         ),
       ),
     );
@@ -124,8 +125,20 @@ class _AuthScreenState extends State<AuthScreen>
                         child: InputField(
                           label: 'Password',
                           textFormField: TextFormField(
-                            decoration: InputDecoration(hintText: '********'),
-                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: '********',
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _passObscure = !_passObscure;
+                                  });
+                                },
+                                child: Icon(_passObscure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
+                              ),
+                            ),
+                            obscureText: _passObscure,
                           ),
                         ),
                       ),
@@ -179,6 +192,19 @@ class _AuthScreenState extends State<AuthScreen>
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: FloatingActionButton(
+          child: Icon(Icons.close, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+          },
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          splashColor: theme.primaryColor,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
     );
   }
 }

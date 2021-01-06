@@ -8,7 +8,7 @@ import './settings_screen.dart';
 import '../widgets/navigation_bar.dart';
 
 class TabsScreen extends StatefulWidget {
-  static const routeName = '/tabs';
+  static const String routeName = '/tabs';
 
   @override
   _TabsScreenState createState() => _TabsScreenState();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:treat_min/screens/available_screen.dart';
 
 class SelectScreen extends StatelessWidget {
-  static const routeName = '/select';
+  static const String routeName = '/select';
   final List<Map<String, String>> clinics = [
     {'name': 'Dentist', 'icon': 'assets/icons/tooth.png'},
     {'name': 'Proctologist', 'icon': 'assets/icons/stomach.png'},

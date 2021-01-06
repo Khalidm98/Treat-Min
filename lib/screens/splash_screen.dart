@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import './get_started_screen.dart';
-// import './main_screen.dart';
+import './tabs_screen.dart';
+import '../providers/app_data.dart';
+import '../providers/user_data.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -38,9 +41,15 @@ class _SplashScreenState extends State<SplashScreen>
           .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
       _width.addListener(_expand);
       _controller.forward().then((_) {
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.of(context)
-              .pushReplacementNamed(GetStartedScreen.routeName);
+        Future.delayed(const Duration(seconds: 2), () async {
+          if (await Provider.of<AppData>(context, listen: false).isFirstRun()) {
+            Navigator.of(context)
+                .pushReplacementNamed(GetStartedScreen.routeName);
+          }
+          else {
+            await Provider.of<UserData>(context, listen: false).tryAutoLogIn();
+            Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+          }
         });
       });
     }

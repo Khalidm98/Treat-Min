@@ -5,7 +5,7 @@ import 'package:treat_min/widgets/modal_sheet_list_tile.dart';
 import 'dart:ui';
 
 class AvailableScreen extends StatelessWidget {
-  static const routeName = '/available';
+  static const String routeName = '/available';
   final List<bool> isSwitched = [false, false, false];
 
   void onSortClick(BuildContext context, ThemeData theme) {
