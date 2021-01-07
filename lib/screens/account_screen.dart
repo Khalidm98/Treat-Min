@@ -63,8 +63,10 @@ class AccountScreen extends StatelessWidget {
                 Divider(height: 0),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
-                  child: Text('Health Condition',
-                      style: theme.textTheme.headline5),
+                  child: Text(
+                    'Health Condition',
+                    style: theme.textTheme.headline5,
+                  ),
                 ),
                 Card(
                   margin: EdgeInsets.zero,
@@ -80,8 +82,10 @@ class AccountScreen extends StatelessWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
-                  child: Text('Current Reservations',
-                      style: theme.textTheme.headline5),
+                  child: Text(
+                    'Current Reservations',
+                    style: theme.textTheme.headline5,
+                  ),
                 ),
                 Card(
                   margin: EdgeInsets.only(bottom: 5),
@@ -194,6 +198,11 @@ class AccountScreen extends StatelessWidget {
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Image.asset('assets/images/logo.png'),
+                ),
+                SizedBox(height: 50),
                 Text('You are not logged in', style: theme.textTheme.headline5),
                 SizedBox(height: 20),
                 Padding(

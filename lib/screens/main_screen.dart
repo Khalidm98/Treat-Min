@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './select_screen.dart';
+import '../models/app_enums.dart';
 
 class MainScreen extends StatelessWidget {
   @override
@@ -14,20 +15,33 @@ class MainScreen extends StatelessWidget {
             Image.asset('assets/images/logo.png'),
             SizedBox(height: 80),
             ElevatedButton(
-              child: Text('Outpatient Clinic'),
+              child: Text(bookToString(Book.clinic)),
               onPressed: () {
-                Navigator.of(context).pushNamed(SelectScreen.routeName);
+                Navigator.of(context).pushNamed(
+                  SelectScreen.routeName,
+                  arguments: Book.clinic,
+                );
               },
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text('Services'),
-              onPressed: () {},
+              child: Text(bookToString(Book.service)),
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  SelectScreen.routeName,
+                  arguments: Book.service,
+                );
+              },
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text('Special Rooms'),
-              onPressed: () {},
+              child: Text(bookToString(Book.room)),
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  SelectScreen.routeName,
+                  arguments: Book.room,
+                );
+              },
             ),
             SizedBox(height: 30),
             ElevatedButton(

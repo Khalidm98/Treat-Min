@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import './tabs_screen.dart';
@@ -14,10 +16,10 @@ class SetupScreen extends StatefulWidget {
 
 class _SetupScreenState extends State<SetupScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  bool _passObscure = true;
-  bool _confirmObscure = true;
+  File _image;
   TextEditingController _dateController = TextEditingController();
   DateTime _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
+  int _gender = 0;
   Map<String, String> _account = {
     'id': DateTime.now().toIso8601String(),
     'photo': '',
@@ -39,6 +41,16 @@ class _SetupScreenState extends State<SetupScreen> {
         .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
   }
 
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   Future<void> _pickDate() async {
     DateTime picked = await showDatePicker(
       context: context,
@@ -56,6 +68,7 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -65,13 +78,44 @@ class _SetupScreenState extends State<SetupScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50),
+                padding: const EdgeInsets.symmetric(vertical: 40),
                 child: Text(
                   'Account Setup',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline4,
+                  style: theme.textTheme.headline4,
                 ),
               ),
+              Stack(
+                fit: StackFit.passthrough,
+                children: [
+                  Container(
+                    height: 140,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: _image == null
+                              ? AssetImage('assets/images/health.png')
+                              : FileImage(_image),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 100, left: 100),
+                    child: CircleAvatar(
+                      backgroundColor: theme.accentColor,
+                      radius: 20,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.photo_camera,
+                          color: Colors.white,
+                          size: 25,
+                        ),
+                        onPressed: _pickImage,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 30),
               Form(
                 key: _formKey,
                 child: Column(
@@ -94,48 +138,6 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                     SizedBox(height: 30),
                     InputField(
-                      label: 'Password',
-                      textFormField: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: '********',
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _passObscure = !_passObscure;
-                              });
-                            },
-                            child: Icon(_passObscure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
-                        ),
-                        obscureText: _passObscure,
-                        textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    InputField(
-                      label: 'Confirm Password',
-                      textFormField: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: '********',
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _confirmObscure = !_confirmObscure;
-                              });
-                            },
-                            child: Icon(_confirmObscure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
-                        ),
-                        obscureText: _confirmObscure,
-                        textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    InputField(
                       label: 'Phone',
                       textFormField: TextFormField(
                         decoration: InputDecoration(
@@ -144,10 +146,11 @@ class _SetupScreenState extends State<SetupScreen> {
                         ),
                         keyboardType: TextInputType.phone,
                         maxLength: 11,
-                        onFieldSubmitted: (_) => _pickDate(),
                         onSaved: (value) => _account['phone'] = value,
                         validator: (value) {
-                          if (int.tryParse(value) == null) {
+                          if (value.isEmpty) {
+                            return 'Phone cannot be empty!';
+                          } else if (int.tryParse(value) == null) {
                             return 'Phone must contain numbers only!';
                           }
                           return null;
@@ -165,6 +168,12 @@ class _SetupScreenState extends State<SetupScreen> {
                             controller: _dateController,
                             onSaved: (_) =>
                                 _account['birth'] = _date.toIso8601String(),
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Date of birth cannot be empty!';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ),
@@ -172,8 +181,30 @@ class _SetupScreenState extends State<SetupScreen> {
                   ],
                 ),
               ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Text('Gender:', style: theme.textTheme.subtitle1),
+                  Spacer(),
+                  Radio(
+                    value: 1,
+                    groupValue: _gender,
+                    onChanged: (value) => setState(() => _gender = value),
+                    activeColor: theme.primaryColorDark,
+                  ),
+                  Text('Male', style: theme.textTheme.subtitle1),
+                  Spacer(),
+                  Radio(
+                    value: 2,
+                    groupValue: _gender,
+                    onChanged: (value) => setState(() => _gender = value),
+                    activeColor: theme.primaryColorDark,
+                  ),
+                  Text('Female', style: theme.textTheme.subtitle1),
+                ],
+              ),
               Padding(
-                padding: const EdgeInsets.only(top: 50, bottom: 30),
+                padding: const EdgeInsets.symmetric(vertical: 30),
                 child: ElevatedButton(
                   child: Text('Finish'),
                   onPressed: _submit,
