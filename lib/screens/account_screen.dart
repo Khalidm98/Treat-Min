@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,16 +21,30 @@ class AccountScreen extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.passthrough,
                     children: [
-                      Image.asset('assets/images/health.png', height: 120),
+                      Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: theme.accentColor,
+                            width: 2,
+                          ),
+                          image: DecorationImage(
+                            image: userData.photo.isEmpty
+                                ? AssetImage('assets/images/health.png')
+                                : FileImage(File(userData.photo)),
+                          ),
+                        ),
+                      ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 85, left: 85),
+                        padding: const EdgeInsets.only(top: 80, left: 80),
                         child: CircleAvatar(
                           backgroundColor: theme.accentColor,
-                          radius: 18,
+                          radius: 20,
                           child: Icon(
                             Icons.photo_camera,
                             color: Colors.white,
-                            size: 20,
+                            size: 25,
                           ),
                         ),
                       )

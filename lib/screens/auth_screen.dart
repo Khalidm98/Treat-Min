@@ -100,131 +100,134 @@ class _AuthScreenState extends State<AuthScreen> {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => FocusScope.of(context).unfocus(),
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Text(
-                  _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
-                  style: theme.textTheme.headline4,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: InputField(
-                        label: 'Email Address',
-                        textFormField: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'address@example.com',
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          onSaved: (value) => _data['email'] = value,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Email address cannot be empty!';
-                            } else if (!value.contains('.') ||
-                                !value.contains('@') ||
-                                value.indexOf('@') != value.lastIndexOf('@')) {
-                              return 'Email address must be valid!';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(TabsScreen.routeName);
+                      },
+                      splashRadius: 25,
+                      splashColor: theme.primaryColorLight,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: InputField(
-                        label: 'Password',
-                        textFormField: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: '********',
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _passObscure = !_passObscure;
-                                });
+                  ),
+                  Text(
+                    _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                    style: theme.textTheme.headline4,
+                  ),
+                  SizedBox(height: 40),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: InputField(
+                            label: 'Email Address',
+                            textFormField: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: 'address@example.com',
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              onSaved: (value) => _data['email'] = value,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Email address cannot be empty!';
+                                } else if (!value.contains('.') ||
+                                    !value.contains('@') ||
+                                    value.indexOf('@') !=
+                                        value.lastIndexOf('@')) {
+                                  return 'Email address must be valid!';
+                                }
+                                return null;
                               },
-                              child: Icon(_passObscure
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
                             ),
                           ),
-                          obscureText: _passObscure,
-                          onSaved: (value) => _data['pass'] = value,
-                          validator: (value) {
-                            if (value.length < 8) {
-                              return 'Password must contain at least 8 characters!';
-                            }
-                            return null;
-                          },
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: ElevatedButton(
-                        child: Text(
-                          _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: InputField(
+                            label: 'Password',
+                            textFormField: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: '********',
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _passObscure = !_passObscure;
+                                    });
+                                  },
+                                  child: Icon(_passObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                              obscureText: _passObscure,
+                              onSaved: (value) => _data['pass'] = value,
+                              validator: (value) {
+                                if (value.length < 8) {
+                                  return 'Password must contain at least 8 characters!';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
                         ),
-                        onPressed: _mode == AuthMode.signUp ? _signUp : _logIn,
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: ElevatedButton(
+                            child: Text(
+                              _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                            ),
+                            onPressed:
+                                _mode == AuthMode.signUp ? _signUp : _logIn,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              Divider(
-                thickness: 3,
-                height: 30,
-                indent: 10,
-                endIndent: 10,
-                color: Colors.grey,
-              ),
-              _buildSocialButton(Social.google),
-              _buildSocialButton(Social.facebook),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t'}'
-                        ' have an account? ',
-                    style: theme.textTheme.subtitle1
-                        .copyWith(color: theme.hintColor),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: _mode == AuthMode.signUp ? 'Log In' : 'Sign Up',
-                        style: TextStyle(color: theme.primaryColorDark),
-                        recognizer: _switchMode,
-                      ),
-                    ],
                   ),
-                ),
+                  Divider(
+                    thickness: 3,
+                    height: 30,
+                    indent: 10,
+                    endIndent: 10,
+                    color: Colors.grey,
+                  ),
+                  _buildSocialButton(Social.google),
+                  _buildSocialButton(Social.facebook),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: RichText(
+                      text: TextSpan(
+                        text:
+                            '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t'}'
+                            ' have an account? ',
+                        style: theme.textTheme.subtitle1
+                            .copyWith(color: theme.hintColor),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text:
+                                _mode == AuthMode.signUp ? 'Log In' : 'Sign Up',
+                            style: TextStyle(color: theme.primaryColorDark),
+                            recognizer: _switchMode,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: FloatingActionButton(
-          child: Icon(Icons.close, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
-          },
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          splashColor: theme.primaryColor,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
     );
   }
 }

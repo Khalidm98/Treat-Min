@@ -7,7 +7,7 @@ import './providers/user_data.dart';
 
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
-// import './screens/emergency_screen.dart';
+import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
 import './screens/select_screen.dart';
 import './screens/setup_screen.dart';
@@ -145,7 +145,7 @@ class MyApp extends StatelessWidget {
         routes: {
           AuthScreen.routeName: (_) => AuthScreen(),
           AvailableScreen.routeName: (_) => AvailableScreen(),
-          // EmergencyScreen.routeName: (_) => EmergencyScreen(),
+          EmergencyScreen.routeName: (_) => EmergencyScreen(),
           GetStartedScreen.routeName: (_) => GetStartedScreen(),
           SelectScreen.routeName: (_) => SelectScreen(),
           SetupScreen.routeName: (_) => SetupScreen(),

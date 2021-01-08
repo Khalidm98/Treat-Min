@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import './tabs_screen.dart';
@@ -22,7 +23,6 @@ class _SetupScreenState extends State<SetupScreen> {
   int _gender = 0;
   Map<String, String> _account = {
     'id': DateTime.now().toIso8601String(),
-    'photo': '',
   };
 
   @override
@@ -36,6 +36,15 @@ class _SetupScreenState extends State<SetupScreen> {
       return;
     }
     _formKey.currentState.save();
+    if (_image == null) {
+      _account['photo'] = '';
+    } else {
+      final dir = await getApplicationDocumentsDirectory();
+      final path = '${dir.path}/account.photo';
+      imageCache.clear();
+      await _image.copy(path);
+      _account['photo'] = path;
+    }
     await Provider.of<UserData>(context, listen: false).signUp(_account);
     Navigator.of(context)
         .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
@@ -91,12 +100,14 @@ class _SetupScreenState extends State<SetupScreen> {
                   Container(
                     height: 140,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: _image == null
-                              ? AssetImage('assets/images/health.png')
-                              : FileImage(_image),
-                        )),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: theme.accentColor, width: 2),
+                      image: DecorationImage(
+                        image: _image == null
+                            ? AssetImage('assets/images/health.png')
+                            : FileImage(_image),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 100, left: 100),
@@ -152,6 +163,8 @@ class _SetupScreenState extends State<SetupScreen> {
                             return 'Phone cannot be empty!';
                           } else if (int.tryParse(value) == null) {
                             return 'Phone must contain numbers only!';
+                          } else if (value.length < 11) {
+                            return 'Phone must contain exactly 11 numbers!';
                           }
                           return null;
                         },
@@ -159,7 +172,10 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                     SizedBox(height: 30),
                     GestureDetector(
-                      onTap: () => _pickDate(),
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                        _pickDate();
+                      },
                       child: AbsorbPointer(
                         child: InputField(
                           label: 'Date of Birth',

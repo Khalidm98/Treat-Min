@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import './emergency_screen.dart';
 import './select_screen.dart';
 import '../models/app_enums.dart';
 
@@ -45,7 +46,9 @@ class MainScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(EmergencyScreen.routeName);
+              },
               child: Text('Emergency'),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
