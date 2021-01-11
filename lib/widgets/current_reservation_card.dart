@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '.././models/ProviderClass.dart';
-import 'package:treat_min/models/reservedSchedule.dart';
+import '../providers/provider_class.dart';
+import '../models/reserved_schedule.dart';
 
 class CurrentReservationCard extends StatelessWidget {
   final ReservedSchedule sched;
@@ -39,7 +39,7 @@ class CurrentReservationCard extends StatelessWidget {
                       Provider.of<ProviderClass>(context)
                           .removeReservation(sched.id);
                     },
-                    child: Text('Cancel'),
+                    child: Text('Cancel', maxLines: 1),
                   ),
                 ),
               ],

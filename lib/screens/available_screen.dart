@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/models/clinicSchedule.dart';
-import 'package:treat_min/widgets/doctor_card.dart';
-import 'package:treat_min/SearchBar.dart';
-import 'package:treat_min/widgets/modal_sheet_list_tile.dart';
+import '../models/clinic_schedule.dart';
+import '../widgets/doctor_card.dart';
+import '../utils/search_bar.dart';
+import '../widgets/modal_sheet_list_tile.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/models/ProviderClass.dart';
+import '../providers/provider_class.dart';
 import 'dart:ui';
 
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/widgets/doctor_card.dart';
-import 'package:treat_min/models/clinicSchedule.dart';
+import '../widgets/doctor_card.dart';
+import '../models/clinic_schedule.dart';
 
 class DataSearch extends SearchDelegate<String> {
   final hospitals = [
@@ -28,13 +28,14 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-        icon: AnimatedIcon(
-          icon: AnimatedIcons.menu_arrow,
-          progress: transitionAnimation,
-        ),
-        onPressed: () {
-          close(context, null);
-        });
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () {
+        close(context, null);
+      },
+    );
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/models/clinicSchedule.dart';
+import '../models/clinic_schedule.dart';
 
 class BookNowDropDownList extends StatefulWidget {
   final List<ClinicSchedule> scheduleList;

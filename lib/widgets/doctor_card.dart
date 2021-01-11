@@ -1,13 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
-import 'package:treat_min/models/reservedSchedule.dart';
-import 'rating_hearts.dart';
-import 'package:provider/provider.dart';
-import 'package:treat_min/models/ProviderClass.dart';
 import 'package:flutter/material.dart';
-import 'package:treat_min/widgets/booknow_dropdown_list.dart';
+import 'package:provider/provider.dart';
 
-import 'package:treat_min/models/clinicSchedule.dart';
+import './booknow_dropdown_list.dart';
+import './rating_hearts.dart';
+import '../models/clinic_schedule.dart';
+import '../models/reserved_schedule.dart';
+import '../providers/provider_class.dart';
 
 const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
 const double doctorCardIconsWidth = 12.0;

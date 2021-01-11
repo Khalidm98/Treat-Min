@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/screens/available_screen.dart';
+import '../screens/available_screen.dart';
 
 import '../utils/enumerations.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/models/reservedSchedule.dart';
+import '../models/reserved_schedule.dart';
 
 class ProviderClass with ChangeNotifier {
   List<bool> vars = [false, false, false];

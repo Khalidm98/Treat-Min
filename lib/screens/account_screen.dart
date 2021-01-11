@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
+import '../providers/provider_class.dart';
 import '../providers/user_data.dart';
-import 'package:treat_min/widgets/currentReservationCard.dart';
-
-import 'package:treat_min/models/ProviderClass.dart';
-import 'package:provider/provider.dart';
+import '../widgets/current_reservation_card.dart';
 
 class AccountScreen extends StatelessWidget {
   @override

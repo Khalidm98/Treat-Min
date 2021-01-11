@@ -1,4 +1,4 @@
-import 'package:treat_min/models/clinicSchedule.dart';
+import '../models/clinic_schedule.dart';
 
 class ReservedSchedule {
   final String id;
