@@ -1,38 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:custom_switch_button/custom_switch_button.dart';
 
-class ModalSheetListTile extends StatefulWidget {
+class ModalSheetListTile extends StatelessWidget {
   final String text;
   final bool value;
+  final Function onSwitchChange;
 
-  ModalSheetListTile({@required this.text, @required this.value});
-
-  @override
-  _ModalSheetListTileState createState() =>
-      _ModalSheetListTileState(this.value);
-}
-
-class _ModalSheetListTileState extends State<ModalSheetListTile> {
-  bool val;
-
-  _ModalSheetListTileState(this.val);
-
-  void onSwitchChange() {
-    setState(() {
-      this.val = !this.val;
-    });
-  }
+  ModalSheetListTile(
+      {@required this.text,
+      @required this.value,
+      @required this.onSwitchChange});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ListTile(
       dense: true,
-      title: Text(widget.text),
+      title: Text(text),
       trailing: GestureDetector(
-        onTap: () {
-          onSwitchChange();
-        },
+        onTap: onSwitchChange,
         child: Container(
           decoration: BoxDecoration(
             boxShadow: [
@@ -46,11 +32,11 @@ class _ModalSheetListTileState extends State<ModalSheetListTile> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: CustomSwitchButton(
-            checked: this.val,
+            checked: value,
             unCheckedColor: theme.primaryColorLight,
             checkedColor: Colors.white,
             animationDuration: Duration(milliseconds: 200),
-            backgroundColor: this.val ? theme.primaryColorLight : Colors.white,
+            backgroundColor: value ? theme.primaryColorLight : Colors.white,
           ),
         ),
       ),

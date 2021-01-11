@@ -1,21 +1,46 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
-
+import 'package:treat_min/models/reservedSchedule.dart';
 import 'rating_hearts.dart';
+import 'package:provider/provider.dart';
+import 'package:treat_min/models/ProviderClass.dart';
 import 'package:flutter/material.dart';
 import 'package:treat_min/widgets/booknow_dropdown_list.dart';
+
+import 'package:treat_min/models/clinicSchedule.dart';
 
 const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
 const double doctorCardIconsWidth = 12.0;
 const double doctorCardIconsHeight = 12.0;
 
 class DoctorCard extends StatefulWidget {
+  final String hospitalName;
+  final String doctorName;
+  final String doctorSpecialty;
+  final int rating;
+  final List<ClinicSchedule> schedule;
+  final double examinationFee;
+
+  DoctorCard({
+    @required this.hospitalName,
+    @required this.doctorName,
+    @required this.doctorSpecialty,
+    @required this.schedule,
+    @required this.examinationFee,
+    this.rating = 0,
+  });
+
   @override
   _DoctorCardState createState() => _DoctorCardState();
 }
 
 class _DoctorCardState extends State<DoctorCard> {
-  void _selectBookingDetails(ThemeData theme) {
+  void _selectBookingDetails(ThemeData theme, BuildContext context) {
+    ClinicSchedule dropDownValue;
+    void updateDropDownValue(ClinicSchedule dpv) {
+      dropDownValue = dpv;
+    }
+
     showDialog(
       context: context,
       builder: (_) {
@@ -42,25 +67,28 @@ class _DoctorCardState extends State<DoctorCard> {
                       radius: MediaQuery.of(context).size.height / 14,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  FittedBox(
                     child: Text(
-                      "Dr. Ahmed Khaled",
+                      widget.doctorName,
                       style: theme.textTheme.headline5,
                     ),
                   ),
                   Text(
-                    "ORTHODONTIC SPECIALIST",
+                    widget.doctorSpecialty,
                     style: theme.textTheme.subtitle2,
                   ),
-                  RatingHearts(iconWidth: 30, iconHeight: 30),
+                  RatingHearts(
+                      iconHeight: 30, iconWidth: 30, rating: widget.rating),
                   Text(
                     "Rating from 22 visitors",
                     style: theme.textTheme.bodyText2,
                   ),
                   SizedBox(height: 20),
                   Container(
-                    child: BookNowDropDownList(),
+                    child: BookNowDropDownList(
+                      dropDownValueGetter: updateDropDownValue,
+                      scheduleList: widget.schedule,
+                    ),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       border: Border.all(color: theme.accentColor),
@@ -75,8 +103,16 @@ class _DoctorCardState extends State<DoctorCard> {
                       ),
                     ),
                     onPressed: () {
+                      print(dropDownValue);
+                      ReservedSchedule scheduleModel = ReservedSchedule(
+                          DateTime.now().toIso8601String(),
+                          widget.doctorName,
+                          widget.doctorSpecialty,
+                          dropDownValue);
+                      Provider.of<ProviderClass>(context)
+                          .addReservation(scheduleModel);
                       Navigator.pop(context);
-                      _bookSuccess(theme);
+                      _bookSuccess(theme, context);
                     },
                   ),
                 ],
@@ -88,7 +124,7 @@ class _DoctorCardState extends State<DoctorCard> {
     );
   }
 
-  void _bookSuccess(ThemeData theme) {
+  void _bookSuccess(ThemeData theme, BuildContext context) {
     showDialog(
       context: context,
       builder: (_) {
@@ -146,7 +182,7 @@ class _DoctorCardState extends State<DoctorCard> {
             margin: EdgeInsets.symmetric(horizontal: 7),
             width: double.infinity,
             child: Text(
-              "Dar Elfouad",
+              widget.hospitalName,
               style: theme.textTheme.headline6.copyWith(
                 color: Colors.white,
               ),
@@ -154,29 +190,38 @@ class _DoctorCardState extends State<DoctorCard> {
           ),
           Container(
             decoration: BoxDecoration(
+              color: Colors.white,
               borderRadius: BorderRadius.circular(2.0),
               border: Border.all(color: theme.primaryColorLight),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Dr.Ahmed Khaled",
-                      style: theme.textTheme.headline5,
+                Flexible(
+                  child: FittedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.doctorName,
+                          style: theme.textTheme.headline5,
+                        ),
+                        Text(
+                          widget.doctorSpecialty,
+                          style: theme.textTheme.subtitle2,
+                        ),
+                      ],
                     ),
-                    Text(
-                      "ORTHODONTIC SPECIALIST",
-                      style: theme.textTheme.subtitle2,
-                    ),
-                  ],
+                  ),
+                ),
+                SizedBox(
+                  width: 15,
                 ),
                 RatingHearts(
                   iconHeight: doctorCardIconsHeight,
                   iconWidth: doctorCardIconsWidth,
+                  rating: widget.rating,
                 )
               ],
             ),
@@ -184,6 +229,7 @@ class _DoctorCardState extends State<DoctorCard> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 7),
             decoration: BoxDecoration(
+              color: Colors.white,
               border: Border(
                 left: BorderSide(color: theme.primaryColorLight),
                 right: BorderSide(color: theme.primaryColorLight),
@@ -202,35 +248,43 @@ class _DoctorCardState extends State<DoctorCard> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Monday"),
-                            Text("12:00 - 05:00"),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Saturday"),
-                            Text("01:00 - 08:00"),
-                          ],
-                        ),
-                      ],
+                    padding: const EdgeInsets.all(10),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: widget.schedule.length,
+                      itemBuilder: (context, index) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FittedBox(
+                            child: Text(
+                              widget.schedule[index].day,
+                              style: theme.textTheme.subtitle2
+                                  .copyWith(fontWeight: FontWeight.w700),
+                              textScaleFactor: 0.8,
+                            ),
+                          ),
+                          FittedBox(
+                            child: Text(
+                              widget.schedule[index].time,
+                              style: theme.textTheme.bodyText2.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                              textScaleFactor: 0.8,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(width: 20),
                 Container(
-                  margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  color: Colors.white,
+                  margin: EdgeInsets.fromLTRB(10, 10, 15, 10),
                   child: Column(
                     children: [
                       Text(
-                        "350 EGP",
+                        '${widget.examinationFee} EGP',
                         style: theme.textTheme.subtitle1,
                       ),
                       SizedBox(height: 6),
@@ -254,7 +308,7 @@ class _DoctorCardState extends State<DoctorCard> {
                             ),
                           ),
                           onPressed: () {
-                            _selectBookingDetails(theme);
+                            _selectBookingDetails(theme, context);
                           },
                         ),
                       )

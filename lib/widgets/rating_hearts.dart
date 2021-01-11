@@ -4,8 +4,9 @@ import 'doctor_card.dart';
 class RatingHearts extends StatelessWidget {
   final double iconWidth;
   final double iconHeight;
+  final int rating;
 
-  RatingHearts({@required this.iconHeight, @required this.iconWidth});
+  RatingHearts({this.iconHeight, this.iconWidth, @required this.rating});
 
   @override
   Widget build(BuildContext context) {
@@ -15,41 +16,51 @@ class RatingHearts extends StatelessWidget {
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/rate_filled.png",
-            width: iconWidth,
+            rating > 0
+                ? "assets/icons/rate_filled.png"
+                : "assets/icons/rate_outlined.png",
             height: iconHeight,
+            width: iconWidth,
           ),
         ),
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/rate_filled.png",
-            width: iconWidth,
+            rating > 1
+                ? "assets/icons/rate_filled.png"
+                : "assets/icons/rate_outlined.png",
             height: iconHeight,
+            width: iconWidth,
           ),
         ),
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/rate_filled.png",
-            width: iconWidth,
+            rating > 2
+                ? "assets/icons/rate_filled.png"
+                : "assets/icons/rate_outlined.png",
             height: iconHeight,
+            width: iconWidth,
           ),
         ),
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/rate_filled.png",
-            width: iconWidth,
+            rating > 3
+                ? "assets/icons/rate_filled.png"
+                : "assets/icons/rate_outlined.png",
             height: iconHeight,
+            width: iconWidth,
           ),
         ),
         Padding(
           padding: doctorCardIconsPadding,
           child: Image.asset(
-            "assets/icons/rate_outlined.png",
-            width: iconWidth,
+            rating > 4
+                ? "assets/icons/rate_filled.png"
+                : "assets/icons/rate_outlined.png",
             height: iconHeight,
+            width: iconWidth,
           ),
         ),
       ],

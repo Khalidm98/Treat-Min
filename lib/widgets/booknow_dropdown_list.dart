@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:treat_min/models/clinicSchedule.dart';
 
 class BookNowDropDownList extends StatefulWidget {
+  final List<ClinicSchedule> scheduleList;
+  final Function(ClinicSchedule) dropDownValueGetter;
+  BookNowDropDownList({this.scheduleList, this.dropDownValueGetter});
   @override
-  _BookNowDropDownListState createState() => _BookNowDropDownListState();
+  _BookNowDropDownListState createState() =>
+      _BookNowDropDownListState(scheduleList, dropDownValueGetter);
 }
 
 class _BookNowDropDownListState extends State<BookNowDropDownList> {
-  static List<String> schedule = [
-    'Sunday 18:00-22:00',
-    'Monday 17:00-21:00',
-    'Tuesday 12:00-15:00'
-  ];
-  String dropdownValue;
+  Function dropDownValueGetter;
+  List<ClinicSchedule> scheduleList;
+  ClinicSchedule dropDownValue;
+  _BookNowDropDownListState(this.scheduleList, this.dropDownValueGetter);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DropdownButtonHideUnderline(
-      child: DropdownButton<String>(
+      child: DropdownButton(
+        isExpanded: true,
         hint: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: Text('Choose a date'),
         ),
-        value: dropdownValue,
+        value: dropDownValue,
         icon: Icon(
           Icons.arrow_drop_down_sharp,
           color: theme.accentColor,
@@ -30,17 +34,22 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
         iconSize: 40,
         elevation: 1,
         style: theme.textTheme.headline6,
-        onChanged: (String newValue) {
+        onChanged: (newValue) {
+          dropDownValueGetter(newValue);
           setState(() {
-            dropdownValue = newValue;
+            dropDownValue = newValue;
           });
         },
-        items: schedule.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
+        items: scheduleList.map<DropdownMenuItem>((ClinicSchedule schedule) {
+          return DropdownMenuItem(
+            value: schedule,
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
-              child: Text(value),
+              child: FittedBox(
+                child: Text(
+                  schedule.toString(),
+                ),
+              ),
             ),
           );
         }).toList(),
