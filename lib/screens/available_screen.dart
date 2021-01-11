@@ -9,7 +9,7 @@ import 'dart:ui';
 
 
 class AvailableScreen extends StatelessWidget {
-  static const routeName = '/available';
+  static const String routeName = '/available';
   final List<bool> isSwitched = [false, false, false];
   final List<DoctorCard> doctorListVar = [
     DoctorCard(

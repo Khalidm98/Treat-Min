@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import './setup_screen.dart';
 
 class VerificationScreen extends StatefulWidget {
-  static const routeName = '/verify';
+  static const String routeName = '/verify';
 
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
@@ -78,6 +78,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       }
                       setState(() {});
                     },
+              onTap: () {
+                _controllers[index].selection = TextSelection.collapsed(
+                  offset: _controllers[index].text.length,
+                );
+              },
               controller: _controllers[index],
               cursorColor: _controllers[index].text.isEmpty
                   ? theme.primaryColorLight
@@ -151,7 +156,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 15),
         child: FloatingActionButton(
           child: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {

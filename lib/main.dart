@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/models/ProviderClass.dart';
+
+import './providers/app_data.dart';
+import './providers/user_data.dart';
+
+import './models/ProviderClass.dart';
+
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
+import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
 import './screens/select_screen.dart';
 import './screens/setup_screen.dart';
@@ -26,10 +32,14 @@ class MyApp extends StatelessWidget {
     const Color greenDark = const Color(0xFF20A060);
     const Color blue = const Color(0xFF205070);
     const Color red = const Color(0xFFA01010);
-    return ChangeNotifierProvider(
-      create: (context) => ProviderClass(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppData()),
+        ChangeNotifierProvider(create: (_) => UserData()),
+        ChangeNotifierProvider(create: (_) => ProviderClass()),
+      ],
       child: MaterialApp(
-        title: 'Treat-Min',
+        title: 'Treat-min',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Montserrat',
@@ -39,6 +49,7 @@ class MyApp extends StatelessWidget {
           accentColor: blue,
           errorColor: red,
           dividerColor: blue,
+          colorScheme: ColorScheme.light(primary: green),
           appBarTheme: const AppBarTheme(centerTitle: true),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
@@ -107,13 +118,20 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: greenDark),
             ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: red),
+            ),
           ),
           textTheme: const TextTheme(
             button: const TextStyle(fontWeight: FontWeight.w700),
-            headline4: const TextStyle(
-                fontWeight: FontWeight.w700, color: Colors.black),
-            headline5:
-                const TextStyle(fontWeight: FontWeight.w700, color: blue),
+            headline4:
+                const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
+            headline5: const TextStyle(fontWeight: FontWeight.w700, color: blue),
             subtitle1: const TextStyle(fontWeight: FontWeight.w700),
             bodyText2: const TextStyle(fontWeight: FontWeight.w500),
             caption: const TextStyle(fontWeight: FontWeight.w500),
@@ -130,6 +148,7 @@ class MyApp extends StatelessWidget {
         routes: {
           AuthScreen.routeName: (_) => AuthScreen(),
           AvailableScreen.routeName: (_) => AvailableScreen(),
+          EmergencyScreen.routeName: (_) => EmergencyScreen(),
           GetStartedScreen.routeName: (_) => GetStartedScreen(),
           SelectScreen.routeName: (_) => SelectScreen(),
           SetupScreen.routeName: (_) => SetupScreen(),

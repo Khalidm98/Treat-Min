@@ -9,18 +9,18 @@ enum AuthMode { signUp, logIn }
 enum Social { google, facebook }
 
 class AuthScreen extends StatefulWidget {
-  static const routeName = '/auth';
+  static const String routeName = '/auth';
 
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen>
-    with SingleTickerProviderStateMixin {
+class _AuthScreenState extends State<AuthScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _mode = AuthMode.signUp;
+  bool _passObscure = true;
   TapGestureRecognizer _switchMode;
-  AnimationController _controller;
-  Animation<double> _opacity;
+  Map<String, String> _data = Map();
 
   @override
   void initState() {
@@ -29,27 +29,42 @@ class _AuthScreenState extends State<AuthScreen>
       ..onTap = () {
         if (_mode == AuthMode.signUp) {
           setState(() => _mode = AuthMode.logIn);
-          _controller.forward();
         } else {
           setState(() => _mode = AuthMode.signUp);
-          _controller.reverse();
         }
       };
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    _opacity = Tween(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
   }
 
   @override
   void dispose() {
     _switchMode.dispose();
-    _controller.dispose();
     super.dispose();
+  }
+
+  bool _submit() {
+    if (!_formKey.currentState.validate()) {
+      return false;
+    }
+    _formKey.currentState.save();
+    return true;
+  }
+
+  // Future<void> _signUp() async {
+  void _signUp() {
+    if (_submit()) {
+      // post data to server
+      // get and store the response
+      Navigator.of(context).pushNamed(VerificationScreen.routeName);
+    }
+  }
+
+  // Future<void> _logIn() async {
+  void _logIn() {
+    if (_submit()) {
+      // post data to server
+      // get and store the response
+      Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+    }
   }
 
   Widget _buildSocialButton(Social social) {
@@ -71,7 +86,7 @@ class _AuthScreenState extends State<AuthScreen>
           ),
           foregroundColor: MaterialStateProperty.all<Color>(
             social == Social.google ? Colors.black : Colors.white,
-          )
+          ),
         ),
       ),
     );
@@ -81,101 +96,135 @@ class _AuthScreenState extends State<AuthScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
-                style: theme.textTheme.headline4,
-              ),
-              SizedBox(height: 40),
-              Form(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: InputField(
-                        label: 'Email Address',
-                        textFormField: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'test@example.com',
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: _mode == AuthMode.logIn
-                              ? TextInputAction.next
-                              : null,
-                        ),
-                      ),
+      body: SafeArea(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(TabsScreen.routeName);
+                      },
+                      splashRadius: 25,
+                      splashColor: theme.primaryColorLight,
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      constraints: BoxConstraints(
-                        maxHeight: _mode == AuthMode.signUp ? 0 : 100,
-                      ),
-                      child: FadeTransition(
-                        opacity: _opacity,
-                        child: InputField(
-                          label: 'Password',
-                          textFormField: TextFormField(
-                            decoration: InputDecoration(hintText: '********'),
-                            obscureText: true,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: ElevatedButton(
-                        child: Text(
-                          _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
-                        ),
-                        onPressed: _mode == AuthMode.signUp
-                            ? () {
-                                Navigator.of(context)
-                                    .pushNamed(VerificationScreen.routeName);
-                              }
-                            : () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(TabsScreen.routeName);
+                  ),
+                  Text(
+                    _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                    style: theme.textTheme.headline4,
+                  ),
+                  SizedBox(height: 40),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: InputField(
+                            label: 'Email Address',
+                            textFormField: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: 'address@example.com',
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              onSaved: (value) => _data['email'] = value,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Email address cannot be empty!';
+                                } else if (!value.contains('.') ||
+                                    !value.contains('@') ||
+                                    value.indexOf('@') !=
+                                        value.lastIndexOf('@')) {
+                                  return 'Email address must be valid!';
+                                }
+                                return null;
                               },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: InputField(
+                            label: 'Password',
+                            textFormField: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: '********',
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _passObscure = !_passObscure;
+                                    });
+                                  },
+                                  child: Icon(_passObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                              obscureText: _passObscure,
+                              onSaved: (value) => _data['pass'] = value,
+                              validator: (value) {
+                                if (value.length < 8) {
+                                  return 'Password must contain at least 8 characters!';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: ElevatedButton(
+                            child: Text(
+                              _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                            ),
+                            onPressed:
+                                _mode == AuthMode.signUp ? _signUp : _logIn,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    thickness: 3,
+                    height: 30,
+                    indent: 10,
+                    endIndent: 10,
+                    color: Colors.grey,
+                  ),
+                  _buildSocialButton(Social.google),
+                  _buildSocialButton(Social.facebook),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: RichText(
+                      text: TextSpan(
+                        text:
+                            '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t'}'
+                            ' have an account? ',
+                        style: theme.textTheme.subtitle1
+                            .copyWith(color: theme.hintColor),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text:
+                                _mode == AuthMode.signUp ? 'Log In' : 'Sign Up',
+                            style: TextStyle(color: theme.primaryColorDark),
+                            recognizer: _switchMode,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Divider(
-                thickness: 3,
-                height: 30,
-                indent: 10,
-                endIndent: 10,
-                color: Colors.grey,
-              ),
-              _buildSocialButton(Social.google),
-              _buildSocialButton(Social.facebook),
-              SizedBox(height: 20),
-              RichText(
-                text: TextSpan(
-                  text: '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t'}'
-                      ' have an account? ',
-                  style: theme.textTheme.subtitle1
-                      .copyWith(color: theme.hintColor),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: _mode == AuthMode.signUp ? 'Log In' : 'Sign Up',
-                      style: TextStyle(color: theme.primaryColorDark),
-                      recognizer: _switchMode,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

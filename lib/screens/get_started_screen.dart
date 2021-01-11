@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import './auth_screen.dart';
+import './tabs_screen.dart';
 
 class GetStartedScreen extends StatelessWidget {
-  static const routeName = '/get-started';
+  static const String routeName = '/get-started';
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +24,53 @@ class GetStartedScreen extends StatelessWidget {
                 'assets/images/doctor.png',
                 height: MediaQuery.of(context).size.height * 0.4,
               ),
-              ElevatedButton(
-                child: Text('GET STARTED'),
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushReplacementNamed(AuthScreen.routeName);
-                },
+              // ElevatedButton(
+              //   child: Text('Log In'),
+              //   style: ButtonStyle(
+              //     backgroundColor: MaterialStateProperty.all<Color>(
+              //       Theme.of(context).accentColor,
+              //     ),
+              //   ),
+              //   onPressed: () {
+              //     Navigator.of(context)
+              //         .pushReplacementNamed(AuthScreen.routeName);
+              //   },
+              // ),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text('Log In'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).accentColor,
+                        ),
+                        minimumSize: MaterialStateProperty.all<Size>(
+                          Size(0, 40),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(AuthScreen.routeName);
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text('Explore'),
+                      style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all<Size>(
+                          Size(0, 40),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(TabsScreen.routeName);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

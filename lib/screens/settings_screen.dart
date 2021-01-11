@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
-
-enum Language { Arabic, English }
+import '../utils/enumerations.dart';
+import '../providers/user_data.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -25,7 +26,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: const Text('No'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
+              await Provider.of<UserData>(context, listen: false).logOut();
               Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
             },
             child: const Text('Yes'),
@@ -38,10 +40,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isLoggedIn = Provider.of<UserData>(context, listen: false).isLoggedIn;
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: ListView(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -109,13 +112,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             borderRadius: BorderRadius.circular(10),
             child: ListTile(
               tileColor: Colors.grey[300],
-              title: Text('Log Out', style: theme.textTheme.headline6),
+              title: Text(
+                isLoggedIn ? 'Log Out' : 'Log In',
+                style: theme.textTheme.headline6,
+              ),
               trailing: InkWell(
-                onTap: () => _logOut(),
+                onTap: isLoggedIn
+                    ? () => _logOut()
+                    : () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(AuthScreen.routeName);
+                      },
                 splashColor: theme.primaryColorDark,
                 child: CircleAvatar(
                   backgroundColor: theme.primaryColorLight,
-                  child: Icon(Icons.logout, color: Colors.white),
+                  child: Icon(
+                    isLoggedIn ? Icons.logout : Icons.login,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

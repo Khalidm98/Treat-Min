@@ -11,9 +11,8 @@ class InputField extends StatelessWidget {
     final theme = Theme.of(context);
     return Stack(
       children: [
-        Container(
-          height: 80,
-          alignment: Alignment.bottomCenter,
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
           child: textFormField,
         ),
         Positioned(
