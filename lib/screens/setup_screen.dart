@@ -104,7 +104,7 @@ class _SetupScreenState extends State<SetupScreen> {
                       border: Border.all(color: theme.accentColor, width: 2),
                       image: DecorationImage(
                         image: _image == null
-                            ? AssetImage('assets/images/health.png')
+                            ? AssetImage('assets/images/placeholder.png')
                             : FileImage(_image),
                       ),
                     ),

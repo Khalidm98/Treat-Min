@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treat_min/screens/available_screen.dart';
 
-import '../models/app_enums.dart';
+import '../utils/enumerations.dart';
 
 class SelectScreen extends StatelessWidget {
   static const String routeName = '/select';

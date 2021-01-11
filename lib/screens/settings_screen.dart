@@ -3,7 +3,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
-import '../models/app_enums.dart';
+import '../utils/enumerations.dart';
 import '../providers/user_data.dart';
 
 class SettingsScreen extends StatefulWidget {

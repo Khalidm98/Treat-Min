@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import './emergency_screen.dart';
 import './select_screen.dart';
-import '../models/app_enums.dart';
+import '../utils/enumerations.dart';
 
 class MainScreen extends StatelessWidget {
   @override

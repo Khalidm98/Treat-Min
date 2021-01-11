@@ -31,7 +31,7 @@ class AccountScreen extends StatelessWidget {
                           ),
                           image: DecorationImage(
                             image: userData.photo.isEmpty
-                                ? AssetImage('assets/images/health.png')
+                                ? AssetImage('assets/images/placeholder.png')
                                 : FileImage(File(userData.photo)),
                           ),
                         ),
