@@ -70,11 +70,15 @@ class _BookNowScreenState extends State<BookNowScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     DoctorCard receivedDoctorCard = ModalRoute.of(context).settings.arguments;
 
     void updateDropDownValue(ClinicSchedule dpv) {
-      dropDownValue = dpv;
+      setState(() {
+        dropDownValue = dpv;
+        if (dropDownValue.time != null) {
+          ableToBook = true;
+        }
+      });
     }
 
     void checkToBook() {
