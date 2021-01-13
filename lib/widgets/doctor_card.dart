@@ -1,13 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import './booknow_dropdown_list.dart';
+import 'package:treat_min/screens/booknow_screen.dart';
 import './rating_hearts.dart';
 import '../models/clinic_schedule.dart';
-import '../models/reserved_schedule.dart';
-import '../providers/provider_class.dart';
 
 const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
 const double doctorCardIconsWidth = 12.0;
@@ -20,155 +16,22 @@ class DoctorCard extends StatefulWidget {
   final int rating;
   final List<ClinicSchedule> schedule;
   final double examinationFee;
+  final double hospitalDistance;
 
-  DoctorCard({
-    @required this.hospitalName,
-    @required this.doctorName,
-    @required this.doctorSpecialty,
-    @required this.schedule,
-    @required this.examinationFee,
-    this.rating = 0,
-  });
+  DoctorCard(
+      {@required this.hospitalName,
+      @required this.doctorName,
+      @required this.doctorSpecialty,
+      @required this.schedule,
+      @required this.examinationFee,
+      this.rating = 0,
+      @required this.hospitalDistance});
 
   @override
   _DoctorCardState createState() => _DoctorCardState();
 }
 
 class _DoctorCardState extends State<DoctorCard> {
-  void _selectBookingDetails(ThemeData theme, BuildContext context) {
-    ClinicSchedule dropDownValue;
-    void updateDropDownValue(ClinicSchedule dpv) {
-      dropDownValue = dpv;
-    }
-
-    showDialog(
-      context: context,
-      builder: (_) {
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: AlertDialog(
-            scrollable: true,
-            insetPadding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            content: Container(
-              width: MediaQuery.of(context).size.width - 50,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                border: Border.all(color: theme.accentColor, width: 5),
-              ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: MediaQuery.of(context).size.height / 13,
-                    backgroundColor: theme.accentColor,
-                    child: CircleAvatar(
-                      child: Image.asset('assets/icons/tooth.png'),
-                      backgroundColor: Colors.white,
-                      radius: MediaQuery.of(context).size.height / 14,
-                    ),
-                  ),
-                  FittedBox(
-                    child: Text(
-                      widget.doctorName,
-                      style: theme.textTheme.headline5,
-                    ),
-                  ),
-                  Text(
-                    widget.doctorSpecialty,
-                    style: theme.textTheme.subtitle2,
-                  ),
-                  RatingHearts(
-                      iconHeight: 30, iconWidth: 30, rating: widget.rating),
-                  Text(
-                    "Rating from 22 visitors",
-                    style: theme.textTheme.bodyText2,
-                  ),
-                  SizedBox(height: 20),
-                  Container(
-                    child: BookNowDropDownList(
-                      dropDownValueGetter: updateDropDownValue,
-                      scheduleList: widget.schedule,
-                    ),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: theme.accentColor),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    child: Text('Book Now'),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        theme.accentColor,
-                      ),
-                    ),
-                    onPressed: () {
-                      print(dropDownValue);
-                      ReservedSchedule scheduleModel = ReservedSchedule(
-                          DateTime.now().toIso8601String(),
-                          widget.doctorName,
-                          widget.doctorSpecialty,
-                          dropDownValue);
-                      Provider.of<ProviderClass>(context)
-                          .addReservation(scheduleModel);
-                      Navigator.pop(context);
-                      _bookSuccess(theme, context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _bookSuccess(ThemeData theme, BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: AlertDialog(
-              insetPadding: EdgeInsets.zero,
-              backgroundColor: Colors.transparent,
-              content: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: theme.primaryColor,
-                    radius: 60,
-                    child: Image.asset(
-                      'assets/images/correct_icon.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 20,
-                    ),
-                    child: Text(
-                      'Your Appointment Has Been Reserved Successfully!',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headline5
-                          .copyWith(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -308,7 +171,16 @@ class _DoctorCardState extends State<DoctorCard> {
                             ),
                           ),
                           onPressed: () {
-                            _selectBookingDetails(theme, context);
+                            Navigator.pushNamed(
+                                context, BookNowScreen.routeName,
+                                arguments: DoctorCard(
+                                    hospitalName: widget.hospitalName,
+                                    doctorName: widget.doctorName,
+                                    doctorSpecialty: widget.doctorSpecialty,
+                                    schedule: widget.schedule,
+                                    examinationFee: widget.examinationFee,
+                                    hospitalDistance: widget.hospitalDistance,
+                                    rating: widget.rating));
                           },
                         ),
                       )

@@ -7,10 +7,8 @@ import 'package:provider/provider.dart';
 import '../providers/provider_class.dart';
 import 'dart:ui';
 
-
 class AvailableScreen extends StatelessWidget {
   static const String routeName = '/available';
-  final List<bool> isSwitched = [false, false, false];
   final List<DoctorCard> doctorListVar = [
     DoctorCard(
       doctorName: 'Gerges Wageh',
@@ -23,6 +21,7 @@ class AvailableScreen extends StatelessWidget {
       doctorSpecialty: 'ORTHODONTIC SPECIALIST',
       examinationFee: 50,
       rating: 4,
+      hospitalDistance: 90,
     ),
     DoctorCard(
       doctorName: 'Ahmed Khaled Sayed',
@@ -34,7 +33,8 @@ class AvailableScreen extends StatelessWidget {
       ],
       doctorSpecialty: 'ORTHODONTIC SPECIALIST',
       examinationFee: 250,
-      rating: 4,
+      rating: 3,
+      hospitalDistance: 10,
     ),
     DoctorCard(
       doctorName: 'Khalid Mohammed Refaat',
@@ -42,7 +42,8 @@ class AvailableScreen extends StatelessWidget {
       schedule: [ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')],
       doctorSpecialty: 'Another Specialist',
       examinationFee: 150,
-      rating: 4,
+      rating: 5,
+      hospitalDistance: 20,
     ),
     DoctorCard(
       doctorName: 'Mohamed Ramadan',
@@ -55,6 +56,7 @@ class AvailableScreen extends StatelessWidget {
       doctorSpecialty: 'Dentistry SPECIALIST',
       examinationFee: 350,
       rating: 4,
+      hospitalDistance: 30,
     ),
   ];
 
@@ -80,19 +82,19 @@ class AvailableScreen extends StatelessWidget {
               ),
               ModalSheetListTile(
                 text: "Price Low to High",
-                value: Provider.of<ProviderClass>(context).vars[0],
+                value: Provider.of<ProviderClass>(context).sortingVars[0],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceLowHigh,
               ),
               ModalSheetListTile(
                 text: "Price High to Low",
-                value: Provider.of<ProviderClass>(context).vars[1],
+                value: Provider.of<ProviderClass>(context).sortingVars[1],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceHighLow,
               ),
               ModalSheetListTile(
                 text: "Nearest",
-                value: Provider.of<ProviderClass>(context).vars[2],
+                value: Provider.of<ProviderClass>(context).sortingVars[2],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortNearest,
               ),
@@ -109,10 +111,20 @@ class AvailableScreen extends StatelessWidget {
     final Map<String, String> clinic =
         (ModalRoute.of(context).settings.arguments) as Map<String, String>;
 
-    doctorListVar.sort((a, b) => a.examinationFee.compareTo(b.examinationFee));
-    doctorListVar.reversed.toList();
-    List<DoctorCard> doctorList() {
-      return doctorListVar.toList();
+    List<DoctorCard> doctorListSorted() {
+      if (Provider.of<ProviderClass>(context).sortingVars[0] == true) {
+        doctorListVar
+            .sort((a, b) => a.examinationFee.compareTo(b.examinationFee));
+        return doctorListVar;
+      } else if (Provider.of<ProviderClass>(context).sortingVars[1] == true) {
+        doctorListVar
+            .sort((a, b) => a.examinationFee.compareTo(b.examinationFee));
+        return doctorListVar.reversed.toList();
+      } else {
+        doctorListVar
+            .sort((a, b) => a.hospitalDistance.compareTo(b.hospitalDistance));
+        return doctorListVar;
+      }
     }
 
     return Scaffold(
@@ -137,7 +149,7 @@ class AvailableScreen extends StatelessWidget {
         //shrinkWrap: true,
         children: [
           SizedBox(height: 11),
-          ...doctorList(),
+          ...doctorListSorted(),
           SizedBox(height: 11),
         ],
       ),

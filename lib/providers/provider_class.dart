@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/reserved_schedule.dart';
 
 class ProviderClass with ChangeNotifier {
-  List<bool> vars = [false, false, false];
+  List<bool> sortingVars = [false, false, true];
   List<ReservedSchedule> reservations = [];
 
   void addReservation(ReservedSchedule scheduleModel) {
@@ -17,18 +17,38 @@ class ProviderClass with ChangeNotifier {
     notifyListeners();
   }
 
-  changeSortPriceHighLow() {
-    vars[1] = !vars[1];
+  void changeSortPriceLowHigh() {
+    sortingVars[0] = !sortingVars[0];
+    if (sortingVars[1] || sortingVars[2] == true) {
+      sortingVars[1] = false;
+      sortingVars[2] = false;
+    }
+    if (sortingVars[0] == false) {
+      sortingVars[2] = true;
+    }
     notifyListeners();
   }
 
-  changeSortPriceLowHigh() {
-    vars[0] = !vars[0];
+  void changeSortPriceHighLow() {
+    sortingVars[1] = !sortingVars[1];
+    if (sortingVars[0] || sortingVars[2] == true) {
+      sortingVars[0] = false;
+      sortingVars[2] = false;
+    }
+    if (sortingVars[1] == false) {
+      sortingVars[2] = true;
+    }
     notifyListeners();
   }
 
-  changeSortNearest() {
-    vars[2] = !vars[2];
+  void changeSortNearest() {
+    sortingVars[2] = true;
+
+    if (sortingVars[0] || sortingVars[1] == true) {
+      sortingVars[0] = false;
+      sortingVars[1] = false;
+    }
+
     notifyListeners();
   }
 }

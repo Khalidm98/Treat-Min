@@ -104,15 +104,33 @@ class AccountScreen extends StatelessWidget {
                     style: theme.textTheme.headline5,
                   ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount:
-                  Provider.of<ProviderClass>(context).reservations.length,
-                  itemBuilder: (context, i) => CurrentReservationCard(
-                      Provider.of<ProviderClass>(context).reservations[i]),
-                ),
-                SizedBox(height: 25)
+                Provider.of<ProviderClass>(context).reservations.length != 0
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: Provider.of<ProviderClass>(context)
+                            .reservations
+                            .length,
+                        itemBuilder: (context, i) => CurrentReservationCard(
+                            Provider.of<ProviderClass>(context)
+                                .reservations[i]),
+                      )
+                    : Card(
+                        margin: EdgeInsets.all(0),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                          trailing: Icon(
+                            Icons.book,
+                            color: theme.accentColor,
+                          ),
+                          title: Text(
+                            'There are no current reservations',
+                            style: theme.textTheme.subtitle2
+                                .copyWith(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                SizedBox(height: 15)
               ],
             )
           : Column(

@@ -52,6 +52,7 @@ class DataSearch extends SearchDelegate<String> {
       doctorSpecialty: 'ORTHODONTIC',
       examinationFee: 350,
       rating: 4,
+      hospitalDistance: 30,
     );
   }
 

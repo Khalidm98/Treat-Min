@@ -7,6 +7,7 @@ import './providers/user_data.dart';
 
 import 'providers/provider_class.dart';
 
+import './screens/booknow_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
 import './screens/emergency_screen.dart';
@@ -129,9 +130,10 @@ class MyApp extends StatelessWidget {
           ),
           textTheme: const TextTheme(
             button: const TextStyle(fontWeight: FontWeight.w700),
-            headline4:
-                const TextStyle(fontWeight: FontWeight.w700, color: Colors.black),
-            headline5: const TextStyle(fontWeight: FontWeight.w700, color: blue),
+            headline4: const TextStyle(
+                fontWeight: FontWeight.w700, color: Colors.black),
+            headline5:
+                const TextStyle(fontWeight: FontWeight.w700, color: blue),
             subtitle1: const TextStyle(fontWeight: FontWeight.w700),
             bodyText2: const TextStyle(fontWeight: FontWeight.w500),
             caption: const TextStyle(fontWeight: FontWeight.w500),
@@ -154,6 +156,7 @@ class MyApp extends StatelessWidget {
           SetupScreen.routeName: (_) => SetupScreen(),
           TabsScreen.routeName: (_) => TabsScreen(),
           VerificationScreen.routeName: (_) => VerificationScreen(),
+          BookNowScreen.routeName: (_) => BookNowScreen(),
         },
       ),
     );
