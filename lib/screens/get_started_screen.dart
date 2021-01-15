@@ -11,9 +11,9 @@ class GetStartedScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(40),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image.asset('assets/images/logo.png'),
               Text(
@@ -24,18 +24,6 @@ class GetStartedScreen extends StatelessWidget {
                 'assets/images/doctor.png',
                 height: MediaQuery.of(context).size.height * 0.4,
               ),
-              // ElevatedButton(
-              //   child: Text('Log In'),
-              //   style: ButtonStyle(
-              //     backgroundColor: MaterialStateProperty.all<Color>(
-              //       Theme.of(context).accentColor,
-              //     ),
-              //   ),
-              //   onPressed: () {
-              //     Navigator.of(context)
-              //         .pushReplacementNamed(AuthScreen.routeName);
-              //   },
-              // ),
               Row(
                 children: [
                   Expanded(

@@ -17,10 +17,10 @@ class SetupScreen extends StatefulWidget {
 
 class _SetupScreenState extends State<SetupScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  File _image;
   TextEditingController _dateController = TextEditingController();
   DateTime _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
   int _gender = 0;
+  File _image;
   Map<String, String> _account = {
     'id': DateTime.now().toIso8601String(),
   };
@@ -70,9 +70,10 @@ class _SetupScreenState extends State<SetupScreen> {
     );
     if (picked != null) {
       _date = picked;
-      _dateController.text = _date.toString().substring(0, 10);
+      setState(() {
+        _dateController.text = _date.toString().substring(0, 10);
+      });
     }
-    setState(() {});
   }
 
   @override
