@@ -15,7 +15,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  CarouselController _slider = CarouselController();
+  final CarouselController _slider = CarouselController();
   int _currentIndex = 0;
   int _nextIndex;
 
@@ -61,7 +61,7 @@ class _TabsScreenState extends State<TabsScreen> {
         ],
         activeItems: [
           Image.asset('assets/icons/heart_filled.png'),
-          // Image.asset('assets/icons/medicine_outlined.png'),
+          // Image.asset('assets/icons/medicine_filled.png'),
           Image.asset('assets/icons/settings_filled.png'),
           Image.asset('assets/icons/account_filled.png'),
         ],

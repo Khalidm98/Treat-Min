@@ -90,7 +90,6 @@ class AccountScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
-                      'Age: 28 years\n'
                       'Blood Pressure: 120/80 (Normal)\n'
                       'Body Fats: 7% (Normal)\n'
                       'PCR Test Result: Negative',

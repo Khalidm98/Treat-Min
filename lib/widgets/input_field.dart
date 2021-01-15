@@ -11,10 +11,7 @@ class InputField extends StatelessWidget {
     final theme = Theme.of(context);
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: textFormField,
-        ),
+        Padding(padding: const EdgeInsets.only(top: 20), child: textFormField),
         Positioned(
           left: 20,
           child: Container(
