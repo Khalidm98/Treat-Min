@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 
 import './providers/app_data.dart';
 import './providers/user_data.dart';
-
-import 'providers/provider_class.dart';
+import './providers/provider_class.dart';
 
 import './screens/booknow_screen.dart';
 import './screens/auth_screen.dart';

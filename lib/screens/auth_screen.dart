@@ -67,7 +67,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  Widget _buildSocialButton(Social social) {
+  Widget _socialButton(Social social) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
@@ -200,8 +200,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     endIndent: 10,
                     color: Colors.grey,
                   ),
-                  _buildSocialButton(Social.google),
-                  _buildSocialButton(Social.facebook),
+                  _socialButton(Social.google),
+                  _socialButton(Social.facebook),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: RichText(

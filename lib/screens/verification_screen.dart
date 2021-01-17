@@ -11,18 +11,13 @@ class VerificationScreen extends StatefulWidget {
 }
 
 class _VerificationScreenState extends State<VerificationScreen> {
-  List<TextEditingController> _controllers = List();
-  List<FocusNode> _focusNodes = List();
+  final List _controllers = List.generate(4, (_) => TextEditingController());
+  final List _focusNodes = List.generate(3, (_) => FocusNode());
   TapGestureRecognizer _resendCode;
 
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < 3; i++) {
-      _controllers.add(TextEditingController());
-      _focusNodes.add(FocusNode());
-    }
-    _controllers.add(TextEditingController());
     _resendCode = TapGestureRecognizer()
       ..onTap = () {
         showDialog(
