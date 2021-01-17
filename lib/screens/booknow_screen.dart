@@ -186,7 +186,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         BoxShadow(
                           color: theme.primaryColorLight
                               .withOpacity(!expansionListChanger ? 0.5 : 0),
-                          blurRadius: 2,
+                          blurRadius: !expansionListChanger ? 3 : 0,
                         ),
                       ],
                     ),
