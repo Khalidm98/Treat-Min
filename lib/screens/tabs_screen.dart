@@ -16,8 +16,15 @@ class TabsScreen extends StatefulWidget {
 
 class _TabsScreenState extends State<TabsScreen> {
   final CarouselController _slider = CarouselController();
-  int _currentIndex = 0;
+  int _currentIndex;
   int _nextIndex;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final int index = (ModalRoute.of(context).settings.arguments);
+    _currentIndex = index ?? 0;
+  }
 
   @override
   Widget build(BuildContext context) {

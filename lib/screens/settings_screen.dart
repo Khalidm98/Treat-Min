@@ -96,22 +96,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             borderRadius: BorderRadius.circular(10),
             child: ListTile(
               tileColor: Colors.grey[300],
-              title: Text('My Account', style: theme.textTheme.headline6),
-              leading: CircleAvatar(
-                backgroundColor: theme.primaryColorLight,
-                child: Icon(
-                  Icons.account_circle,
-                  color: Colors.white,
-                  size: 35,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: ListTile(
-              tileColor: Colors.grey[300],
               title: Text(
                 isLoggedIn ? 'Log Out' : 'Log In',
                 style: theme.textTheme.headline6,

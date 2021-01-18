@@ -1,13 +1,15 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './tabs_screen.dart';
 import '../models/clinic_schedule.dart';
 import '../widgets/booknow_dropdown_list.dart';
-import 'package:provider/provider.dart';
 import '../providers/provider_class.dart';
 import '../models/reserved_schedule.dart';
 import '../widgets/doctor_card.dart';
 import '../widgets/rating_hearts.dart';
 import '../widgets/review_box.dart';
-import 'dart:ui';
 
 class BookNowScreen extends StatefulWidget {
   static const String routeName = '/booknow';
@@ -30,7 +32,11 @@ class _BookNowScreenState extends State<BookNowScreen> {
           child: GestureDetector(
             onTap: () {
               Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                TabsScreen.routeName,
+                (route) => false,
+                arguments: 2,
+              );
             },
             child: AlertDialog(
               insetPadding: EdgeInsets.zero,
