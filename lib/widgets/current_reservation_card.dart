@@ -15,14 +15,14 @@ class CurrentReservationCard extends StatelessWidget {
             title:
                 Text('Are you sure that you want to cancel this reservation?'),
             actions: [
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Provider.of<ProviderClass>(context)
                         .removeReservation(sched.id);
                     Navigator.pop(context);
                   },
                   child: Text('Yes')),
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },

@@ -1,9 +1,10 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:treat_min/screens/booknow_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import './rating_hearts.dart';
 import '../models/clinic_schedule.dart';
+import '../screens/booknow_screen.dart';
 
 const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
 const double doctorCardIconsWidth = 12.0;
@@ -170,17 +171,40 @@ class _DoctorCardState extends State<DoctorCard> {
                                   .copyWith(color: Colors.white),
                             ),
                           ),
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, BookNowScreen.routeName,
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            if (!prefs.containsKey('userData')) {
+                              showDialog(
+                                context: context,
+                                child: AlertDialog(
+                                  title: Text(
+                                    'You must log in to book an appointment',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              Navigator.pushNamed(
+                                context,
+                                BookNowScreen.routeName,
                                 arguments: DoctorCard(
-                                    hospitalName: widget.hospitalName,
-                                    doctorName: widget.doctorName,
-                                    doctorSpecialty: widget.doctorSpecialty,
-                                    schedule: widget.schedule,
-                                    examinationFee: widget.examinationFee,
-                                    hospitalDistance: widget.hospitalDistance,
-                                    rating: widget.rating));
+                                  hospitalName: widget.hospitalName,
+                                  doctorName: widget.doctorName,
+                                  doctorSpecialty: widget.doctorSpecialty,
+                                  schedule: widget.schedule,
+                                  examinationFee: widget.examinationFee,
+                                  hospitalDistance: widget.hospitalDistance,
+                                  rating: widget.rating,
+                                ),
+                              );
+                            }
                           },
                         ),
                       )

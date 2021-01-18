@@ -7,7 +7,7 @@ class AppData with ChangeNotifier {
   Future<bool> isFirstRun() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('OpenedBefore')) {
-      // prefs.setBool('OpenedBefore', true);
+      prefs.setBool('OpenedBefore', true);
       return true;
     }
     return false;
