@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 import '../models/clinic_schedule.dart';
 import '../widgets/doctor_card.dart';
 import '../utils/search_bar.dart';
@@ -14,9 +15,9 @@ class AvailableScreen extends StatelessWidget {
       doctorName: 'Gerges Wageh',
       hospitalName: 'Dar EL-Fouad',
       schedule: [
-        ClinicSchedule(day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
-        ClinicSchedule(day: 'Sunday', time: '12:00 PM - 14:00 PM'),
-        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
+        ClinicSchedule(day: 'Wednesday', time: '9:00 - 12:00'),
+        ClinicSchedule(day: 'Sunday', time: '12:00 - 14:00'),
+        ClinicSchedule(day: 'Friday', time: '11:00 - 12:00')
       ],
       doctorSpecialty: 'ORTHODONTIC SPECIALIST',
       examinationFee: 50,
@@ -27,9 +28,9 @@ class AvailableScreen extends StatelessWidget {
       doctorName: 'Ahmed Khaled Sayed',
       hospitalName: 'EL-Kahrba',
       schedule: [
-        ClinicSchedule(day: 'Sunday', time: '12:00 PM - 14:00 PM'),
-        ClinicSchedule(day: 'Sunday', time: '11:00 PM - 12:00 PM'),
-        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM'),
+        ClinicSchedule(day: 'Sunday', time: '12:00 - 14:00'),
+        ClinicSchedule(day: 'Sunday', time: '11:00 - 12:00'),
+        ClinicSchedule(day: 'Friday', time: '11:00 - 12:00'),
       ],
       doctorSpecialty: 'ORTHODONTIC SPECIALIST',
       examinationFee: 250,
@@ -39,8 +40,8 @@ class AvailableScreen extends StatelessWidget {
     DoctorCard(
       doctorName: 'Khalid Mohammed Refaat',
       hospitalName: 'EL-Seoudi EL-Almani',
-      schedule: [ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')],
-      doctorSpecialty: 'Another Specialist',
+      schedule: [ClinicSchedule(day: 'Friday', time: '11:00 - 12:00')],
+      doctorSpecialty: 'ANOTHER SPECIALIST',
       examinationFee: 150,
       rating: 5,
       hospitalDistance: 20,
@@ -49,11 +50,11 @@ class AvailableScreen extends StatelessWidget {
       doctorName: 'Mohamed Ramadan',
       hospitalName: 'EL-Nile',
       schedule: [
-        ClinicSchedule(day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
-        ClinicSchedule(day: 'Monday', time: '12:00 PM - 14:00 PM'),
-        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
+        ClinicSchedule(day: 'Wednesday', time: '9:00 - 12:00'),
+        ClinicSchedule(day: 'Monday', time: '12:00 - 14:00'),
+        ClinicSchedule(day: 'Friday', time: '11:00 - 12:00')
       ],
-      doctorSpecialty: 'Dentistry SPECIALIST',
+      doctorSpecialty: 'DENTISTRY SPECIALIST',
       examinationFee: 350,
       rating: 4,
       hospitalDistance: 30,
@@ -73,8 +74,8 @@ class AvailableScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 color: theme.primaryColorLight,
                 alignment: Alignment.center,
-                child: Text(
-                  "Sort By",
+                child: TranslatedText(
+                  jsonKey: "Sort By",
                   style: theme.textTheme.headline5.copyWith(
                     color: Colors.white,
                   ),
@@ -129,7 +130,7 @@ class AvailableScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(clinic['name']),
+        title: TranslatedText(jsonKey: clinic['name']),
         actions: [
           IconButton(
             icon: Icon(Icons.search),

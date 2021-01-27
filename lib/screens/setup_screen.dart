@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/widgets/translated_text.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 import './tabs_screen.dart';
 import '../providers/user_data.dart';
@@ -89,8 +91,8 @@ class _SetupScreenState extends State<SetupScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Text(
-                  'Account Setup',
+                child: TranslatedText(
+                  jsonKey: 'Account Setup',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headline4,
                 ),
@@ -136,13 +138,18 @@ class _SetupScreenState extends State<SetupScreen> {
                     InputField(
                       label: 'Name',
                       textFormField: TextFormField(
-                        decoration: InputDecoration(hintText: 'Your Name Here'),
+                        decoration: InputDecoration(
+                            hintText: translator.currentLanguage == 'en'
+                                ? 'Your Name Here'
+                                : 'اسمك هنا'),
                         textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
                         onSaved: (value) => _account['name'] = value,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Name cannot be empty!';
+                            return translator.currentLanguage == 'en'
+                                ? 'Name cannot be empty!'
+                                : 'الاسم لا يمكن ان يكون فارغ!';
                           }
                           return null;
                         },
@@ -153,7 +160,9 @@ class _SetupScreenState extends State<SetupScreen> {
                       label: 'Phone',
                       textFormField: TextFormField(
                         decoration: InputDecoration(
-                          hintText: '01## ### ####',
+                          hintText: translator.currentLanguage == 'en'
+                              ? '01## ### ####'
+                              : '#### ### 01##',
                           counterText: '',
                         ),
                         keyboardType: TextInputType.phone,
@@ -161,11 +170,17 @@ class _SetupScreenState extends State<SetupScreen> {
                         onSaved: (value) => _account['phone'] = value,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Phone cannot be empty!';
+                            return translator.currentLanguage == 'en'
+                                ? 'Phone cannot be empty!'
+                                : 'رقم الهاتف لا يمكن ان يكون فارغ!';
                           } else if (int.tryParse(value) == null) {
-                            return 'Phone must contain numbers only!';
-                          } else if (value.length < 11) {
-                            return 'Phone must contain exactly 11 numbers!';
+                            return translator.currentLanguage == 'en'
+                                ? 'Phone must contain numbers only!'
+                                : 'رقم الهاتف يجب ان يحتوي على ارقام فقط!';
+                          } else if (value.length != 11) {
+                            return translator.currentLanguage == 'en'
+                                ? 'Phone must contain exactly 11 numbers!'
+                                : 'رقم الهاتف يجب ان يحتوي على 11 رقم!';
                           }
                           return null;
                         },
@@ -187,7 +202,9 @@ class _SetupScreenState extends State<SetupScreen> {
                                 _account['birth'] = _date.toIso8601String(),
                             validator: (value) {
                               if (value.isEmpty) {
-                                return 'Date of birth cannot be empty!';
+                                return translator.currentLanguage == 'en'
+                                    ? 'Date of birth cannot be empty!'
+                                    : 'تاريخ الميلاد لا يمكن ان يكون فارغ!';
                               }
                               return null;
                             },
@@ -201,7 +218,8 @@ class _SetupScreenState extends State<SetupScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  Text('Gender:', style: theme.textTheme.subtitle1),
+                  TranslatedText(
+                      jsonKey: 'Gender:', style: theme.textTheme.subtitle1),
                   Spacer(),
                   Radio(
                     value: 1,
@@ -209,7 +227,8 @@ class _SetupScreenState extends State<SetupScreen> {
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
                   ),
-                  Text('Male', style: theme.textTheme.subtitle1),
+                  TranslatedText(
+                      jsonKey: 'Male', style: theme.textTheme.subtitle1),
                   Spacer(),
                   Radio(
                     value: 2,
@@ -217,7 +236,8 @@ class _SetupScreenState extends State<SetupScreen> {
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
                   ),
-                  Text('Female', style: theme.textTheme.subtitle1),
+                  TranslatedText(
+                      jsonKey: 'Female', style: theme.textTheme.subtitle1),
                 ],
               ),
               Padding(

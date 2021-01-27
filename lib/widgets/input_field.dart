@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 
 class InputField extends StatelessWidget {
   final String label;
@@ -13,7 +15,8 @@ class InputField extends StatelessWidget {
       children: [
         Padding(padding: const EdgeInsets.only(top: 20), child: textFormField),
         Positioned(
-          left: 20,
+          left: translator.currentLanguage == 'en' ? 20 : null,
+          right: translator.currentLanguage == 'ar' ? 20 : null,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
@@ -25,8 +28,8 @@ class InputField extends StatelessWidget {
                 stops: [0.1, 0.9],
               ),
             ),
-            child: Text(
-              label,
+            child: TranslatedText(
+              jsonKey: label,
               style: theme.textTheme.subtitle1.copyWith(color: Colors.white),
             ),
           ),

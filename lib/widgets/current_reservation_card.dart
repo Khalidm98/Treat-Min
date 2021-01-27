@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 import '../providers/provider_class.dart';
 import '../models/reserved_schedule.dart';
 
@@ -12,8 +13,9 @@ class CurrentReservationCard extends StatelessWidget {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title:
-                Text('Are you sure that you want to cancel this reservation?'),
+            title: TranslatedText(
+                jsonKey:
+                    'Are you sure that you want to cancel this reservation?'),
             actions: [
               TextButton(
                   onPressed: () {
@@ -21,12 +23,12 @@ class CurrentReservationCard extends StatelessWidget {
                         .removeReservation(sched.id);
                     Navigator.pop(context);
                   },
-                  child: Text('Yes')),
+                  child: TranslatedText(jsonKey: 'Yes')),
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('No'))
+                  child: TranslatedText(jsonKey: 'No'))
             ],
           );
         });
@@ -43,7 +45,7 @@ class CurrentReservationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: theme.accentColor,
@@ -56,7 +58,7 @@ class CurrentReservationCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
               child: Text(
                 sched.doctorName,
                 style: theme.textTheme.headline6
@@ -64,24 +66,22 @@ class CurrentReservationCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
                 sched.doctorSpecialty,
                 style: theme.textTheme.caption,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    sched.schedule.day,
-                    textScaleFactor: 0.9,
+                  TranslatedText(
+                    jsonKey: sched.schedule.day,
                   ),
                   Text(
                     sched.schedule.time,
-                    textScaleFactor: 0.9,
                   ),
                   SizedBox(
                     height: 30,
@@ -90,7 +90,7 @@ class CurrentReservationCard extends StatelessWidget {
                       onPressed: () {
                         confirmReservationCancellation(context);
                       },
-                      child: Text('Cancel', maxLines: 1),
+                      child: TranslatedText(jsonKey: 'Cancel', maxLines: 1),
                     ),
                   ),
                 ],

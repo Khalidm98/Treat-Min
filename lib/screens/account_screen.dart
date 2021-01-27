@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 
 import './auth_screen.dart';
 import '../providers/provider_class.dart';
@@ -58,7 +59,7 @@ class AccountScreen extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.account_circle, color: accent, size: 40),
                   trailing: Icon(Icons.edit, color: theme.accentColor),
-                  title: Text('Name'),
+                  title: TranslatedText(jsonKey: 'Name'),
                   subtitle: Text(userData.name),
                 ),
                 Divider(height: 0),
@@ -66,7 +67,7 @@ class AccountScreen extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.date_range, color: accent, size: 40),
                   trailing: Icon(Icons.edit, color: theme.accentColor),
-                  title: Text('Date of Birth'),
+                  title: TranslatedText(jsonKey: 'Date of Birth'),
                   subtitle: Text(userData.birth.toString().substring(0, 10)),
                 ),
                 Divider(height: 0),
@@ -74,14 +75,14 @@ class AccountScreen extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.phone_android, color: accent, size: 40),
                   trailing: Icon(Icons.edit, color: accent),
-                  title: Text('Phone Number'),
+                  title: TranslatedText(jsonKey: 'Phone Number'),
                   subtitle: Text(userData.phone),
                 ),
                 Divider(height: 0),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
-                  child: Text(
-                    'Health Condition',
+                  child: TranslatedText(
+                    jsonKey: 'Health Condition',
                     style: theme.textTheme.headline5,
                   ),
                 ),
@@ -98,8 +99,8 @@ class AccountScreen extends StatelessWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
-                  child: Text(
-                    'Current Reservations',
+                  child: TranslatedText(
+                    jsonKey: 'Current Reservations',
                     style: theme.textTheme.headline5,
                   ),
                 ),
@@ -122,8 +123,8 @@ class AccountScreen extends StatelessWidget {
                             Icons.book,
                             color: theme.accentColor,
                           ),
-                          title: Text(
-                            'There are no current reservations',
+                          title: TranslatedText(
+                            jsonKey: 'There are no current reservations',
                             style: theme.textTheme.subtitle2
                                 .copyWith(fontWeight: FontWeight.w700),
                           ),
@@ -140,12 +141,14 @@ class AccountScreen extends StatelessWidget {
                   child: Image.asset('assets/images/logo.png'),
                 ),
                 SizedBox(height: 50),
-                Text('You are not logged in', style: theme.textTheme.headline5),
+                TranslatedText(
+                    jsonKey: 'You are not logged in',
+                    style: theme.textTheme.headline5),
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: ElevatedButton(
-                    child: Text('Log in'),
+                    child: TranslatedText(jsonKey: 'Log in'),
                     onPressed: () {
                       Navigator.of(context)
                           .pushReplacementNamed(AuthScreen.routeName);

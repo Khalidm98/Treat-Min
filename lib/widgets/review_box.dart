@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 import 'rating_hearts.dart';
 
 class ReviewBox extends StatefulWidget {
@@ -44,8 +45,8 @@ class _ReviewBoxState extends State<ReviewBox> {
                           .copyWith(fontWeight: FontWeight.w700),
                       textScaleFactor: 0.9,
                     ),
-                    Text(
-                      '3 Months ago',
+                    TranslatedText(
+                      jsonKey: 'Months ago',
                       style: theme.textTheme.subtitle2
                           .copyWith(color: Colors.grey),
                       textScaleFactor: 0.7,

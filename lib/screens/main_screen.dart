@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 
 import './emergency_screen.dart';
 import './select_screen.dart';
@@ -16,7 +17,9 @@ class MainScreen extends StatelessWidget {
             Image.asset('assets/images/logo.png'),
             SizedBox(height: 80),
             ElevatedButton(
-              child: Text(bookToString(Book.clinic)),
+              child: TranslatedText(
+                jsonKey: 'Outpatient Clinics',
+              ),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
@@ -26,7 +29,9 @@ class MainScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text(bookToString(Book.service)),
+              child: TranslatedText(
+                jsonKey: 'Services',
+              ),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
@@ -36,7 +41,9 @@ class MainScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text(bookToString(Book.room)),
+              child: TranslatedText(
+                jsonKey: 'Special Rooms',
+              ),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
@@ -49,7 +56,9 @@ class MainScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pushNamed(EmergencyScreen.routeName);
               },
-              child: Text('Emergency'),
+              child: TranslatedText(
+                jsonKey: 'Emergency',
+              ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
                   Theme.of(context).errorColor,

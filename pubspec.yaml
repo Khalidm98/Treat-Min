@@ -22,6 +22,7 @@ dependencies:
   provider: ^3.2.0
   shared_preferences: ^0.5.12+4
   toggle_switch: ^0.1.8
+  localize_and_translate: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +42,8 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+    - assets/lang/en.json
+    - assets/lang/ar.json
 
   fonts:
     - family: Montserrat

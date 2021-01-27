@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:treat_min/widgets/translated_text.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 import './setup_screen.dart';
 
@@ -23,11 +25,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
         showDialog(
           context: context,
           child: AlertDialog(
-            title: const Text('We will send a new code to your email address'),
+            title: TranslatedText(
+                jsonKey: 'We will send a new code to your email address'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: TranslatedText(jsonKey: 'Ok'),
               ),
             ],
           ),
@@ -117,20 +120,24 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   children: [
                     Image.asset('assets/images/logo.png'),
                     SizedBox(height: 50),
-                    Text(
-                      'Verify your email\nwith code sent to you',
+                    TranslatedText(
+                      jsonKey: 'Verify your email with code sent to you',
                       style: theme.textTheme.headline5,
                       textAlign: TextAlign.center,
                     ),
                     _codeInputField(theme),
                     RichText(
                       text: TextSpan(
-                        text: 'Didn\'t receive the code? ',
+                        text: translator.currentLanguage == 'en'
+                            ? 'Didn\'t receive the code? '
+                            : 'لم يصلك الرمز؟ ',
                         style: theme.textTheme.subtitle1
                             .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
                           TextSpan(
-                            text: 'Resend',
+                            text: translator.currentLanguage == 'en'
+                                ? 'Resend'
+                                : 'اعد الارسال',
                             style: TextStyle(color: theme.accentColor),
                             recognizer: _resendCode,
                           ),
@@ -141,7 +148,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ),
               ),
               ElevatedButton(
-                child: Text('Continue'),
+                child: TranslatedText(jsonKey: 'Continue'),
                 onPressed: () {
                   Navigator.of(context).pushNamed(SetupScreen.routeName);
                 },

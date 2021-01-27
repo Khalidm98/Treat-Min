@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 
 import './tabs_screen.dart';
 import '../models/clinic_schedule.dart';
@@ -57,8 +58,9 @@ class _BookNowScreenState extends State<BookNowScreen> {
                       horizontal: 10,
                       vertical: 20,
                     ),
-                    child: Text(
-                      'Your Appointment Has Been Reserved Successfully!',
+                    child: TranslatedText(
+                      jsonKey:
+                          'Your Appointment Has Been Reserved Successfully!',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headline5
                           .copyWith(color: Colors.white),
@@ -107,7 +109,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('Book Now')),
+      appBar: AppBar(title: TranslatedText(jsonKey: 'Book Now')),
       body: ListView(
         padding: EdgeInsets.all(30),
         children: [
@@ -162,7 +164,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  child: Text('Book Now'),
+                  child: TranslatedText(jsonKey: 'Book Now'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                       theme.accentColor,
@@ -175,7 +177,8 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 if (!ableToBook) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
-                    child: Text('Please choose an appointment date.',
+                    child: TranslatedText(
+                        jsonKey: 'Please choose an appointment date.',
                         style: theme.textTheme.subtitle2
                             .copyWith(color: Colors.red)),
                   )
@@ -203,8 +206,12 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         });
                       },
                       title: !expansionListChanger
-                          ? Text('View patients reviews')
-                          : Text('Hide patients reviews'),
+                          ? TranslatedText(
+                              jsonKey: 'View patients reviews',
+                              textAlign: TextAlign.center)
+                          : TranslatedText(
+                              jsonKey: 'Hide patients reviews',
+                              textAlign: TextAlign.center),
                       leading: Icon(
                         Icons.stars_rounded,
                         color: theme.accentColor,

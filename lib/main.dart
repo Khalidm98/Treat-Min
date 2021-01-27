@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 import './providers/app_data.dart';
 import './providers/user_data.dart';
@@ -17,14 +18,35 @@ import './screens/splash_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/verification_screen.dart';
 
-void main() {
-  // Set device orientation to only Portrait up
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(MyApp());
+
+  await translator.init(
+    localeDefault: LocalizationDefaultType.device,
+    languagesList: <String>['en', 'ar'],
+    assetsDirectory: 'assets/lang/',
+    //apiKeyGoogle:
+  );
+
+  runApp(LocalizedApp(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+
+  static void setLocale(BuildContext context, Locale locale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+    state.setLocale(locale);
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale _locale;
+
+  setLocale(Locale locale) => setState(() => _locale = locale);
+
   @override
   Widget build(BuildContext context) {
     const Color greenLight = const Color(0xFF60C0A0);
@@ -145,6 +167,9 @@ class MyApp extends StatelessWidget {
           useTextSelectionTheme: true,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        localizationsDelegates: translator.delegates, // Android + iOS Delegates
+        supportedLocales: translator.locals(),
+        locale: _locale,
         home: SplashScreen(),
         routes: {
           AuthScreen.routeName: (_) => AuthScreen(),

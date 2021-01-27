@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
-
+import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 import './auth_screen.dart';
-import '../utils/enumerations.dart';
+import 'package:treat_min/main.dart';
 import '../providers/user_data.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,25 +13,24 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  Language _language = Language.English;
   bool _notification = false;
 
   void _logOut() {
     showDialog(
       context: context,
       child: AlertDialog(
-        title: const Text('Are you sure you want to log out?'),
+        title: TranslatedText(jsonKey: 'Are you sure you want to log out?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('No'),
+            child: TranslatedText(jsonKey: 'No'),
           ),
           TextButton(
             onPressed: () async {
               await Provider.of<UserData>(context, listen: false).logOut();
               Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
             },
-            child: const Text('Yes'),
+            child: TranslatedText(jsonKey: 'Yes'),
           ),
         ],
       ),
@@ -42,7 +42,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final theme = Theme.of(context);
     final isLoggedIn = Provider.of<UserData>(context, listen: false).isLoggedIn;
     return Scaffold(
-      appBar: AppBar(title: Text('Settings')),
+      appBar: AppBar(
+        title: TranslatedText(jsonKey: 'Settings'),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(15),
         children: [
@@ -50,8 +52,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             borderRadius: BorderRadius.circular(10),
             child: ListTile(
               tileColor: Colors.grey[300],
-              title: Text('App Language', style: theme.textTheme.headline6),
+              title: TranslatedText(
+                  jsonKey: 'App Language', style: theme.textTheme.headline6),
               trailing: ToggleSwitch(
+                initialLabelIndex: translator.currentLanguage == 'en' ? 0 : 1,
                 labels: ['English', 'Arabic'],
                 minWidth: 75,
                 minHeight: 30,
@@ -60,11 +64,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inactiveBgColor: Colors.white,
                 onToggle: (index) {
                   if (index == 0) {
-                    _language = Language.English;
+                    setState(() {
+                      translator.setNewLanguage(
+                        context,
+                        newLanguage: 'en',
+                        remember: true,
+                        restart: false,
+                      );
+                      MyApp.setLocale(context, translator.locale);
+                    });
                   } else {
-                    _language = Language.Arabic;
+                    setState(() {
+                      translator.setNewLanguage(
+                        context,
+                        newLanguage: 'ar',
+                        remember: true,
+                        restart: false,
+                      );
+                      MyApp.setLocale(context, translator.locale);
+                    });
                   }
-                  print(_language);
                 },
               ),
             ),
@@ -81,8 +100,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onChanged: (newVal) {
                 setState(() => _notification = newVal);
               },
-              title: Text(
-                'Send Notifications',
+              title: TranslatedText(
+                jsonKey: 'Send Notifications',
                 style: theme.textTheme.headline6,
               ),
               activeColor: Colors.white,
@@ -96,8 +115,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             borderRadius: BorderRadius.circular(10),
             child: ListTile(
               tileColor: Colors.grey[300],
-              title: Text(
-                isLoggedIn ? 'Log Out' : 'Log In',
+              title: TranslatedText(
+                jsonKey: isLoggedIn ? 'Log out' : 'Log in',
                 style: theme.textTheme.headline6,
               ),
               trailing: InkWell(

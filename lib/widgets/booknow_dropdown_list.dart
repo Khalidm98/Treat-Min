@@ -23,7 +23,7 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
       child: DropdownButton(
         isExpanded: true,
         hint: Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text('Choose a date'),
         ),
         value: dropDownValue,
@@ -44,7 +44,7 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
           return DropdownMenuItem(
             value: schedule,
             child: Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: FittedBox(
                 child: Text(
                   schedule.toString(),

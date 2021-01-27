@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/widgets/translated_text.dart';
 
 import './available_screen.dart';
 import '../providers/app_data.dart';
@@ -15,7 +16,9 @@ class SelectScreen extends StatelessWidget {
     final list = Provider.of<AppData>(context).getBookingList(book);
 
     return Scaffold(
-      appBar: AppBar(title: Text(bookToString(book))),
+      appBar: AppBar(
+        title: TranslatedText(jsonKey: bookToString(book)),
+      ),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => FocusScope.of(context).unfocus(),
@@ -26,8 +29,8 @@ class SelectScreen extends StatelessWidget {
           itemBuilder: (_, index) {
             return ListTile(
               leading: Image.asset(list[index]['icon'], height: 30),
-              title: Text(
-                list[index]['name'],
+              title: TranslatedText(
+                jsonKey: list[index]['name'],
                 textScaleFactor: 0.8,
                 style: theme.textTheme.headline5,
               ),
