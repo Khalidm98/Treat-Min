@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/widgets/translated_text.dart';
+import 'package:treat_min/localizations/app_localization.dart';
 
 import './auth_screen.dart';
 import './tabs_screen.dart';
@@ -9,6 +9,7 @@ class GetStartedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appText = AppLocalization.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -17,8 +18,8 @@ class GetStartedScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image.asset('assets/images/logo.png'),
-              TranslatedText(
-                jsonKey: 'Care close to home',
+              Text(
+                'Care close to home',
                 style: Theme.of(context).textTheme.headline5,
               ),
               Image.asset(
@@ -29,7 +30,7 @@ class GetStartedScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      child: TranslatedText(jsonKey: 'Log in'),
+                      child: Text(appText.getText('log_in')),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                           Theme.of(context).accentColor,
@@ -47,7 +48,7 @@ class GetStartedScreen extends StatelessWidget {
                   SizedBox(width: 20),
                   Expanded(
                     child: ElevatedButton(
-                      child: TranslatedText(jsonKey: 'Explore'),
+                      child: Text(appText.getText('explore')),
                       style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all<Size>(
                           Size(0, 40),

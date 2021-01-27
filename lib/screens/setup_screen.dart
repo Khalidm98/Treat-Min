@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/widgets/translated_text.dart';
-import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:treat_min/localizations/app_localization.dart';
 
 import './tabs_screen.dart';
 import '../providers/user_data.dart';
@@ -68,7 +67,7 @@ class _SetupScreenState extends State<SetupScreen> {
       initialDate: _date,
       firstDate: DateTime.now().subtract(Duration(days: 365 * 80 + 20)),
       lastDate: DateTime.now().subtract(Duration(days: 365 * 12 + 3)),
-      helpText: 'SELECT YOUR DATE OF BIRTH',
+      helpText: AppLocalization.of(context).getText('select_date'),
     );
     if (picked != null) {
       _date = picked;
@@ -81,6 +80,7 @@ class _SetupScreenState extends State<SetupScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = AppLocalization.of(context);
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -91,8 +91,8 @@ class _SetupScreenState extends State<SetupScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
-                child: TranslatedText(
-                  jsonKey: 'Account Setup',
+                child: Text(
+                  appText.getText('setup'),
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headline4,
                 ),
@@ -136,20 +136,17 @@ class _SetupScreenState extends State<SetupScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InputField(
-                      label: 'Name',
+                      label: appText.getText('name'),
                       textFormField: TextFormField(
                         decoration: InputDecoration(
-                            hintText: translator.currentLanguage == 'en'
-                                ? 'Your Name Here'
-                                : 'اسمك هنا'),
+                          hintText: appText.getText('name_hint'),
+                        ),
                         textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
                         onSaved: (value) => _account['name'] = value,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return translator.currentLanguage == 'en'
-                                ? 'Name cannot be empty!'
-                                : 'الاسم لا يمكن ان يكون فارغ!';
+                            return appText.getText('name_empty');
                           }
                           return null;
                         },
@@ -157,12 +154,10 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                     SizedBox(height: 30),
                     InputField(
-                      label: 'Phone',
+                      label: appText.getText('phone'),
                       textFormField: TextFormField(
                         decoration: InputDecoration(
-                          hintText: translator.currentLanguage == 'en'
-                              ? '01## ### ####'
-                              : '#### ### 01##',
+                          hintText: '01## ### ####',
                           counterText: '',
                         ),
                         keyboardType: TextInputType.phone,
@@ -170,17 +165,11 @@ class _SetupScreenState extends State<SetupScreen> {
                         onSaved: (value) => _account['phone'] = value,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return translator.currentLanguage == 'en'
-                                ? 'Phone cannot be empty!'
-                                : 'رقم الهاتف لا يمكن ان يكون فارغ!';
+                            return appText.getText('phone_empty');
                           } else if (int.tryParse(value) == null) {
-                            return translator.currentLanguage == 'en'
-                                ? 'Phone must contain numbers only!'
-                                : 'رقم الهاتف يجب ان يحتوي على ارقام فقط!';
-                          } else if (value.length != 11) {
-                            return translator.currentLanguage == 'en'
-                                ? 'Phone must contain exactly 11 numbers!'
-                                : 'رقم الهاتف يجب ان يحتوي على 11 رقم!';
+                            return appText.getText('phone_numbers_only');
+                          } else if (value.length < 11) {
+                            return appText.getText('phone_11_numbers');
                           }
                           return null;
                         },
@@ -194,7 +183,7 @@ class _SetupScreenState extends State<SetupScreen> {
                       },
                       child: AbsorbPointer(
                         child: InputField(
-                          label: 'Date of Birth',
+                          label: appText.getText('birth'),
                           textFormField: TextFormField(
                             decoration: InputDecoration(hintText: 'YYYY-MM-DD'),
                             controller: _dateController,
@@ -202,9 +191,7 @@ class _SetupScreenState extends State<SetupScreen> {
                                 _account['birth'] = _date.toIso8601String(),
                             validator: (value) {
                               if (value.isEmpty) {
-                                return translator.currentLanguage == 'en'
-                                    ? 'Date of birth cannot be empty!'
-                                    : 'تاريخ الميلاد لا يمكن ان يكون فارغ!';
+                                return appText.getText('birth_empty');
                               }
                               return null;
                             },
@@ -218,8 +205,10 @@ class _SetupScreenState extends State<SetupScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  TranslatedText(
-                      jsonKey: 'Gender:', style: theme.textTheme.subtitle1),
+                  Text(
+                    appText.getText('gender'),
+                    style: theme.textTheme.subtitle1,
+                  ),
                   Spacer(),
                   Radio(
                     value: 1,
@@ -227,8 +216,10 @@ class _SetupScreenState extends State<SetupScreen> {
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
                   ),
-                  TranslatedText(
-                      jsonKey: 'Male', style: theme.textTheme.subtitle1),
+                  Text(
+                    appText.getText('gender_male'),
+                    style: theme.textTheme.subtitle1,
+                  ),
                   Spacer(),
                   Radio(
                     value: 2,
@@ -236,14 +227,16 @@ class _SetupScreenState extends State<SetupScreen> {
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
                   ),
-                  TranslatedText(
-                      jsonKey: 'Female', style: theme.textTheme.subtitle1),
+                  Text(
+                    appText.getText('gender_female'),
+                    style: theme.textTheme.subtitle1,
+                  ),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 child: ElevatedButton(
-                  child: Text('Finish'),
+                  child: Text(appText.getText('finish')),
                   onPressed: _submit,
                 ),
               ),

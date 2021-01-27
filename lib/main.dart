@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:localize_and_translate/localize_and_translate.dart';
 
+import './localizations/app_localization.dart';
 import './providers/app_data.dart';
 import './providers/user_data.dart';
 import './providers/provider_class.dart';
 
-import './screens/booknow_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
+import './screens/booknow_screen.dart';
 import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
 import './screens/select_screen.dart';
@@ -18,18 +19,11 @@ import './screens/splash_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/verification_screen.dart';
 
-void main() async {
+void main() {
+  // Set device orientation to only Portrait up
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-  await translator.init(
-    localeDefault: LocalizationDefaultType.device,
-    languagesList: <String>['en', 'ar'],
-    assetsDirectory: 'assets/lang/',
-    //apiKeyGoogle:
-  );
-
-  runApp(LocalizedApp(child: MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -45,7 +39,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Locale _locale;
 
-  setLocale(Locale locale) => setState(() => _locale = locale);
+  void setLocale(Locale locale) => setState(() => _locale = locale);
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +57,25 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Treat-min',
         debugShowCheckedModeBanner: false,
+        locale: _locale,
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('ar', 'EG'),
+        ],
+        localizationsDelegates: [
+          AppLocalization.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          for (Locale locale in supportedLocales) {
+            if (locale.languageCode == deviceLocale.languageCode) {
+              return locale;
+            }
+          }
+          return supportedLocales.first;
+        },
         theme: ThemeData(
           fontFamily: 'Montserrat',
           primaryColor: green,
@@ -167,9 +180,6 @@ class _MyAppState extends State<MyApp> {
           useTextSelectionTheme: true,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        localizationsDelegates: translator.delegates, // Android + iOS Delegates
-        supportedLocales: translator.locals(),
-        locale: _locale,
         home: SplashScreen(),
         routes: {
           AuthScreen.routeName: (_) => AuthScreen(),

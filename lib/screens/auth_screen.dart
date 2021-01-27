@@ -1,10 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:treat_min/widgets/translated_text.dart';
-import 'package:localize_and_translate/localize_and_translate.dart';
 
 import './tabs_screen.dart';
 import './verification_screen.dart';
+import '../localizations/app_localization.dart';
 import '../widgets/input_field.dart';
 
 enum AuthMode { signUp, logIn }
@@ -70,6 +69,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _socialButton(Social social) {
+    final appText = AppLocalization.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
@@ -78,9 +78,9 @@ class _AuthScreenState extends State<AuthScreen> {
           'assets/icons/${social == Social.google ? 'google' : 'facebook'}.png',
           height: 30,
         ),
-        label: TranslatedText(
-          jsonKey: '${_mode == AuthMode.signUp ? 'Sign Up' : 'Log in'} with '
-              '${social == Social.google ? 'Google' : 'Facebook'}',
+        label: Text(
+          '${appText.getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in')} '
+          '${appText.getText(social == Social.google ? 'google' : 'facebook')}',
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(
@@ -97,167 +97,145 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return StreamBuilder<Object>(
-        stream: null,
-        builder: (context, snapshot) {
-          return Scaffold(
-            body: SafeArea(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Center(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 10),
+    final appText = AppLocalization.of(context);
+    return Scaffold(
+      body: SafeArea(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(TabsScreen.routeName);
+                      },
+                      splashRadius: 25,
+                      splashColor: theme.primaryColorLight,
+                    ),
+                  ),
+                  Text(
+                    appText.getText(
+                      _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
+                    ),
+                    style: theme.textTheme.headline4,
+                  ),
+                  SizedBox(height: 40),
+                  Form(
+                    key: _formKey,
                     child: Column(
                       children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: IconButton(
-                            icon: Icon(Icons.close),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(TabsScreen.routeName);
-                            },
-                            splashRadius: 25,
-                            splashColor: theme.primaryColorLight,
-                          ),
-                        ),
-                        TranslatedText(
-                          jsonKey: _mode == AuthMode.signUp
-                              ? 'Sign Up First'
-                              : 'Log in',
-                          style: theme.textTheme.headline4,
-                        ),
-                        SizedBox(height: 40),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: InputField(
-                                  label: 'Email Address',
-                                  textFormField: TextFormField(
-                                    decoration: InputDecoration(
-                                      hintText: 'address@example.com',
-                                    ),
-                                    keyboardType: TextInputType.emailAddress,
-                                    textInputAction: TextInputAction.next,
-                                    onSaved: (value) => _data['email'] = value,
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return translator.currentLanguage ==
-                                                'en'
-                                            ? 'Email address cannot be empty!'
-                                            : 'البريد الالكتروني لا يمكن ان يكون فارغاً';
-                                      } else if (!value.contains('.') ||
-                                          !value.contains('@') ||
-                                          value.indexOf('@') !=
-                                              value.lastIndexOf('@')) {
-                                        return translator.currentLanguage ==
-                                                'en'
-                                            ? 'Email address must be valid!'
-                                            : "البريد الالكتروني يجب ان يكون صحيحاً";
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: InputField(
-                                  label: 'Password',
-                                  textFormField: TextFormField(
-                                    decoration: InputDecoration(
-                                      hintText: '********',
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _passObscure = !_passObscure;
-                                          });
-                                        },
-                                        child: Icon(_passObscure
-                                            ? Icons.visibility_off
-                                            : Icons.visibility),
-                                      ),
-                                    ),
-                                    obscureText: _passObscure,
-                                    onSaved: (value) => _data['pass'] = value,
-                                    validator: (value) {
-                                      if (value.length < 8) {
-                                        return translator.currentLanguage ==
-                                                'en'
-                                            ? 'Password must contain at least 8 characters!'
-                                            : 'كلمة السر يجب ان تتكون من 8 احرف على الاقل';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: ElevatedButton(
-                                  child: TranslatedText(
-                                    jsonKey: _mode == AuthMode.signUp
-                                        ? 'Sign Up'
-                                        : 'Log in',
-                                  ),
-                                  onPressed: _mode == AuthMode.signUp
-                                      ? _signUp
-                                      : _logIn,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 3,
-                          height: 30,
-                          indent: 10,
-                          endIndent: 10,
-                          color: Colors.grey,
-                        ),
-                        _socialButton(Social.google),
-                        _socialButton(Social.facebook),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: RichText(
-                            text: TextSpan(
-                              text:
-                                  '${_mode == AuthMode.signUp ? translator.currentLanguage == 'en' ? 'Already' : '' : translator.currentLanguage == 'en' ? 'Don\'t' : "ليس"}'
-                                  ' ${translator.currentLanguage == 'en' ? ' have an account?' : "لديك حساب؟"} ',
-                              style: theme.textTheme.subtitle1
-                                  .copyWith(color: theme.hintColor),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: _mode == AuthMode.signUp
-                                      ? translator.currentLanguage == 'en'
-                                          ? 'Log In'
-                                          : 'تسجيل الدخول'
-                                      : translator.currentLanguage == 'en'
-                                          ? 'Sign Up'
-                                          : 'سجل',
-                                  style:
-                                      TextStyle(color: theme.primaryColorDark),
-                                  recognizer: _switchMode,
-                                ),
-                              ],
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: InputField(
+                            label: appText.getText('email'),
+                            textFormField: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: 'address@example.com',
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              onSaved: (value) => _data['email'] = value,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return appText.getText('email_empty');
+                                } else if (!value.contains('.') ||
+                                    !value.contains('@') ||
+                                    value.indexOf('@') !=
+                                        value.lastIndexOf('@')) {
+                                  return appText.getText('email_valid');
+                                }
+                                return null;
+                              },
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: InputField(
+                            label: appText.getText('password'),
+                            textFormField: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: '********',
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _passObscure = !_passObscure;
+                                    });
+                                  },
+                                  child: Icon(_passObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                              obscureText: _passObscure,
+                              onSaved: (value) => _data['pass'] = value,
+                              validator: (value) {
+                                if (value.length < 8) {
+                                  return appText.getText('password_error');
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: ElevatedButton(
+                            child: Text(
+                              appText.getText(
+                                _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
+                              ),
+                            ),
+                            onPressed:
+                                _mode == AuthMode.signUp ? _signUp : _logIn,
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
+                  Divider(
+                    thickness: 3,
+                    height: 30,
+                    indent: 10,
+                    endIndent: 10,
+                    color: Colors.grey,
+                  ),
+                  _socialButton(Social.google),
+                  _socialButton(Social.facebook),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: RichText(
+                      text: TextSpan(
+                        text: appText.getText(_mode == AuthMode.signUp
+                            ? 'already_registered'
+                            : 'not_registered'),
+                        style: theme.textTheme.subtitle1
+                            .copyWith(color: theme.hintColor),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: appText.getText(
+                              _mode == AuthMode.signUp ? 'log_in' : 'sign_up',
+                            ),
+                            style: TextStyle(color: theme.primaryColorDark),
+                            recognizer: _switchMode,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          );
-        });
+          ),
+        ),
+      ),
+    );
   }
 }
