@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/localizations/app_localization.dart';
+import 'package:treat_min/main.dart';
 
 import './get_started_screen.dart';
 import './tabs_screen.dart';
@@ -42,11 +44,14 @@ class _SplashScreenState extends State<SplashScreen>
       _width.addListener(_expand);
       _controller.forward().then((_) {
         Future.delayed(const Duration(seconds: 2), () async {
-          if (await Provider.of<AppData>(context, listen: false).isFirstRun()) {
+          final appData = Provider.of<AppData>(context, listen: false);
+          if (await appData.isFirstRun()) {
+            await appData
+                .setLanguage(AppLocalization.of(context).locale.languageCode);
             Navigator.of(context)
                 .pushReplacementNamed(GetStartedScreen.routeName);
-          }
-          else {
+          } else {
+            MyApp.setLocale(context, Locale(await appData.getLanguage()));
             await Provider.of<UserData>(context, listen: false).tryAutoLogIn();
             Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
           }

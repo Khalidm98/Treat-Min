@@ -13,6 +13,16 @@ class AppData with ChangeNotifier {
     return false;
   }
 
+  Future setLanguage(String languageCode) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('language', languageCode);
+  }
+
+  Future<String> getLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('language');
+  }
+
   List<Map<String, String>> getBookingList(Book book) {
     switch (book) {
       case Book.clinic:

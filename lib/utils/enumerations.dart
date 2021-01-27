@@ -12,5 +12,3 @@ String bookToString(Book book) {
       return 'Book Enum';
   }
 }
-
-enum Language { Arabic, English }

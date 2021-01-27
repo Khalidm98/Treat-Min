@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:treat_min/localizations/app_localization.dart';
 
 import './setup_screen.dart';
 
@@ -20,14 +21,15 @@ class _VerificationScreenState extends State<VerificationScreen> {
     super.initState();
     _resendCode = TapGestureRecognizer()
       ..onTap = () {
+        final appText = AppLocalization.of(context);
         showDialog(
           context: context,
           child: AlertDialog(
-            title: const Text('We will send a new code to your email address'),
+            title: Text(appText.getText('resend_message')),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(appText.getText('ok')),
               ),
             ],
           ),
@@ -102,6 +104,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = AppLocalization.of(context);
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: GestureDetector(
@@ -118,14 +121,14 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     Image.asset('assets/images/logo.png'),
                     SizedBox(height: 50),
                     Text(
-                      'Verify your email\nwith code sent to you',
+                      appText.getText('verify'),
                       style: theme.textTheme.headline5,
                       textAlign: TextAlign.center,
                     ),
                     _codeInputField(theme),
                     RichText(
                       text: TextSpan(
-                        text: 'Didn\'t receive the code? ',
+                        text: appText.getText('no_code'),
                         style: theme.textTheme.subtitle1
                             .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
@@ -141,7 +144,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ),
               ),
               ElevatedButton(
-                child: Text('Continue'),
+                child: Text(appText.getText('continue')),
                 onPressed: () {
                   Navigator.of(context).pushNamed(SetupScreen.routeName);
                 },

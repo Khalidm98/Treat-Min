@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/main.dart';
 
 import './auth_screen.dart';
-import '../utils/enumerations.dart';
+import '../providers/app_data.dart';
 import '../providers/user_data.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,7 +13,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  Language _language = Language.English;
   bool _notification = false;
 
   void _logOut() {
@@ -59,12 +59,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 activeBgColor: theme.primaryColorLight,
                 inactiveBgColor: Colors.white,
                 onToggle: (index) {
-                  if (index == 0) {
-                    _language = Language.English;
-                  } else {
-                    _language = Language.Arabic;
-                  }
-                  print(_language);
+                  final lang = index == 0 ? 'en' : 'ar';
+                  MyApp.setLocale(context, Locale(lang));
+                  Provider.of<AppData>(context, listen: false)
+                      .setLanguage(lang);
                 },
               ),
             ),

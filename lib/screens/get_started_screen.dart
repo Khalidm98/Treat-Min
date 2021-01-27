@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treat_min/localizations/app_localization.dart';
 
 import './auth_screen.dart';
 import './tabs_screen.dart';
@@ -8,6 +9,7 @@ class GetStartedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appText = AppLocalization.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -28,7 +30,7 @@ class GetStartedScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('Log In'),
+                      child: Text(appText.getText('log_in')),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                           Theme.of(context).accentColor,
@@ -46,7 +48,7 @@ class GetStartedScreen extends StatelessWidget {
                   SizedBox(width: 20),
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('Explore'),
+                      child: Text(appText.getText('explore')),
                       style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all<Size>(
                           Size(0, 40),

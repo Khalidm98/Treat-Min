@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import './tabs_screen.dart';
 import './verification_screen.dart';
+import '../localizations/app_localization.dart';
 import '../widgets/input_field.dart';
 
 enum AuthMode { signUp, logIn }
@@ -68,6 +69,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _socialButton(Social social) {
+    final appText = AppLocalization.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
@@ -77,8 +79,8 @@ class _AuthScreenState extends State<AuthScreen> {
           height: 30,
         ),
         label: Text(
-          '${_mode == AuthMode.signUp ? 'Sign Up' : 'Log In'} with '
-          '${social == Social.google ? 'Google' : 'Facebook'}',
+          '${appText.getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in')} '
+          '${appText.getText(social == Social.google ? 'google' : 'facebook')}',
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(
@@ -95,6 +97,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = AppLocalization.of(context);
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -118,7 +121,9 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   Text(
-                    _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                    appText.getText(
+                      _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
+                    ),
                     style: theme.textTheme.headline4,
                   ),
                   SizedBox(height: 40),
@@ -129,7 +134,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: InputField(
-                            label: 'Email Address',
+                            label: appText.getText('email'),
                             textFormField: TextFormField(
                               decoration: InputDecoration(
                                 hintText: 'address@example.com',
@@ -139,12 +144,12 @@ class _AuthScreenState extends State<AuthScreen> {
                               onSaved: (value) => _data['email'] = value,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'Email address cannot be empty!';
+                                  return appText.getText('email_empty');
                                 } else if (!value.contains('.') ||
                                     !value.contains('@') ||
                                     value.indexOf('@') !=
                                         value.lastIndexOf('@')) {
-                                  return 'Email address must be valid!';
+                                  return appText.getText('email_valid');
                                 }
                                 return null;
                               },
@@ -154,7 +159,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: InputField(
-                            label: 'Password',
+                            label: appText.getText('password'),
                             textFormField: TextFormField(
                               decoration: InputDecoration(
                                 hintText: '********',
@@ -173,7 +178,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               onSaved: (value) => _data['pass'] = value,
                               validator: (value) {
                                 if (value.length < 8) {
-                                  return 'Password must contain at least 8 characters!';
+                                  return appText.getText('password_error');
                                 }
                                 return null;
                               },
@@ -184,7 +189,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: ElevatedButton(
                             child: Text(
-                              _mode == AuthMode.signUp ? 'Sign Up' : 'Log In',
+                              appText.getText(
+                                _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
+                              ),
                             ),
                             onPressed:
                                 _mode == AuthMode.signUp ? _signUp : _logIn,
@@ -206,15 +213,16 @@ class _AuthScreenState extends State<AuthScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: RichText(
                       text: TextSpan(
-                        text:
-                            '${_mode == AuthMode.signUp ? 'Already' : 'Don\'t'}'
-                            ' have an account? ',
+                        text: appText.getText(_mode == AuthMode.signUp
+                            ? 'already_registered'
+                            : 'not_registered'),
                         style: theme.textTheme.subtitle1
                             .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
                           TextSpan(
-                            text:
-                                _mode == AuthMode.signUp ? 'Log In' : 'Sign Up',
+                            text: appText.getText(
+                              _mode == AuthMode.signUp ? 'log_in' : 'sign_up',
+                            ),
                             style: TextStyle(color: theme.primaryColorDark),
                             recognizer: _switchMode,
                           ),
