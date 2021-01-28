@@ -1,13 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/widgets/translated_text.dart';
 
 import './tabs_screen.dart';
+import '../localizations/app_localization.dart';
 import '../models/clinic_schedule.dart';
-import '../widgets/booknow_dropdown_list.dart';
-import '../providers/provider_class.dart';
 import '../models/reserved_schedule.dart';
+import '../providers/provider_class.dart';
+import '../widgets/booknow_dropdown_list.dart';
 import '../widgets/doctor_card.dart';
 import '../widgets/rating_hearts.dart';
 import '../widgets/review_box.dart';
@@ -25,6 +25,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
   ClinicSchedule dropDownValue = ClinicSchedule(day: null, time: null);
 
   void _bookSuccess(ThemeData theme, BuildContext context) {
+    final appText = AppLocalization.of(context);
     showDialog(
       context: context,
       builder: (_) {
@@ -58,9 +59,8 @@ class _BookNowScreenState extends State<BookNowScreen> {
                       horizontal: 10,
                       vertical: 20,
                     ),
-                    child: TranslatedText(
-                      jsonKey:
-                          'Your Appointment Has Been Reserved Successfully!',
+                    child: Text(
+                      appText.getText('reserved_successfully'),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headline5
                           .copyWith(color: Colors.white),
@@ -78,6 +78,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = AppLocalization.of(context);
     DoctorCard receivedDoctorCard = ModalRoute.of(context).settings.arguments;
 
     void updateDropDownValue(ClinicSchedule dpv) {
@@ -102,19 +103,14 @@ class _BookNowScreenState extends State<BookNowScreen> {
             receivedDoctorCard.doctorSpecialty,
             dropDownValue,
             receivedDoctorCard.hospitalName);
-        Provider.of<ProviderClass>(context).addReservation(
-            scheduleModel, Provider.of<ProviderClass>(context).reservations);
+        Provider.of<ProviderClass>(context).addReservation(scheduleModel);
         _bookSuccess(theme, context);
-        // the following lines are just for testing
-        // Provider.of<ProviderClass>(context).addReservation(scheduleModel,
-        //     Provider.of<ProviderClass>(context).historyReservations);
-        // _bookSuccess(theme, context);
       }
     }
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: TranslatedText(jsonKey: 'Book Now')),
+      appBar: AppBar(title: Text(appText.getText('book_now'))),
       body: ListView(
         padding: EdgeInsets.all(30),
         children: [
@@ -169,7 +165,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  child: TranslatedText(jsonKey: 'Book Now'),
+                  child: Text(appText.getText('book_now')),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                       theme.accentColor,
@@ -182,10 +178,11 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 if (!ableToBook) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
-                    child: TranslatedText(
-                        jsonKey: 'Please choose an appointment date.',
-                        style: theme.textTheme.subtitle2
-                            .copyWith(color: Colors.red)),
+                    child: Text(
+                      appText.getText('date_error'),
+                      style:
+                          theme.textTheme.subtitle2.copyWith(color: Colors.red),
+                    ),
                   )
                 ],
                 Padding(
@@ -211,47 +208,18 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         });
                       },
                       title: !expansionListChanger
-                          ? TranslatedText(
-                              jsonKey: 'View patients reviews',
-                              textAlign: TextAlign.center)
-                          : TranslatedText(
-                              jsonKey: 'Hide patients reviews',
-                              textAlign: TextAlign.center),
+                          ? Text('View patients reviews')
+                          : Text('Hide patients reviews'),
                       leading: Icon(
                         Icons.stars_rounded,
                         color: theme.accentColor,
                       ),
                       children: [
-                        Provider.of<ProviderClass>(context).reviews.length != 0
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                physics: ClampingScrollPhysics(),
-                                itemCount: Provider.of<ProviderClass>(context)
-                                    .reviews
-                                    .length,
-                                //likes and dislikes needs to be updated
-                                itemBuilder: (context, i) => ReviewBox(
-                                    Provider.of<ProviderClass>(context)
-                                        .reviews[i],
-                                    10,
-                                    2),
-                              )
-                            : Card(
-                                margin: EdgeInsets.all(0),
-                                child: ListTile(
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 15),
-                                  trailing: Icon(
-                                    Icons.rate_review,
-                                    color: theme.accentColor,
-                                  ),
-                                  title: TranslatedText(
-                                    jsonKey: 'There are no current reviews.',
-                                    style: theme.textTheme.subtitle2
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ),
+                        ReviewBox(),
+                        ReviewBox(),
+                        ReviewBox(),
+                        ReviewBox(),
+                        ReviewBox(),
                       ],
                     ),
                   ),

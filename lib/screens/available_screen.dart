@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:treat_min/widgets/translated_text.dart';
-import '../models/clinic_schedule.dart';
-import '../widgets/doctor_card.dart';
-import '../utils/search_bar.dart';
-import '../widgets/modal_sheet_list_tile.dart';
-import 'package:provider/provider.dart';
-import '../providers/provider_class.dart';
 import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../localizations/app_localization.dart';
+import '../models/clinic_schedule.dart';
+import '../providers/provider_class.dart';
+import '../utils/search_bar.dart';
+import '../widgets/doctor_card.dart';
+import '../widgets/modal_sheet_list_tile.dart';
 
 class AvailableScreen extends StatelessWidget {
   static const String routeName = '/available';
@@ -15,9 +16,9 @@ class AvailableScreen extends StatelessWidget {
       doctorName: 'Gerges Wageh',
       hospitalName: 'Dar EL-Fouad',
       schedule: [
-        ClinicSchedule(day: 'Wednesday', time: '9:00 - 12:00'),
-        ClinicSchedule(day: 'Sunday', time: '12:00 - 14:00'),
-        ClinicSchedule(day: 'Friday', time: '11:00 - 12:00')
+        ClinicSchedule(day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
+        ClinicSchedule(day: 'Sunday', time: '12:00 PM - 14:00 PM'),
+        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
       ],
       doctorSpecialty: 'ORTHODONTIC SPECIALIST',
       examinationFee: 50,
@@ -28,9 +29,9 @@ class AvailableScreen extends StatelessWidget {
       doctorName: 'Ahmed Khaled Sayed',
       hospitalName: 'EL-Kahrba',
       schedule: [
-        ClinicSchedule(day: 'Sunday', time: '12:00 - 14:00'),
-        ClinicSchedule(day: 'Sunday', time: '11:00 - 12:00'),
-        ClinicSchedule(day: 'Friday', time: '11:00 - 12:00'),
+        ClinicSchedule(day: 'Sunday', time: '12:00 PM - 14:00 PM'),
+        ClinicSchedule(day: 'Sunday', time: '11:00 PM - 12:00 PM'),
+        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM'),
       ],
       doctorSpecialty: 'ORTHODONTIC SPECIALIST',
       examinationFee: 250,
@@ -40,8 +41,8 @@ class AvailableScreen extends StatelessWidget {
     DoctorCard(
       doctorName: 'Khalid Mohammed Refaat',
       hospitalName: 'EL-Seoudi EL-Almani',
-      schedule: [ClinicSchedule(day: 'Friday', time: '11:00 - 12:00')],
-      doctorSpecialty: 'ANOTHER SPECIALIST',
+      schedule: [ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')],
+      doctorSpecialty: 'Another Specialist',
       examinationFee: 150,
       rating: 5,
       hospitalDistance: 20,
@@ -50,11 +51,11 @@ class AvailableScreen extends StatelessWidget {
       doctorName: 'Mohamed Ramadan',
       hospitalName: 'EL-Nile',
       schedule: [
-        ClinicSchedule(day: 'Wednesday', time: '9:00 - 12:00'),
-        ClinicSchedule(day: 'Monday', time: '12:00 - 14:00'),
-        ClinicSchedule(day: 'Friday', time: '11:00 - 12:00')
+        ClinicSchedule(day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
+        ClinicSchedule(day: 'Monday', time: '12:00 PM - 14:00 PM'),
+        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
       ],
-      doctorSpecialty: 'DENTISTRY SPECIALIST',
+      doctorSpecialty: 'Dentistry SPECIALIST',
       examinationFee: 350,
       rating: 4,
       hospitalDistance: 30,
@@ -62,6 +63,7 @@ class AvailableScreen extends StatelessWidget {
   ];
 
   void onSortClick(BuildContext context, ThemeData theme) {
+    final appText = AppLocalization.of(context);
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -74,27 +76,27 @@ class AvailableScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 color: theme.primaryColorLight,
                 alignment: Alignment.center,
-                child: TranslatedText(
-                  jsonKey: "Sort By",
+                child: Text(
+                  appText.getText('sort'),
                   style: theme.textTheme.headline5.copyWith(
                     color: Colors.white,
                   ),
                 ),
               ),
               ModalSheetListTile(
-                text: "Price Low to High",
+                text: appText.getText('price_low'),
                 value: Provider.of<ProviderClass>(context).sortingVars[0],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceLowHigh,
               ),
               ModalSheetListTile(
-                text: "Price High to Low",
+                text: appText.getText('price_high'),
                 value: Provider.of<ProviderClass>(context).sortingVars[1],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceHighLow,
               ),
               ModalSheetListTile(
-                text: "Nearest",
+                text: appText.getText('nearest'),
                 value: Provider.of<ProviderClass>(context).sortingVars[2],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortNearest,
@@ -109,7 +111,7 @@ class AvailableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final Map<String, String> clinic =
+    final clinic =
         (ModalRoute.of(context).settings.arguments) as Map<String, String>;
 
     List<DoctorCard> doctorListSorted() {
@@ -130,7 +132,7 @@ class AvailableScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: TranslatedText(jsonKey: clinic['name']),
+        title: Text(clinic['name']),
         actions: [
           IconButton(
             icon: Icon(Icons.search),

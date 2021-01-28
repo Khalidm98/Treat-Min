@@ -1,11 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:treat_min/screens/auth_screen.dart';
-import 'package:treat_min/widgets/translated_text.dart';
-import '../utils/gTranslate.dart';
-import 'package:localize_and_translate/localize_and_translate.dart';
+
 import './rating_hearts.dart';
+import '../screens/auth_screen.dart';
+import '../localizations/app_localization.dart';
 import '../models/clinic_schedule.dart';
 import '../screens/booknow_screen.dart';
 
@@ -39,6 +38,7 @@ class _DoctorCardState extends State<DoctorCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = AppLocalization.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 11),
       child: Column(
@@ -48,18 +48,12 @@ class _DoctorCardState extends State<DoctorCard> {
             padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
             margin: EdgeInsets.symmetric(horizontal: 7),
             width: double.infinity,
-            //Not Working "missing google translate api"
-            child: FutureBuilder(
-                future: gTranslate(widget.hospitalName),
-                builder: (BuildContext context,
-                    AsyncSnapshot<String> translatedText) {
-                  return Text(
-                    translatedText.data,
-                    style: theme.textTheme.headline6.copyWith(
-                      color: Colors.white,
-                    ),
-                  );
-                }),
+            child: Text(
+              widget.hospitalName,
+              style: theme.textTheme.headline6.copyWith(
+                color: Colors.white,
+              ),
+            ),
           ),
           Container(
             decoration: BoxDecoration(
@@ -68,26 +62,34 @@ class _DoctorCardState extends State<DoctorCard> {
               border: Border.all(color: theme.primaryColorLight),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.doctorName,
-                  style: theme.textTheme.headline5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.doctorSpecialty,
-                      style: theme.textTheme.subtitle2,
+                Flexible(
+                  child: FittedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.doctorName,
+                          style: theme.textTheme.headline5,
+                        ),
+                        Text(
+                          widget.doctorSpecialty,
+                          style: theme.textTheme.subtitle2,
+                        ),
+                      ],
                     ),
-                    RatingHearts(
-                      iconHeight: doctorCardIconsHeight,
-                      iconWidth: doctorCardIconsWidth,
-                      rating: widget.rating,
-                    )
-                  ],
+                  ),
                 ),
+                SizedBox(
+                  width: 15,
+                ),
+                RatingHearts(
+                  iconHeight: doctorCardIconsHeight,
+                  iconWidth: doctorCardIconsWidth,
+                  rating: widget.rating,
+                )
               ],
             ),
           ),
@@ -122,10 +124,11 @@ class _DoctorCardState extends State<DoctorCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           FittedBox(
-                            child: TranslatedText(
-                              jsonKey: widget.schedule[index].day,
+                            child: Text(
+                              widget.schedule[index].day,
                               style: theme.textTheme.subtitle2
                                   .copyWith(fontWeight: FontWeight.w700),
+                              textScaleFactor: 0.8,
                             ),
                           ),
                           FittedBox(
@@ -134,6 +137,7 @@ class _DoctorCardState extends State<DoctorCard> {
                               style: theme.textTheme.bodyText2.copyWith(
                                 fontWeight: FontWeight.w700,
                               ),
+                              textScaleFactor: 0.8,
                             ),
                           ),
                         ],
@@ -147,9 +151,7 @@ class _DoctorCardState extends State<DoctorCard> {
                   child: Column(
                     children: [
                       Text(
-                        translator.currentLanguage == 'en'
-                            ? '${widget.examinationFee} EGP'
-                            : '${widget.examinationFee} جنيه',
+                        '${widget.examinationFee} EGP',
                         style: theme.textTheme.subtitle1,
                       ),
                       SizedBox(height: 6),
@@ -166,8 +168,8 @@ class _DoctorCardState extends State<DoctorCard> {
                             ),
                           ),
                           child: FittedBox(
-                            child: TranslatedText(
-                              jsonKey: "Book Now",
+                            child: Text(
+                              appText.getText('book_now'),
                               style: theme.textTheme.headline5
                                   .copyWith(color: Colors.white),
                             ),
@@ -178,25 +180,25 @@ class _DoctorCardState extends State<DoctorCard> {
                               showDialog(
                                 context: context,
                                 child: AlertDialog(
-                                  title: TranslatedText(
-                                    jsonKey:
-                                        'You must log in to book an appointment',
-                                  ),
+                                  title: Text(appText.getText('must_log_in')),
                                   actions: [
                                     TextButton(
-                                      child: TranslatedText(jsonKey: 'Ok'),
+                                      child: Text(appText.getText('cancel')),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
                                     ),
                                     TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          Navigator.pushNamed(
-                                              context, AuthScreen.routeName);
-                                        },
-                                        child:
-                                            TranslatedText(jsonKey: 'Log in'))
+                                      child: Text(appText.getText('log_in')),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                          AuthScreen.routeName,
+                                          (route) => false,
+                                        );
+                                      },
+                                    ),
                                   ],
                                 ),
                               );
@@ -205,7 +207,6 @@ class _DoctorCardState extends State<DoctorCard> {
                                 context,
                                 BookNowScreen.routeName,
                                 arguments: DoctorCard(
-                                  //Todo: need to changed to take translated strings
                                   hospitalName: widget.hospitalName,
                                   doctorName: widget.doctorName,
                                   doctorSpecialty: widget.doctorSpecialty,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 import './account_screen.dart';
+
+// import './browse_screen.dart';
 import './main_screen.dart';
 import './settings_screen.dart';
 import '../widgets/navigation_bar.dart';
@@ -32,8 +35,10 @@ class _TabsScreenState extends State<TabsScreen> {
         options: CarouselOptions(
           height: double.infinity,
           initialPage: _currentIndex,
+          reverse: Localizations.localeOf(context).languageCode == 'ar'
+              ? true
+              : false,
           viewportFraction: 1,
-          enlargeCenterPage: true,
           enableInfiniteScroll: false,
           onPageChanged: (index, reason) {
             if (reason == CarouselPageChangedReason.controller) {
