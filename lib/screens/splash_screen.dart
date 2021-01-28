@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/localizations/app_localization.dart';
-import 'package:treat_min/main.dart';
 
 import './get_started_screen.dart';
 import './tabs_screen.dart';
+import '../localizations/app_localization.dart';
 import '../providers/app_data.dart';
 import '../providers/user_data.dart';
+import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

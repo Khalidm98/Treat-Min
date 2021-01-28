@@ -3,11 +3,11 @@ enum Book { clinic, room, service }
 String bookToString(Book book) {
   switch (book) {
     case Book.clinic:
-      return 'Outpatient Clinics';
+      return 'clinics';
     case Book.room:
-      return 'Special Rooms';
+      return 'rooms';
     case Book.service:
-      return 'Services';
+      return 'services';
     default:
       return 'Book Enum';
   }

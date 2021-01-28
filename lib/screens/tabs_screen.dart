@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import './account_screen.dart';
+
 // import './browse_screen.dart';
 import './main_screen.dart';
 import './settings_screen.dart';
@@ -34,8 +35,10 @@ class _TabsScreenState extends State<TabsScreen> {
         options: CarouselOptions(
           height: double.infinity,
           initialPage: _currentIndex,
+          reverse: Localizations.localeOf(context).languageCode == 'ar'
+              ? true
+              : false,
           viewportFraction: 1,
-          enlargeCenterPage: true,
           enableInfiniteScroll: false,
           onPageChanged: (index, reason) {
             if (reason == CarouselPageChangedReason.controller) {
@@ -54,24 +57,27 @@ class _TabsScreenState extends State<TabsScreen> {
           AccountScreen(),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        index: _currentIndex,
-        onTap: (index) {
-          _nextIndex = index;
-          _slider.animateToPage(index);
-        },
-        items: [
-          Image.asset('assets/icons/heart_outlined.png'),
-          // Image.asset('assets/icons/medicine_outlined.png'),
-          Image.asset('assets/icons/settings_outlined.png'),
-          Image.asset('assets/icons/account_outlined.png'),
-        ],
-        activeItems: [
-          Image.asset('assets/icons/heart_filled.png'),
-          // Image.asset('assets/icons/medicine_filled.png'),
-          Image.asset('assets/icons/settings_filled.png'),
-          Image.asset('assets/icons/account_filled.png'),
-        ],
+      bottomNavigationBar: Directionality(
+        textDirection: TextDirection.ltr,
+        child: NavigationBar(
+          index: _currentIndex,
+          onTap: (index) {
+            _nextIndex = index;
+            _slider.animateToPage(index);
+          },
+          items: [
+            Image.asset('assets/icons/heart_outlined.png'),
+            // Image.asset('assets/icons/medicine_outlined.png'),
+            Image.asset('assets/icons/settings_outlined.png'),
+            Image.asset('assets/icons/account_outlined.png'),
+          ],
+          activeItems: [
+            Image.asset('assets/icons/heart_filled.png'),
+            // Image.asset('assets/icons/medicine_filled.png'),
+            Image.asset('assets/icons/settings_filled.png'),
+            Image.asset('assets/icons/account_filled.png'),
+          ],
+        ),
       ),
     );
   }

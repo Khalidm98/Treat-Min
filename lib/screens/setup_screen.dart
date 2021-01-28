@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/localizations/app_localization.dart';
 
 import './tabs_screen.dart';
+import '../localizations/app_localization.dart';
 import '../providers/user_data.dart';
 import '../widgets/input_field.dart';
 

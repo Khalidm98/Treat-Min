@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/localizations/app_localization.dart';
 
 import './auth_screen.dart';
 import './tabs_screen.dart';
+import '../localizations/app_localization.dart';
 
 class GetStartedScreen extends StatelessWidget {
   static const String routeName = '/get-started';

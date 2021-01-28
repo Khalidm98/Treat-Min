@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
+import '../localizations/app_localization.dart';
 import '../providers/provider_class.dart';
 import '../providers/user_data.dart';
 import '../widgets/current_reservation_card.dart';
@@ -12,76 +13,58 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final accent = theme.accentColor;
+    final appText = AppLocalization.of(context);
     final userData = Provider.of<UserData>(context, listen: false);
     return SafeArea(
       child: userData.isLoggedIn
           ? ListView(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: Stack(
-                    fit: StackFit.passthrough,
-                    children: [
-                      Container(
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: theme.accentColor,
-                            width: 2,
-                          ),
-                          image: DecorationImage(
-                            image: userData.photo.isEmpty
-                                ? AssetImage('assets/images/placeholder.png')
-                                : FileImage(File(userData.photo)),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 80, left: 80),
-                        child: CircleAvatar(
-                          backgroundColor: theme.accentColor,
-                          radius: 20,
-                          child: Icon(
-                            Icons.photo_camera,
-                            color: Colors.white,
-                            size: 25,
-                          ),
-                        ),
-                      )
-                    ],
+                Container(
+                  height: 120,
+                  margin: const EdgeInsets.symmetric(vertical: 30),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: theme.accentColor, width: 2),
+                    image: DecorationImage(
+                      image: userData.photo.isEmpty
+                          ? AssetImage('assets/images/placeholder.png')
+                          : FileImage(File(userData.photo)),
+                    ),
+                  ),
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.edit),
+                    splashRadius: 20,
+                    onPressed: () {},
                   ),
                 ),
                 Divider(height: 0),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.account_circle, color: accent, size: 40),
-                  trailing: Icon(Icons.edit, color: theme.accentColor),
-                  title: Text('Name'),
+                  title: Text(appText.getText('name')),
                   subtitle: Text(userData.name),
                 ),
                 Divider(height: 0),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.date_range, color: accent, size: 40),
-                  trailing: Icon(Icons.edit, color: theme.accentColor),
-                  title: Text('Date of Birth'),
+                  title: Text(appText.getText('birth')),
                   subtitle: Text(userData.birth.toString().substring(0, 10)),
                 ),
                 Divider(height: 0),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(Icons.phone_android, color: accent, size: 40),
-                  trailing: Icon(Icons.edit, color: accent),
-                  title: Text('Phone Number'),
+                  title: Text(appText.getText('phone')),
                   subtitle: Text(userData.phone),
                 ),
                 Divider(height: 0),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
                   child: Text(
-                    'Health Condition',
+                    appText.getText('condition'),
                     style: theme.textTheme.headline5,
                   ),
                 ),
@@ -99,7 +82,7 @@ class AccountScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
                   child: Text(
-                    'Current Reservations',
+                    appText.getText('reservations'),
                     style: theme.textTheme.headline5,
                   ),
                 ),
@@ -123,7 +106,7 @@ class AccountScreen extends StatelessWidget {
                             color: theme.accentColor,
                           ),
                           title: Text(
-                            'There are no current reservations',
+                            appText.getText('no_reservations'),
                             style: theme.textTheme.subtitle2
                                 .copyWith(fontWeight: FontWeight.w700),
                           ),
@@ -140,12 +123,15 @@ class AccountScreen extends StatelessWidget {
                   child: Image.asset('assets/images/logo.png'),
                 ),
                 SizedBox(height: 50),
-                Text('You are not logged in', style: theme.textTheme.headline5),
+                Text(
+                  appText.getText('not_logged_in'),
+                  style: theme.textTheme.headline5,
+                ),
                 SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: ElevatedButton(
-                    child: Text('Log in'),
+                    child: Text(appText.getText('log_in')),
                     onPressed: () {
                       Navigator.of(context)
                           .pushReplacementNamed(AuthScreen.routeName);

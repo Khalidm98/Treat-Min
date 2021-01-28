@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './tabs_screen.dart';
+import '../localizations/app_localization.dart';
 import '../models/clinic_schedule.dart';
-import '../widgets/booknow_dropdown_list.dart';
-import '../providers/provider_class.dart';
 import '../models/reserved_schedule.dart';
+import '../providers/provider_class.dart';
+import '../widgets/booknow_dropdown_list.dart';
 import '../widgets/doctor_card.dart';
 import '../widgets/rating_hearts.dart';
 import '../widgets/review_box.dart';
@@ -24,6 +25,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
   ClinicSchedule dropDownValue = ClinicSchedule(day: null, time: null);
 
   void _bookSuccess(ThemeData theme, BuildContext context) {
+    final appText = AppLocalization.of(context);
     showDialog(
       context: context,
       builder: (_) {
@@ -58,7 +60,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                       vertical: 20,
                     ),
                     child: Text(
-                      'Your Appointment Has Been Reserved Successfully!',
+                      appText.getText('reserved_successfully'),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headline5
                           .copyWith(color: Colors.white),
@@ -76,6 +78,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = AppLocalization.of(context);
     DoctorCard receivedDoctorCard = ModalRoute.of(context).settings.arguments;
 
     void updateDropDownValue(ClinicSchedule dpv) {
@@ -107,7 +110,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('Book Now')),
+      appBar: AppBar(title: Text(appText.getText('book_now'))),
       body: ListView(
         padding: EdgeInsets.all(30),
         children: [
@@ -162,7 +165,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  child: Text('Book Now'),
+                  child: Text(appText.getText('book_now')),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                       theme.accentColor,
@@ -175,9 +178,11 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 if (!ableToBook) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
-                    child: Text('Please choose an appointment date.',
-                        style: theme.textTheme.subtitle2
-                            .copyWith(color: Colors.red)),
+                    child: Text(
+                      appText.getText('date_error'),
+                      style:
+                          theme.textTheme.subtitle2.copyWith(color: Colors.red),
+                    ),
                   )
                 ],
                 Padding(

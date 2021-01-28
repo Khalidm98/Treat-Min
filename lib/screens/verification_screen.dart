@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:treat_min/localizations/app_localization.dart';
 
 import './setup_screen.dart';
+import '../localizations/app_localization.dart';
 
 class VerificationScreen extends StatefulWidget {
   static const String routeName = '/verify';
@@ -133,7 +133,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                             .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
                           TextSpan(
-                            text: 'Resend',
+                            text: appText.getText('resend'),
                             style: TextStyle(color: theme.accentColor),
                             recognizer: _resendCode,
                           ),
