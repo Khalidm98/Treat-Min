@@ -12,8 +12,9 @@ class InputField extends StatelessWidget {
     return Stack(
       children: [
         Padding(padding: const EdgeInsets.only(top: 20), child: textFormField),
-        Positioned(
-          left: 20,
+        Positioned.directional(
+          textDirection: Directionality.of(context),
+          start: 20,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(

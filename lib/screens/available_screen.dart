@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
-import '../models/clinic_schedule.dart';
-import '../widgets/doctor_card.dart';
-import '../utils/search_bar.dart';
-import '../widgets/modal_sheet_list_tile.dart';
-import 'package:provider/provider.dart';
-import '../providers/provider_class.dart';
 import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../localizations/app_localizations.dart';
+import '../models/clinic_schedule.dart';
+import '../providers/provider_class.dart';
+import '../utils/search_bar.dart';
+import '../widgets/doctor_card.dart';
+import '../widgets/modal_sheet_list_tile.dart';
 
 class AvailableScreen extends StatelessWidget {
   static const String routeName = '/available';
@@ -74,26 +76,26 @@ class AvailableScreen extends StatelessWidget {
                 color: theme.primaryColorLight,
                 alignment: Alignment.center,
                 child: Text(
-                  "Sort By",
+                  getText('sort'),
                   style: theme.textTheme.headline5.copyWith(
                     color: Colors.white,
                   ),
                 ),
               ),
               ModalSheetListTile(
-                text: "Price Low to High",
+                text: getText('price_low'),
                 value: Provider.of<ProviderClass>(context).sortingVars[0],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceLowHigh,
               ),
               ModalSheetListTile(
-                text: "Price High to Low",
+                text: getText('price_high'),
                 value: Provider.of<ProviderClass>(context).sortingVars[1],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceHighLow,
               ),
               ModalSheetListTile(
-                text: "Nearest",
+                text: getText('nearest'),
                 value: Provider.of<ProviderClass>(context).sortingVars[2],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortNearest,
@@ -108,8 +110,9 @@ class AvailableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final Map<String, String> clinic =
+    final clinic =
         (ModalRoute.of(context).settings.arguments) as Map<String, String>;
+    setAppLocalization(context);
 
     List<DoctorCard> doctorListSorted() {
       if (Provider.of<ProviderClass>(context).sortingVars[0] == true) {

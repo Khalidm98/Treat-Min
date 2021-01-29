@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import './emergency_screen.dart';
 import './select_screen.dart';
+import '../localizations/app_localizations.dart';
 import '../utils/enumerations.dart';
 
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    setAppLocalization(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -16,7 +18,7 @@ class MainScreen extends StatelessWidget {
             Image.asset('assets/images/logo.png'),
             SizedBox(height: 80),
             ElevatedButton(
-              child: Text(bookToString(Book.clinic)),
+              child: Text(getText(bookToString(Book.clinic))),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
@@ -26,7 +28,7 @@ class MainScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text(bookToString(Book.service)),
+              child: Text(getText(bookToString(Book.service))),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
@@ -36,7 +38,7 @@ class MainScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text(bookToString(Book.room)),
+              child: Text(getText(bookToString(Book.room))),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
@@ -49,7 +51,7 @@ class MainScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pushNamed(EmergencyScreen.routeName);
               },
-              child: Text('Emergency'),
+              child: Text(getText('emergency')),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
                   Theme.of(context).errorColor,

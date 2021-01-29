@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import './localizations/app_localizations.dart';
 import './providers/app_data.dart';
 import './providers/user_data.dart';
 import './providers/provider_class.dart';
 
-import './screens/booknow_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
+import './screens/booknow_screen.dart';
 import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
+import './screens/info_screen.dart';
 import './screens/select_screen.dart';
-import './screens/setup_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/verification_screen.dart';
@@ -24,7 +26,21 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+
+  static void setLocale(BuildContext context, Locale locale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
+    state.setLocale(locale);
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale _locale;
+
+  void setLocale(Locale locale) => setState(() => _locale = locale);
+
   @override
   Widget build(BuildContext context) {
     const Color greenLight = const Color(0xFF60C0A0);
@@ -41,6 +57,25 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Treat-min',
         debugShowCheckedModeBanner: false,
+        locale: _locale,
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('ar', 'EG'),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          for (Locale locale in supportedLocales) {
+            if (locale.languageCode == deviceLocale.languageCode) {
+              return locale;
+            }
+          }
+          return supportedLocales.first;
+        },
         theme: ThemeData(
           fontFamily: 'Montserrat',
           primaryColor: green,
@@ -149,13 +184,13 @@ class MyApp extends StatelessWidget {
         routes: {
           AuthScreen.routeName: (_) => AuthScreen(),
           AvailableScreen.routeName: (_) => AvailableScreen(),
+          BookNowScreen.routeName: (_) => BookNowScreen(),
           EmergencyScreen.routeName: (_) => EmergencyScreen(),
           GetStartedScreen.routeName: (_) => GetStartedScreen(),
+          InfoScreen.routeName: (_) => InfoScreen(),
           SelectScreen.routeName: (_) => SelectScreen(),
-          SetupScreen.routeName: (_) => SetupScreen(),
           TabsScreen.routeName: (_) => TabsScreen(),
           VerificationScreen.routeName: (_) => VerificationScreen(),
-          BookNowScreen.routeName: (_) => BookNowScreen(),
         },
       ),
     );

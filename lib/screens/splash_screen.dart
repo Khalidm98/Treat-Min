@@ -5,6 +5,7 @@ import './get_started_screen.dart';
 import './tabs_screen.dart';
 import '../providers/app_data.dart';
 import '../providers/user_data.dart';
+import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -42,11 +43,13 @@ class _SplashScreenState extends State<SplashScreen>
       _width.addListener(_expand);
       _controller.forward().then((_) {
         Future.delayed(const Duration(seconds: 2), () async {
-          if (await Provider.of<AppData>(context, listen: false).isFirstRun()) {
+          final appData = Provider.of<AppData>(context, listen: false);
+          await appData.load(context);
+          if (appData.isFirstRun) {
             Navigator.of(context)
                 .pushReplacementNamed(GetStartedScreen.routeName);
-          }
-          else {
+          } else {
+            MyApp.setLocale(context, Locale(appData.language));
             await Provider.of<UserData>(context, listen: false).tryAutoLogIn();
             Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
           }

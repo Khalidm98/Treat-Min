@@ -5,25 +5,44 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import './tabs_screen.dart';
+import '../localizations/app_localizations.dart';
 import '../providers/user_data.dart';
 import '../widgets/input_field.dart';
 
-class SetupScreen extends StatefulWidget {
-  static const String routeName = '/setup';
+class InfoScreen extends StatefulWidget {
+  static const String routeName = '/info';
 
   @override
-  _SetupScreenState createState() => _SetupScreenState();
+  _InfoScreenState createState() => _InfoScreenState();
 }
 
-class _SetupScreenState extends State<SetupScreen> {
+class _InfoScreenState extends State<InfoScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   TextEditingController _dateController = TextEditingController();
-  DateTime _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
-  int _gender = 0;
   File _image;
+  DateTime _date;
+  int _gender = 0;
   Map<String, String> _account = {
     'id': DateTime.now().toIso8601String(),
   };
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_date == null) {
+      final userData = Provider.of<UserData>(context, listen: false);
+      if (userData.isLoggedIn) {
+        if (userData.photo.isNotEmpty) {
+          _image = File(userData.photo);
+        }
+        _date = userData.birth;
+        _dateController.text = _date.toIso8601String().substring(0, 10);
+      }
+      else {
+        _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -46,8 +65,12 @@ class _SetupScreenState extends State<SetupScreen> {
       _account['photo'] = path;
     }
     await Provider.of<UserData>(context, listen: false).signUp(_account);
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+    if (Provider.of<UserData>(context, listen: false).isLoggedIn) {
+      Navigator.pop(context);
+    } else {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+    }
   }
 
   Future<void> _pickImage() async {
@@ -66,7 +89,7 @@ class _SetupScreenState extends State<SetupScreen> {
       initialDate: _date,
       firstDate: DateTime.now().subtract(Duration(days: 365 * 80 + 20)),
       lastDate: DateTime.now().subtract(Duration(days: 365 * 12 + 3)),
-      helpText: 'SELECT YOUR DATE OF BIRTH',
+      helpText: AppLocalizations.of(context).getText('select_date'),
     );
     if (picked != null) {
       _date = picked;
@@ -79,6 +102,10 @@ class _SetupScreenState extends State<SetupScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final userData = Provider.of<UserData>(context, listen: false);
+    final isLoggedIn = userData.isLoggedIn;
+    setAppLocalization(context);
+
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -88,9 +115,9 @@ class _SetupScreenState extends State<SetupScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40),
+                padding: const EdgeInsets.symmetric(vertical: 30),
                 child: Text(
-                  'Account Setup',
+                  getText(isLoggedIn ? 'edit' : 'setup'),
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headline4,
                 ),
@@ -134,15 +161,18 @@ class _SetupScreenState extends State<SetupScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InputField(
-                      label: 'Name',
+                      label: getText('name'),
                       textFormField: TextFormField(
-                        decoration: InputDecoration(hintText: 'Your Name Here'),
+                        decoration: InputDecoration(
+                          hintText: getText('name_hint'),
+                        ),
+                        initialValue: isLoggedIn ? userData.name : '',
                         textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
                         onSaved: (value) => _account['name'] = value,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Name cannot be empty!';
+                            return getText('name_empty');
                           }
                           return null;
                         },
@@ -150,22 +180,23 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                     SizedBox(height: 30),
                     InputField(
-                      label: 'Phone',
+                      label: getText('phone'),
                       textFormField: TextFormField(
                         decoration: InputDecoration(
                           hintText: '01## ### ####',
                           counterText: '',
                         ),
+                        initialValue: isLoggedIn ? userData.phone : '',
                         keyboardType: TextInputType.phone,
                         maxLength: 11,
                         onSaved: (value) => _account['phone'] = value,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Phone cannot be empty!';
+                            return getText('phone_empty');
                           } else if (int.tryParse(value) == null) {
-                            return 'Phone must contain numbers only!';
+                            return getText('phone_numbers_only');
                           } else if (value.length < 11) {
-                            return 'Phone must contain exactly 11 numbers!';
+                            return getText('phone_11_numbers');
                           }
                           return null;
                         },
@@ -179,7 +210,7 @@ class _SetupScreenState extends State<SetupScreen> {
                       },
                       child: AbsorbPointer(
                         child: InputField(
-                          label: 'Date of Birth',
+                          label: getText('birth'),
                           textFormField: TextFormField(
                             decoration: InputDecoration(hintText: 'YYYY-MM-DD'),
                             controller: _dateController,
@@ -187,7 +218,7 @@ class _SetupScreenState extends State<SetupScreen> {
                                 _account['birth'] = _date.toIso8601String(),
                             validator: (value) {
                               if (value.isEmpty) {
-                                return 'Date of birth cannot be empty!';
+                                return getText('birth_empty');
                               }
                               return null;
                             },
@@ -201,7 +232,10 @@ class _SetupScreenState extends State<SetupScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  Text('Gender:', style: theme.textTheme.subtitle1),
+                  Text(
+                    getText('gender'),
+                    style: theme.textTheme.subtitle1,
+                  ),
                   Spacer(),
                   Radio(
                     value: 1,
@@ -209,7 +243,10 @@ class _SetupScreenState extends State<SetupScreen> {
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
                   ),
-                  Text('Male', style: theme.textTheme.subtitle1),
+                  Text(
+                    getText('gender_male'),
+                    style: theme.textTheme.subtitle1,
+                  ),
                   Spacer(),
                   Radio(
                     value: 2,
@@ -217,13 +254,16 @@ class _SetupScreenState extends State<SetupScreen> {
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
                   ),
-                  Text('Female', style: theme.textTheme.subtitle1),
+                  Text(
+                    getText('gender_female'),
+                    style: theme.textTheme.subtitle1,
+                  ),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 child: ElevatedButton(
-                  child: Text('Finish'),
+                  child: Text(getText(isLoggedIn ? 'save' : 'finish')),
                   onPressed: _submit,
                 ),
               ),

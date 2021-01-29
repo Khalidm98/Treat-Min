@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import './setup_screen.dart';
+import './info_screen.dart';
+import '../localizations/app_localizations.dart';
 
 class VerificationScreen extends StatefulWidget {
   static const String routeName = '/verify';
@@ -23,11 +24,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
         showDialog(
           context: context,
           child: AlertDialog(
-            title: const Text('We will send a new code to your email address'),
+            title: Text(getText('resend_message')),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(getText('ok')),
               ),
             ],
           ),
@@ -48,6 +49,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 50),
       child: Row(
+        textDirection: TextDirection.ltr,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [3, 2, 1, 0].map((index) {
           return SizedBox(
@@ -102,6 +104,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    setAppLocalization(context);
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: GestureDetector(
@@ -118,19 +122,19 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     Image.asset('assets/images/logo.png'),
                     SizedBox(height: 50),
                     Text(
-                      'Verify your email\nwith code sent to you',
+                      getText('verify'),
                       style: theme.textTheme.headline5,
                       textAlign: TextAlign.center,
                     ),
                     _codeInputField(theme),
                     RichText(
                       text: TextSpan(
-                        text: 'Didn\'t receive the code? ',
+                        text: getText('no_code'),
                         style: theme.textTheme.subtitle1
                             .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
                           TextSpan(
-                            text: 'Resend',
+                            text: getText('resend'),
                             style: TextStyle(color: theme.accentColor),
                             recognizer: _resendCode,
                           ),
@@ -141,9 +145,31 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ),
               ),
               ElevatedButton(
-                child: Text('Continue'),
+                child: Text(getText('continue')),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(SetupScreen.routeName);
+                  bool isFilled = true;
+                  for (var controller in _controllers) {
+                    if (controller.text.isEmpty) {
+                      isFilled = false;
+                      break;
+                    }
+                  }
+                  if (isFilled) {
+                    Navigator.of(context).pushNamed(InfoScreen.routeName);
+                  } else {
+                    showDialog(
+                      context: context,
+                      child: AlertDialog(
+                        title: Text(getText('code_error')),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(getText('ok')),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
               ),
             ],

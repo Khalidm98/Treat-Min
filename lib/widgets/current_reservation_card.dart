@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/provider_class.dart';
+
+import '../localizations/app_localizations.dart';
 import '../models/reserved_schedule.dart';
+import '../providers/provider_class.dart';
 
 class CurrentReservationCard extends StatelessWidget {
   final ReservedSchedule sched;
+
   CurrentReservationCard(this.sched);
 
   void confirmReservationCancellation(BuildContext context) {
@@ -12,8 +15,7 @@ class CurrentReservationCard extends StatelessWidget {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title:
-                Text('Are you sure that you want to cancel this reservation?'),
+            title: Text(getText('cancel_message')),
             actions: [
               TextButton(
                   onPressed: () {
@@ -21,12 +23,13 @@ class CurrentReservationCard extends StatelessWidget {
                         .removeReservation(sched.id);
                     Navigator.pop(context);
                   },
-                  child: Text('Yes')),
+                  child: Text(getText('yes'))),
               TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('No'))
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(getText('no')),
+              )
             ],
           );
         });
@@ -35,6 +38,8 @@ class CurrentReservationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    setAppLocalization(context);
+
     return Card(
       margin: EdgeInsets.only(bottom: 10),
       child: Padding(
@@ -90,7 +95,7 @@ class CurrentReservationCard extends StatelessWidget {
                       onPressed: () {
                         confirmReservationCancellation(context);
                       },
-                      child: Text('Cancel', maxLines: 1),
+                      child: Text(getText('cancel'), maxLines: 1),
                     ),
                   ),
                 ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './available_screen.dart';
+import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
 import '../utils/enumerations.dart';
 
@@ -13,9 +14,10 @@ class SelectScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final book = (ModalRoute.of(context).settings.arguments) as Book;
     final list = Provider.of<AppData>(context).getBookingList(book);
+    setAppLocalization(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(bookToString(book))),
+      appBar: AppBar(title: Text(getText(bookToString(book)))),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => FocusScope.of(context).unfocus(),
