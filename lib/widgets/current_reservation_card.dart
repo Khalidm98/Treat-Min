@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../localizations/app_localization.dart';
+import '../localizations/app_localizations.dart';
 import '../models/reserved_schedule.dart';
 import '../providers/provider_class.dart';
 
@@ -11,12 +11,11 @@ class CurrentReservationCard extends StatelessWidget {
   CurrentReservationCard(this.sched);
 
   void confirmReservationCancellation(BuildContext context) {
-    final appText = AppLocalization.of(context);
     showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text(appText.getText('cancel_message')),
+            title: Text(getText('cancel_message')),
             actions: [
               TextButton(
                   onPressed: () {
@@ -24,12 +23,12 @@ class CurrentReservationCard extends StatelessWidget {
                         .removeReservation(sched.id);
                     Navigator.pop(context);
                   },
-                  child: Text(appText.getText('yes'))),
+                  child: Text(getText('yes'))),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(appText.getText('no')),
+                child: Text(getText('no')),
               )
             ],
           );
@@ -39,7 +38,8 @@ class CurrentReservationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appText = AppLocalization.of(context);
+    setAppLocalization(context);
+
     return Card(
       margin: EdgeInsets.only(bottom: 10),
       child: Padding(
@@ -95,7 +95,7 @@ class CurrentReservationCard extends StatelessWidget {
                       onPressed: () {
                         confirmReservationCancellation(context);
                       },
-                      child: Text(appText.getText('cancel'), maxLines: 1),
+                      child: Text(getText('cancel'), maxLines: 1),
                     ),
                   ),
                 ],

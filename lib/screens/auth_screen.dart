@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import './tabs_screen.dart';
 import './verification_screen.dart';
-import '../localizations/app_localization.dart';
+import '../localizations/app_localizations.dart';
 import '../widgets/input_field.dart';
 
 enum AuthMode { signUp, logIn }
@@ -69,7 +69,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _socialButton(Social social) {
-    final appText = AppLocalization.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton.icon(
@@ -79,8 +78,8 @@ class _AuthScreenState extends State<AuthScreen> {
           height: 30,
         ),
         label: Text(
-          '${appText.getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in')} '
-          '${appText.getText(social == Social.google ? 'google' : 'facebook')}',
+          '${getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in')} '
+          '${getText(social == Social.google ? 'google' : 'facebook')}',
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(
@@ -97,7 +96,8 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appText = AppLocalization.of(context);
+    setAppLocalization(context);
+    
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -109,7 +109,10 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Column(
                 children: [
                   Align(
-                    alignment: Alignment.centerLeft,
+                    alignment:
+                        Localizations.localeOf(context).languageCode == 'en'
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
                     child: IconButton(
                       icon: Icon(Icons.close),
                       onPressed: () {
@@ -121,7 +124,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                   Text(
-                    appText.getText(
+                    getText(
                       _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
                     ),
                     style: theme.textTheme.headline4,
@@ -134,7 +137,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: InputField(
-                            label: appText.getText('email'),
+                            label: getText('email'),
                             textFormField: TextFormField(
                               decoration: InputDecoration(
                                 hintText: 'address@example.com',
@@ -144,12 +147,12 @@ class _AuthScreenState extends State<AuthScreen> {
                               onSaved: (value) => _data['email'] = value,
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return appText.getText('email_empty');
+                                  return getText('email_empty');
                                 } else if (!value.contains('.') ||
                                     !value.contains('@') ||
                                     value.indexOf('@') !=
                                         value.lastIndexOf('@')) {
-                                  return appText.getText('email_valid');
+                                  return getText('email_valid');
                                 }
                                 return null;
                               },
@@ -159,7 +162,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: InputField(
-                            label: appText.getText('password'),
+                            label: getText('password'),
                             textFormField: TextFormField(
                               decoration: InputDecoration(
                                 hintText: '********',
@@ -178,7 +181,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               onSaved: (value) => _data['pass'] = value,
                               validator: (value) {
                                 if (value.length < 8) {
-                                  return appText.getText('password_error');
+                                  return getText('password_error');
                                 }
                                 return null;
                               },
@@ -189,12 +192,14 @@ class _AuthScreenState extends State<AuthScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: ElevatedButton(
                             child: Text(
-                              appText.getText(
+                              getText(
                                 _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
                               ),
                             ),
-                            onPressed:
-                                _mode == AuthMode.signUp ? _signUp : _logIn,
+                            onPressed: () {
+                              FocusScope.of(context).unfocus();
+                              _mode == AuthMode.signUp ? _signUp() : _logIn();
+                            }
                           ),
                         ),
                       ],
@@ -213,14 +218,14 @@ class _AuthScreenState extends State<AuthScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: RichText(
                       text: TextSpan(
-                        text: appText.getText(_mode == AuthMode.signUp
+                        text: getText(_mode == AuthMode.signUp
                             ? 'already_registered'
                             : 'not_registered'),
                         style: theme.textTheme.subtitle1
                             .copyWith(color: theme.hintColor),
                         children: <TextSpan>[
                           TextSpan(
-                            text: appText.getText(
+                            text: getText(
                               _mode == AuthMode.signUp ? 'log_in' : 'sign_up',
                             ),
                             style: TextStyle(color: theme.primaryColorDark),

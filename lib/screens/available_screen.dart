@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../localizations/app_localization.dart';
+import '../localizations/app_localizations.dart';
 import '../models/clinic_schedule.dart';
 import '../providers/provider_class.dart';
 import '../utils/search_bar.dart';
@@ -63,7 +63,6 @@ class AvailableScreen extends StatelessWidget {
   ];
 
   void onSortClick(BuildContext context, ThemeData theme) {
-    final appText = AppLocalization.of(context);
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -77,26 +76,26 @@ class AvailableScreen extends StatelessWidget {
                 color: theme.primaryColorLight,
                 alignment: Alignment.center,
                 child: Text(
-                  appText.getText('sort'),
+                  getText('sort'),
                   style: theme.textTheme.headline5.copyWith(
                     color: Colors.white,
                   ),
                 ),
               ),
               ModalSheetListTile(
-                text: appText.getText('price_low'),
+                text: getText('price_low'),
                 value: Provider.of<ProviderClass>(context).sortingVars[0],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceLowHigh,
               ),
               ModalSheetListTile(
-                text: appText.getText('price_high'),
+                text: getText('price_high'),
                 value: Provider.of<ProviderClass>(context).sortingVars[1],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceHighLow,
               ),
               ModalSheetListTile(
-                text: appText.getText('nearest'),
+                text: getText('nearest'),
                 value: Provider.of<ProviderClass>(context).sortingVars[2],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortNearest,
@@ -113,6 +112,7 @@ class AvailableScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final clinic =
         (ModalRoute.of(context).settings.arguments) as Map<String, String>;
+    setAppLocalization(context);
 
     List<DoctorCard> doctorListSorted() {
       if (Provider.of<ProviderClass>(context).sortingVars[0] == true) {

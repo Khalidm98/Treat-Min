@@ -16,8 +16,10 @@
   "resend": "Resend",
   "resend_message": "We will send a new code to your email address",
   "ok": "OK",
+  "code_error": "You must type the code sent to you",
   "continue": "Continue",
   "setup": "Account Setup",
+  "edit": "Edit Account",
   "name": "Name",
   "name_hint": "Your name here",
   "name_empty": "Name cannot be empty!",
@@ -32,6 +34,7 @@
   "gender_male": "Male",
   "gender_female": "Female",
   "finish": "Finish",
+  "save": "Save",
   "clinics": "Outpatient Clinics",
   "services": "Services",
   "rooms": "Special Rooms",
@@ -59,5 +62,7 @@
   "must_log_in": "You must log in to book an appointment",
   "choose_date": "Choose a date",
   "date_error": "Please choose an appointment date.",
+  "view_reviews": "View users reviews",
+  "hide_reviews": "Hide users reviews",
   "reserved_successfully": "Your Appointment Has Been Reserved Successfully"
 }

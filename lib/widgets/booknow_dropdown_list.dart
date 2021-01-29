@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../localizations/app_localization.dart';
+import '../localizations/app_localizations.dart';
 import '../models/clinic_schedule.dart';
 
 class BookNowDropDownList extends StatefulWidget {
@@ -21,13 +21,14 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appText = AppLocalization.of(context);
+    setAppLocalization(context);
+
     return DropdownButtonHideUnderline(
       child: DropdownButton(
         isExpanded: true,
         hint: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(appText.getText('choose_date')),
+          child: Text(getText('choose_date')),
         ),
         value: dropDownValue,
         icon: Icon(
