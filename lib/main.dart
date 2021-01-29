@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-import './localizations/app_localization.dart';
+import './localizations/app_localizations.dart';
 import './providers/app_data.dart';
 import './providers/user_data.dart';
 import './providers/provider_class.dart';
@@ -13,8 +13,8 @@ import './screens/available_screen.dart';
 import './screens/booknow_screen.dart';
 import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
+import './screens/info_screen.dart';
 import './screens/select_screen.dart';
-import './screens/setup_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/verification_screen.dart';
@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
           const Locale('ar', 'EG'),
         ],
         localizationsDelegates: [
-          AppLocalization.delegate,
+          AppLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -184,13 +184,13 @@ class _MyAppState extends State<MyApp> {
         routes: {
           AuthScreen.routeName: (_) => AuthScreen(),
           AvailableScreen.routeName: (_) => AvailableScreen(),
+          BookNowScreen.routeName: (_) => BookNowScreen(),
           EmergencyScreen.routeName: (_) => EmergencyScreen(),
           GetStartedScreen.routeName: (_) => GetStartedScreen(),
+          InfoScreen.routeName: (_) => InfoScreen(),
           SelectScreen.routeName: (_) => SelectScreen(),
-          SetupScreen.routeName: (_) => SetupScreen(),
           TabsScreen.routeName: (_) => TabsScreen(),
           VerificationScreen.routeName: (_) => VerificationScreen(),
-          BookNowScreen.routeName: (_) => BookNowScreen(),
         },
       ),
     );

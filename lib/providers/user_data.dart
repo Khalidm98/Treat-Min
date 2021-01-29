@@ -35,8 +35,12 @@ class UserData with ChangeNotifier {
       'photo': data['photo'],
       'birth': data['birth'],
     });
+    if (prefs.containsKey('userData')) {
+      prefs.remove('userData');
+    }
     prefs.setString('userData', userData);
     tryAutoLogIn();
+    notifyListeners();
   }
 
   Future<void> logOut() async {

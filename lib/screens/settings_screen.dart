@@ -4,36 +4,27 @@ import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
 import './tabs_screen.dart';
-import '../localizations/app_localization.dart';
+import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
 import '../providers/user_data.dart';
-import '../main.dart';
 
-class SettingsScreen extends StatefulWidget {
-  @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notification = false;
-
-  void _logOut() {
-    final appText = AppLocalization.of(context);
+class SettingsScreen extends StatelessWidget {
+  void _logOut(BuildContext context) {
     showDialog(
       context: context,
       child: AlertDialog(
-        title: Text(appText.getText('log_out_message')),
+        title: Text(getText('log_out_message')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(appText.getText('no')),
+            child: Text(getText('no')),
           ),
           TextButton(
             onPressed: () async {
               await Provider.of<UserData>(context, listen: false).logOut();
               Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
             },
-            child: Text(appText.getText('yes')),
+            child: Text(getText('yes')),
           ),
         ],
       ),
@@ -43,10 +34,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appText = AppLocalization.of(context);
+    final appData = Provider.of<AppData>(context);
     final isLoggedIn = Provider.of<UserData>(context, listen: false).isLoggedIn;
+    setAppLocalization(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text(appText.getText('settings'))),
+      appBar: AppBar(title: Text(getText('settings'))),
       body: ListView(
         padding: const EdgeInsets.all(15),
         children: [
@@ -55,25 +48,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListTile(
               tileColor: Colors.grey[300],
               title: Text(
-                appText.getText('language'),
+                getText('language'),
                 style: theme.textTheme.headline6,
               ),
               trailing: ToggleSwitch(
-                labels: [appText.getText('english'), appText.getText('arabic')],
+                labels: [getText('english'), getText('arabic')],
                 minWidth: 75,
                 minHeight: 30,
                 cornerRadius: 10,
+                initialLabelIndex: appData.language == 'en' ? 0 : 1,
                 activeBgColor: theme.primaryColorLight,
                 inactiveBgColor: Colors.white,
                 onToggle: (index) {
                   final lang = index == 0 ? 'en' : 'ar';
-                  Navigator.of(context).pushReplacementNamed(
-                    TabsScreen.routeName,
-                    arguments: 1,
-                  );
-                  MyApp.setLocale(context, Locale(lang));
-                  Provider.of<AppData>(context, listen: false)
-                      .setLanguage(lang);
+                  if (lang != appData.language) {
+                    Navigator.of(context).pushReplacementNamed(
+                      TabsScreen.routeName,
+                      arguments: 1,
+                    );
+                    appData.setLanguage(context, lang);
+                  }
                 },
               ),
             ),
@@ -86,12 +80,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             margin: EdgeInsets.all(0),
             color: Colors.grey[300],
             child: SwitchListTile(
-              value: _notification,
-              onChanged: (newVal) {
-                setState(() => _notification = newVal);
-              },
+              value: appData.notifications,
+              onChanged: (val) => appData.setNotifications(val),
               title: Text(
-                appText.getText('notifications'),
+                getText('notifications'),
                 style: theme.textTheme.headline6,
               ),
               activeColor: Colors.white,
@@ -106,12 +98,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListTile(
               tileColor: Colors.grey[300],
               title: Text(
-                appText.getText(isLoggedIn ? 'log_out' : 'log_in'),
+                getText(isLoggedIn ? 'log_out' : 'log_in'),
                 style: theme.textTheme.headline6,
               ),
               trailing: InkWell(
                 onTap: isLoggedIn
-                    ? () => _logOut()
+                    ? () => _logOut(context)
                     : () {
                         Navigator.of(context)
                             .pushReplacementNamed(AuthScreen.routeName);

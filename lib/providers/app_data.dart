@@ -2,25 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/enumerations.dart';
+import '../main.dart';
 
 class AppData with ChangeNotifier {
-  Future<bool> isFirstRun() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('OpenedBefore')) {
-      prefs.setBool('OpenedBefore', true);
-      return true;
-    }
-    return false;
-  }
+  String language;
+  bool notifications;
+  bool isFirstRun;
 
-  Future setLanguage(String languageCode) async {
+  Future setLanguage(BuildContext context, String languageCode) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('language', languageCode);
+    language = languageCode;
+    MyApp.setLocale(context, Locale(languageCode));
   }
 
-  Future<String> getLanguage() async {
+  Future setNotifications(bool val) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('language');
+    prefs.setBool('notifications', val);
+    notifications = val;
+    notifyListeners();
+  }
+
+  Future load(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('isFirstRun')) {
+      prefs.setBool('isFirstRun', false);
+      isFirstRun = true;
+      setNotifications(true);
+      setLanguage(context, Localizations.localeOf(context).languageCode);
+    }
+    else {
+      isFirstRun = false;
+      language = prefs.getString('language');
+      notifications = prefs.getBool('notifications');
+    }
   }
 
   List<Map<String, String>> getBookingList(Book book) {

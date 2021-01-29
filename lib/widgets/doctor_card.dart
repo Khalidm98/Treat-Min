@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import './rating_hearts.dart';
 import '../screens/auth_screen.dart';
-import '../localizations/app_localization.dart';
+import '../localizations/app_localizations.dart';
 import '../models/clinic_schedule.dart';
 import '../screens/booknow_screen.dart';
 
@@ -38,7 +38,8 @@ class _DoctorCardState extends State<DoctorCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appText = AppLocalization.of(context);
+    setAppLocalization(context);
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 11),
       child: Column(
@@ -169,7 +170,7 @@ class _DoctorCardState extends State<DoctorCard> {
                           ),
                           child: FittedBox(
                             child: Text(
-                              appText.getText('book_now'),
+                              getText('book_now'),
                               style: theme.textTheme.headline5
                                   .copyWith(color: Colors.white),
                             ),
@@ -180,16 +181,16 @@ class _DoctorCardState extends State<DoctorCard> {
                               showDialog(
                                 context: context,
                                 child: AlertDialog(
-                                  title: Text(appText.getText('must_log_in')),
+                                  title: Text(getText('must_log_in')),
                                   actions: [
                                     TextButton(
-                                      child: Text(appText.getText('cancel')),
+                                      child: Text(getText('cancel')),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
                                     ),
                                     TextButton(
-                                      child: Text(appText.getText('log_in')),
+                                      child: Text(getText('log_in')),
                                       onPressed: () {
                                         Navigator.pop(context);
                                         Navigator.of(context)
