@@ -4,13 +4,15 @@ import '../models/reserved_schedule.dart';
 class ProviderClass with ChangeNotifier {
   List<bool> sortingVars = [false, false, true];
   List<ReservedSchedule> reservations = [];
+  List<ReservedSchedule> historyReservations = [];
 
-  void addReservation(ReservedSchedule scheduleModel) {
+  void addReservation(
+      ReservedSchedule scheduleModel, List<ReservedSchedule> reservations) {
     reservations.add(scheduleModel);
     notifyListeners();
   }
 
-  void removeReservation(String id) {
+  void removeReservation(String id, List<ReservedSchedule> reservations) {
     reservations.removeWhere((element) {
       return element.id == id;
     });

@@ -9,6 +9,24 @@ import '../providers/user_data.dart';
 import '../widgets/current_reservation_card.dart';
 
 class AccountScreen extends StatelessWidget {
+  noReservation(ThemeData theme) {
+    return Card(
+      margin: EdgeInsets.all(0),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+        trailing: Icon(
+          Icons.book,
+          color: theme.accentColor,
+        ),
+        title: TranslatedText(
+          jsonKey: 'There are no reservations',
+          style:
+              theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -79,24 +97,24 @@ class AccountScreen extends StatelessWidget {
                   subtitle: Text(userData.phone),
                 ),
                 Divider(height: 0),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
-                  child: TranslatedText(
-                    jsonKey: 'Health Condition',
-                    style: theme.textTheme.headline5,
-                  ),
-                ),
-                Card(
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      'Blood Pressure: 120/80 (Normal)\n'
-                      'Body Fats: 7% (Normal)\n'
-                      'PCR Test Result: Negative',
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
+                //   child: TranslatedText(
+                //     jsonKey: 'Health Condition',
+                //     style: theme.textTheme.headline5,
+                //   ),
+                // ),
+                // Card(
+                //   margin: EdgeInsets.zero,
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(15.0),
+                //     child: Text(
+                //       'Blood Pressure: 120/80 (Normal)\n'
+                //       'Body Fats: 7% (Normal)\n'
+                //       'PCR Test Result: Negative',
+                //     ),
+                //   ),
+                // ),
                 Container(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
                   child: TranslatedText(
@@ -104,6 +122,7 @@ class AccountScreen extends StatelessWidget {
                     style: theme.textTheme.headline5,
                   ),
                 ),
+                // Current Reservations List
                 Provider.of<ProviderClass>(context).reservations.length != 0
                     ? ListView.builder(
                         shrinkWrap: true,
@@ -112,25 +131,35 @@ class AccountScreen extends StatelessWidget {
                             .reservations
                             .length,
                         itemBuilder: (context, i) => CurrentReservationCard(
-                            Provider.of<ProviderClass>(context)
-                                .reservations[i]),
+                            Provider.of<ProviderClass>(context).reservations[i],
+                            1),
                       )
-                    : Card(
-                        margin: EdgeInsets.all(0),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                          trailing: Icon(
-                            Icons.book,
-                            color: theme.accentColor,
-                          ),
-                          title: TranslatedText(
-                            jsonKey: 'There are no current reservations',
-                            style: theme.textTheme.subtitle2
-                                .copyWith(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
-                SizedBox(height: 15)
+                    : noReservation(theme),
+                Container(
+                  padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
+                  child: TranslatedText(
+                    jsonKey: 'Reservations History',
+                    style: theme.textTheme.headline5,
+                  ),
+                ),
+                // Reservations History List
+                Provider.of<ProviderClass>(context)
+                            .historyReservations
+                            .length !=
+                        0
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: Provider.of<ProviderClass>(context)
+                            .historyReservations
+                            .length,
+                        itemBuilder: (context, i) => CurrentReservationCard(
+                            Provider.of<ProviderClass>(context)
+                                .historyReservations[i],
+                            0),
+                      )
+                    : noReservation(theme),
+                SizedBox(height: 15),
               ],
             )
           : Column(

@@ -14,7 +14,7 @@
   "Phone" : "Phone Number",
   "Health Condition" : "Health Condition",
   "Current Reservations" : "Current Reservations",
-  "There are no current reservations" : "There are no current reservations",
+  "There are no reservations" : "There are no reservations",
   "Yes" : "Yes",
   "No" : "No",
   "Ok" : "Ok",
@@ -68,5 +68,7 @@
   "Hide patients reviews" : "Hide patients reviews",
   "Months ago": "Months ago",
   "Care close to home": "Care close to home",
-  "Explore" : "Explore"
+  "Explore" : "Explore",
+  "Reservations History": "Reservations History",
+  "Rate": "Rate"
 }

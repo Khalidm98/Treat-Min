@@ -14,7 +14,7 @@
   "Phone" : "رقم الهاتف",
   "Health Condition" : "الحالة الصحية",
   "Current Reservations" : "الحجوزات الحالية",
-  "There are no current reservations" : "لا توجد أي حجوزات حالياً",
+  "There are no reservations" : "لا توجد أي حجوزات",
   "Yes" : "نعم",
   "No" : "لا",
   "Ok" : "حسناً",
@@ -68,5 +68,7 @@
   "Hide patients reviews" : "إخفاء آراء المرضى",
   "Months ago": "منذ أشهر",
   "Care close to home": "صحتك بالدنيا",
-  "Explore" : "إستكشف"
+  "Explore" : "إستكشف",
+  "Reservations History": "تاريخ الحجوزات",
+  "Rate": "تقييم"
 }

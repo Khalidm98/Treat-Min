@@ -102,7 +102,8 @@ class _BookNowScreenState extends State<BookNowScreen> {
             receivedDoctorCard.doctorSpecialty,
             dropDownValue,
             receivedDoctorCard.hospitalName);
-        Provider.of<ProviderClass>(context).addReservation(scheduleModel);
+        Provider.of<ProviderClass>(context).addReservation(
+            scheduleModel, Provider.of<ProviderClass>(context).reservations);
         _bookSuccess(theme, context);
       }
     }

@@ -5,8 +5,9 @@ import '../providers/provider_class.dart';
 import '../models/reserved_schedule.dart';
 
 class CurrentReservationCard extends StatelessWidget {
+  final int CurrentOrHistory; //Current = 1 , History = 0
   final ReservedSchedule sched;
-  CurrentReservationCard(this.sched);
+  CurrentReservationCard(this.sched, this.CurrentOrHistory);
 
   void confirmReservationCancellation(BuildContext context) {
     showDialog(
@@ -19,8 +20,9 @@ class CurrentReservationCard extends StatelessWidget {
             actions: [
               TextButton(
                   onPressed: () {
-                    Provider.of<ProviderClass>(context)
-                        .removeReservation(sched.id);
+                    Provider.of<ProviderClass>(context).removeReservation(
+                        sched.id,
+                        Provider.of<ProviderClass>(context).reservations);
                     Navigator.pop(context);
                   },
                   child: TranslatedText(jsonKey: 'Yes')),
@@ -83,16 +85,44 @@ class CurrentReservationCard extends StatelessWidget {
                   Text(
                     sched.schedule.time,
                   ),
-                  SizedBox(
-                    height: 30,
-                    width: 85,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        confirmReservationCancellation(context);
-                      },
-                      child: TranslatedText(jsonKey: 'Cancel', maxLines: 1),
-                    ),
-                  ),
+                  CurrentOrHistory == 1
+                      ? SizedBox(
+                          height: 30,
+                          width: 85,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              confirmReservationCancellation(context);
+                            },
+                            child:
+                                TranslatedText(jsonKey: 'Cancel', maxLines: 1),
+                          ),
+                        )
+                      : SizedBox(
+                          height: 30,
+                          width: 85,
+                          child: OutlinedButton(
+                            style: ButtonStyle(
+                              side: MaterialStateProperty.all<BorderSide>(
+                                BorderSide(color: theme.primaryColor),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                theme.primaryColor.withOpacity(0.2),
+                              ),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                theme.primaryColor.withOpacity(0.4),
+                              ),
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  theme.primaryColor),
+                              textStyle: MaterialStateProperty.all<TextStyle>(
+                                const TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: TranslatedText(jsonKey: 'Rate', maxLines: 1),
+                          ))
                 ],
               ),
             ),
