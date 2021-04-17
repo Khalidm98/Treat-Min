@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:treat_min/widgets/translated_text.dart';
+import '../models/reviews.dart';
 import 'rating_hearts.dart';
 
 class ReviewBox extends StatefulWidget {
+  final Reviews review;
+  int likes;
+  int dislikes;
+
+  ReviewBox(this.review, this.likes, this.dislikes);
   @override
   _ReviewBoxState createState() => _ReviewBoxState();
 }
 
 class _ReviewBoxState extends State<ReviewBox> {
+  int likeFlag = 2; // 0 = liked / 1 = disliked / 2 = none
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 7),
       padding: EdgeInsets.all(10),
@@ -40,30 +48,38 @@ class _ReviewBoxState extends State<ReviewBox> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Ahmed Khaled Sayed',
+                      widget.review.username,
                       style: theme.textTheme.subtitle1
                           .copyWith(fontWeight: FontWeight.w700),
                       textScaleFactor: 0.9,
                     ),
                     TranslatedText(
+                      //needs to be updated
                       jsonKey: 'Months ago',
                       style: theme.textTheme.subtitle2
                           .copyWith(color: Colors.grey),
                       textScaleFactor: 0.7,
                     ),
-                    RatingHearts(rating: 4, iconWidth: 10, iconHeight: 10),
+                    RatingHearts(
+                        rating: widget.review.rating,
+                        iconWidth: 10,
+                        iconHeight: 10),
                   ],
                 ),
               ),
             ],
           ),
-          Card(
-            color: theme.primaryColorLight,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'The doctor is very helpful he helped me alot, he is highly recommended if you want a better treatment.',
-                style: theme.textTheme.subtitle2.copyWith(color: Colors.white),
+          SizedBox(
+            width: double.infinity,
+            child: Card(
+              color: theme.primaryColorLight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.review.reviewText,
+                  style:
+                      theme.textTheme.subtitle2.copyWith(color: Colors.white),
+                ),
               ),
             ),
           ),
@@ -71,18 +87,58 @@ class _ReviewBoxState extends State<ReviewBox> {
             children: [
               IconButton(
                   icon: Icon(
-                    Icons.thumb_up_alt,
+                    likeFlag == 2 || likeFlag == 1
+                        ? Icons.thumb_up_alt_outlined
+                        : Icons.thumb_up_alt,
                     color: theme.accentColor,
                   ),
-                  onPressed: () {}),
-              Text('0'),
+                  onPressed: () {
+                    if (likeFlag == 2) {
+                      setState(() {
+                        widget.likes += 1;
+                      });
+                      likeFlag = 0;
+                    } else if (likeFlag == 0) {
+                      setState(() {
+                        widget.likes -= 1;
+                      });
+                      likeFlag = 2;
+                    } else {
+                      setState(() {
+                        widget.likes += 1;
+                        widget.dislikes -= 1;
+                      });
+                      likeFlag = 0;
+                    }
+                  }),
+              Text("${widget.likes}"),
               IconButton(
                   icon: Icon(
-                    Icons.thumb_down_alt,
+                    likeFlag == 2 || likeFlag == 0
+                        ? Icons.thumb_down_alt_outlined
+                        : Icons.thumb_down_alt,
                     color: Colors.red,
                   ),
-                  onPressed: () {}),
-              Text('0'),
+                  onPressed: () {
+                    if (likeFlag == 2) {
+                      setState(() {
+                        widget.dislikes += 1;
+                      });
+                      likeFlag = 1;
+                    } else if (likeFlag == 1) {
+                      setState(() {
+                        widget.dislikes -= 1;
+                      });
+                      likeFlag = 2;
+                    } else {
+                      setState(() {
+                        widget.likes -= 1;
+                        widget.dislikes += 1;
+                      });
+                      likeFlag = 1;
+                    }
+                  }),
+              Text("${widget.dislikes}"),
             ],
           ),
         ],

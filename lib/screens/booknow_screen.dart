@@ -105,6 +105,10 @@ class _BookNowScreenState extends State<BookNowScreen> {
         Provider.of<ProviderClass>(context).addReservation(
             scheduleModel, Provider.of<ProviderClass>(context).reservations);
         _bookSuccess(theme, context);
+        // the following lines are just for testing
+        // Provider.of<ProviderClass>(context).addReservation(scheduleModel,
+        //     Provider.of<ProviderClass>(context).historyReservations);
+        // _bookSuccess(theme, context);
       }
     }
 
@@ -218,11 +222,36 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         color: theme.accentColor,
                       ),
                       children: [
-                        ReviewBox(),
-                        ReviewBox(),
-                        ReviewBox(),
-                        ReviewBox(),
-                        ReviewBox(),
+                        Provider.of<ProviderClass>(context).reviews.length != 0
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: Provider.of<ProviderClass>(context)
+                                    .reviews
+                                    .length,
+                                //likes and dislikes needs to be updated
+                                itemBuilder: (context, i) => ReviewBox(
+                                    Provider.of<ProviderClass>(context)
+                                        .reviews[i],
+                                    10,
+                                    2),
+                              )
+                            : Card(
+                                margin: EdgeInsets.all(0),
+                                child: ListTile(
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 15),
+                                  trailing: Icon(
+                                    Icons.rate_review,
+                                    color: theme.accentColor,
+                                  ),
+                                  title: TranslatedText(
+                                    jsonKey: 'There are no current reviews.',
+                                    style: theme.textTheme.subtitle2
+                                        .copyWith(fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),

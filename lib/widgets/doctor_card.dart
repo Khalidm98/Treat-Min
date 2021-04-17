@@ -69,15 +69,10 @@ class _DoctorCardState extends State<DoctorCard> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(
-              crossAxisAlignment: translator.currentLanguage == 'en'
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
               children: [
-                FittedBox(
-                  child: Text(
-                    widget.doctorName,
-                    style: theme.textTheme.headline5,
-                  ),
+                Text(
+                  widget.doctorName,
+                  style: theme.textTheme.headline5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

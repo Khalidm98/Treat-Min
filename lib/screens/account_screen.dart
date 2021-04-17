@@ -8,7 +8,14 @@ import '../providers/provider_class.dart';
 import '../providers/user_data.dart';
 import '../widgets/current_reservation_card.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
+  @override
+  _AccountScreenState createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  bool expansionListChanger = false;
+
   noReservation(ThemeData theme) {
     return Card(
       margin: EdgeInsets.all(0),
@@ -147,16 +154,44 @@ class AccountScreen extends StatelessWidget {
                             .historyReservations
                             .length !=
                         0
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        itemCount: Provider.of<ProviderClass>(context)
-                            .historyReservations
-                            .length,
-                        itemBuilder: (context, i) => CurrentReservationCard(
-                            Provider.of<ProviderClass>(context)
-                                .historyReservations[i],
-                            0),
+                    ? Container(
+                        decoration: BoxDecoration(
+                            border: !expansionListChanger
+                                ? Border.all(color: theme.accentColor, width: 2)
+                                : Border.all(color: Colors.white, width: 2)),
+                        child: ExpansionTile(
+                            onExpansionChanged: (bool) {
+                              setState(() {
+                                expansionListChanger = bool;
+                              });
+                            },
+                            title: !expansionListChanger
+                                ? FittedBox(
+                                    child: TranslatedText(
+                                        jsonKey:
+                                            'Show your reservations history',
+                                        textAlign: TextAlign.center),
+                                  )
+                                : FittedBox(
+                                    child: TranslatedText(
+                                        jsonKey:
+                                            'Hide your reservations history',
+                                        textAlign: TextAlign.center),
+                                  ),
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: Provider.of<ProviderClass>(context)
+                                    .historyReservations
+                                    .length,
+                                itemBuilder: (context, i) =>
+                                    CurrentReservationCard(
+                                        Provider.of<ProviderClass>(context)
+                                            .historyReservations[i],
+                                        0),
+                              )
+                            ]),
                       )
                     : noReservation(theme),
                 SizedBox(height: 15),

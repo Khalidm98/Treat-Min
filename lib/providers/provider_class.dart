@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import '../models/reserved_schedule.dart';
+import '../models/reviews.dart';
 
 class ProviderClass with ChangeNotifier {
   List<bool> sortingVars = [false, false, true];
+  //for testing purposes
   List<ReservedSchedule> reservations = [];
   List<ReservedSchedule> historyReservations = [];
+  List<Reviews> reviews = [];
+
+  void addReview(Reviews review) {
+    reviews.add(review);
+    notifyListeners();
+  }
 
   void addReservation(
       ReservedSchedule scheduleModel, List<ReservedSchedule> reservations) {
