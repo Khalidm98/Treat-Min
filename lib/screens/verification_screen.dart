@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import './info_screen.dart';
+import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
+import '../utils/dialogs.dart';
 
 class VerificationScreen extends StatefulWidget {
   static const String routeName = '/verify';
@@ -21,16 +23,27 @@ class _VerificationScreenState extends State<VerificationScreen> {
     super.initState();
     _resendCode = TapGestureRecognizer()
       ..onTap = () {
+        final email = ModalRoute.of(context).settings.arguments;
         showDialog(
           context: context,
-          child: AlertDialog(
-            title: Text(getText('resend_message')),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(getText('ok')),
-              ),
-            ],
+          child: FutureBuilder(
+            future: API.sendEmail(email),
+            builder: (_, response) {
+              if (response.connectionState == ConnectionState.waiting) {
+                return AlertDialog(title: CircularProgressIndicator());
+              }
+              return AlertDialog(
+                title: Text(response.data
+                    ? getText('resend_message')
+                    : 'Something went wrong!'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(getText('ok')),
+                  ),
+                ],
+              );
+            },
           ),
         );
       };
@@ -44,6 +57,32 @@ class _VerificationScreenState extends State<VerificationScreen> {
     super.dispose();
   }
 
+  Future<void> _verify() async {
+    final email = ModalRoute.of(context).settings.arguments;
+    Navigator.of(context).pushNamed(InfoScreen.routeName, arguments: email);
+    // String strCode = '';
+    // for (TextEditingController num in _controllers) {
+    //   strCode += num.text;
+    // }
+    //
+    // final code = int.tryParse(strCode);
+    // if (code == null) {
+    //   alert(context, 'Code must consist of exactly 4 digits!');
+    //   return;
+    // }
+    //
+    // final email = ModalRoute.of(context).settings.arguments;
+    // loading(context);
+    // final response = await API.verifyEmail(email, code);
+    // Navigator.pop(context);
+    //
+    // if (response == true) {
+    //   Navigator.of(context).pushNamed(InfoScreen.routeName, arguments: email);
+    // } else {
+    //   alert(context, response);
+    // }
+  }
+
   Widget _codeInputField(ThemeData theme) {
     final side = (MediaQuery.of(context).size.width - 140) / 4;
     return Padding(
@@ -51,16 +90,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
       child: Row(
         textDirection: TextDirection.ltr,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [3, 2, 1, 0].map((index) {
+        children: [0, 1, 2, 3].map((index) {
           return SizedBox(
             width: side,
             height: side,
             child: TextField(
-              onChanged: index == 0
+              onChanged: index == 3
                   ? (num) {
                       if (num.isNotEmpty) {
                         if (num.length == 2) {
-                          _controllers[0].text = num[1];
+                          _controllers[3].text = num[1];
                         }
                         FocusScope.of(context).unfocus();
                       }
@@ -71,7 +110,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         if (num.length == 2) {
                           _controllers[index].text = num[1];
                         }
-                        _focusNodes[index - 1].requestFocus();
+                        _focusNodes[index].requestFocus();
                       }
                       setState(() {});
                     },
@@ -89,7 +128,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 fillColor: theme.primaryColor,
                 filled: _controllers[index].text.isNotEmpty,
               ),
-              focusNode: index == 3 ? null : _focusNodes[index],
+              focusNode: index == 0 ? null : _focusNodes[index - 1],
               keyboardType: TextInputType.number,
               maxLength: 2,
               style: theme.textTheme.headline5.copyWith(color: Colors.white),
@@ -155,20 +194,9 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     }
                   }
                   if (isFilled) {
-                    Navigator.of(context).pushNamed(InfoScreen.routeName);
+                    _verify();
                   } else {
-                    showDialog(
-                      context: context,
-                      child: AlertDialog(
-                        title: Text(getText('code_error')),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(getText('ok')),
-                          ),
-                        ],
-                      ),
-                    );
+                    alert(context, getText('code_error'));
                   }
                 },
               ),
@@ -180,12 +208,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
         padding: const EdgeInsets.only(top: 15),
         child: FloatingActionButton(
           child: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          elevation: 0,
+          onPressed: () => Navigator.of(context).pop(),
           backgroundColor: Colors.transparent,
           splashColor: theme.primaryColor,
+          elevation: 0,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,

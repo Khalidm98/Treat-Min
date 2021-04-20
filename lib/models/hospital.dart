@@ -1,16 +1,18 @@
-import 'package:flutter/foundation.dart';
-
 class Hospital {
   final String id;
   final String name;
   final String address;
+  final String phone;
+  final String photo;
   final double latitude;
   final double longitude;
 
   Hospital({
     this.id,
-    @required this.name,
+    this.name,
     this.address,
+    this.phone,
+    this.photo,
     this.latitude,
     this.longitude,
   });
