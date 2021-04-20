@@ -1,8 +1,6 @@
-import './speciality.dart';
-
 class Clinic {
-  final String id;
-  final Speciality speciality;
+  final int id;
+  final String name;
 
-  Clinic(this.id, this.speciality);
+  Clinic(this.id, this.name);
 }

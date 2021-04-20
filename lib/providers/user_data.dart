@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserData with ChangeNotifier {
-  // replace id with token
-  String id;
+  String token;
   String name;
+  String email;
+  String gender;
   String phone;
   String photo;
   DateTime birth;
@@ -18,8 +19,10 @@ class UserData with ChangeNotifier {
     }
     final userData =
         json.decode(prefs.getString('userData')) as Map<String, Object>;
-    id = userData['id'];
+    token = userData['token'];
     name = userData['name'];
+    email = userData['email'];
+    gender = userData['gender'];
     phone = userData['phone'];
     photo = userData['photo'];
     birth = DateTime.parse(userData['birth']);
@@ -28,13 +31,7 @@ class UserData with ChangeNotifier {
 
   Future<void> signUp(Map<String, String> data) async {
     final prefs = await SharedPreferences.getInstance();
-    final userData = json.encode({
-      'id': data['id'],
-      'name': data['name'],
-      'phone': data['phone'],
-      'photo': data['photo'],
-      'birth': data['birth'],
-    });
+    final userData = json.encode(data);
     if (prefs.containsKey('userData')) {
       prefs.remove('userData');
     }

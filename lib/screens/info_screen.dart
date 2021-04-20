@@ -5,8 +5,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import './tabs_screen.dart';
+import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/user_data.dart';
+import '../utils/dialogs.dart';
 import '../widgets/input_field.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -17,14 +19,13 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
+  final Map<String, String> _account = {};
   final GlobalKey<FormState> _formKey = GlobalKey();
-  TextEditingController _dateController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
   File _image;
+  bool _passObscure = true;
   DateTime _date;
-  int _gender = 0;
-  Map<String, String> _account = {
-    'id': DateTime.now().toIso8601String(),
-  };
+  int _gender = -1;
 
   @override
   void didChangeDependencies() {
@@ -37,8 +38,7 @@ class _InfoScreenState extends State<InfoScreen> {
         }
         _date = userData.birth;
         _dateController.text = _date.toIso8601String().substring(0, 10);
-      }
-      else {
+      } else {
         _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
       }
     }
@@ -51,10 +51,24 @@ class _InfoScreenState extends State<InfoScreen> {
   }
 
   Future<void> _submit() async {
-    if (!_formKey.currentState.validate()) {
+    if (_gender < 1) {
+      setState(() => _gender = 0);
+      _formKey.currentState.validate();
+      return;
+    } else if (!_formKey.currentState.validate()) {
       return;
     }
+
     _formKey.currentState.save();
+    _account['gender'] = _gender == 1 ? 'M' : 'F';
+    _account['email'] = ModalRoute.of(context).settings.arguments;
+    // if (_image != null) {
+    //   final dir = await getApplicationDocumentsDirectory();
+    //   final path = '${dir.path}/user.png';
+    //   imageCache.clear();
+    //   final photo = await _image.copy(path);
+    //   _account['photo'] = photo;
+    // }
     if (_image == null) {
       _account['photo'] = '';
     } else {
@@ -64,12 +78,16 @@ class _InfoScreenState extends State<InfoScreen> {
       await _image.copy(path);
       _account['photo'] = path;
     }
-    await Provider.of<UserData>(context, listen: false).signUp(_account);
-    if (Provider.of<UserData>(context, listen: false).isLoggedIn) {
-      Navigator.pop(context);
-    } else {
+
+    loading(context);
+    final response = await API.register(context, _account);
+    Navigator.pop(context);
+
+    if (response == true) {
       Navigator.of(context)
           .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+    } else {
+      alert(context, response);
     }
   }
 
@@ -158,8 +176,37 @@ class _InfoScreenState extends State<InfoScreen> {
               Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    InputField(
+                      label: getText('password'),
+                      textFormField: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: '********',
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() => _passObscure = !_passObscure);
+                            },
+                            child: Icon(_passObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                          ),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        obscureText: _passObscure,
+                        onSaved: (value) => _account['password'] = value,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return getText('password_empty');
+                          } else if (value.length < 8) {
+                            return getText('password_length');
+                          } else if (int.tryParse(value) != null) {
+                            return getText('password_numbers');
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 30),
                     InputField(
                       label: getText('name'),
                       textFormField: TextFormField(
@@ -232,10 +279,7 @@ class _InfoScreenState extends State<InfoScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                  Text(
-                    getText('gender'),
-                    style: theme.textTheme.subtitle1,
-                  ),
+                  Text(getText('gender'), style: theme.textTheme.subtitle1),
                   Spacer(),
                   Radio(
                     value: 1,
@@ -260,6 +304,14 @@ class _InfoScreenState extends State<InfoScreen> {
                   ),
                 ],
               ),
+              _gender == 0
+                  ? Text(
+                      'Please select your gender!',
+                      style: theme.textTheme.caption.copyWith(
+                        color: theme.errorColor,
+                      ),
+                    )
+                  : SizedBox(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 child: ElevatedButton(
