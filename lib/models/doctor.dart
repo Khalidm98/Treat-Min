@@ -1,5 +1,4 @@
-import 'package:flutter/foundation.dart';
-import './speciality.dart';
+import './clinic.dart';
 
 class Doctor {
   final String id;
@@ -7,14 +6,14 @@ class Doctor {
   final String title;
   final String phone;
   final String photo;
-  final Speciality speciality;
+  final Clinic speciality;
 
   Doctor({
     this.id,
-    @required this.name,
+    this.name,
     this.title,
     this.phone,
     this.photo,
-    @required this.speciality,
+    this.speciality,
   });
 }
