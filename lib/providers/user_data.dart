@@ -29,7 +29,7 @@ class UserData with ChangeNotifier {
     isLoggedIn = true;
   }
 
-  Future<void> signUp(Map<String, String> data) async {
+  Future<void> saveData(Map<String, String> data) async {
     final prefs = await SharedPreferences.getInstance();
     final userData = json.encode(data);
     if (prefs.containsKey('userData')) {

@@ -52,6 +52,7 @@ class AccountAPI {
   static Future register(
       BuildContext context, Map<String, String> userData) async {
     final Map<String, String> account = Map.from(userData);
+    account.remove('password');
     userData['birth'] = userData['birth'].substring(0, 10);
     userData.remove('photo');
 
@@ -62,10 +63,44 @@ class AccountAPI {
 
     if (response.statusCode == 201) {
       account['token'] = json.decode(response.body)['token'];
-      await Provider.of<UserData>(context, listen: false).signUp(account);
+      await Provider.of<UserData>(context, listen: false).saveData(account);
       return true;
     } else if (response.statusCode == 400) {
       return json.decode(response.body)['details'];
+    }
+    return 'Something went wrong!';
+  }
+
+  static Future login(
+      BuildContext context, Map<String, String> userData) async {
+    final response = await http.post(
+      '$_baseURL/accounts/login/',
+      body: userData,
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      jsonResponse['user'].remove('id');
+      final account = Map<String, String>.from(jsonResponse['user']);
+      account['token'] = jsonResponse['token'];
+      account['photo'] = '';
+      await Provider.of<UserData>(context, listen: false).saveData(account);
+      return true;
+    }
+    return 'Something went wrong!';
+  }
+
+  static Future logout(BuildContext context) async {
+    final token = Provider.of<UserData>(context, listen: false).token;
+    final response = await http.post(
+      '$_baseURL/accounts/logout/',
+      headers: {"Authorization": "Token $token"},
+    );
+
+    if (response.statusCode == 204) {
+      return true;
+    } else if (response.statusCode == 401) {
+      return 'Invalid Token!';
     }
     return 'Something went wrong!';
   }
