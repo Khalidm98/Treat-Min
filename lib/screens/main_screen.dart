@@ -18,31 +18,31 @@ class MainScreen extends StatelessWidget {
             Image.asset('assets/images/logo.png'),
             SizedBox(height: 80),
             ElevatedButton(
-              child: Text(getText(bookToString(Book.clinic))),
+              child: Text(getText(entityToString(Entity.clinic))),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
-                  arguments: Book.clinic,
+                  arguments: Entity.clinic,
                 );
               },
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text(getText(bookToString(Book.service))),
+              child: Text(getText(entityToString(Entity.service))),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
-                  arguments: Book.service,
+                  arguments: Entity.service,
                 );
               },
             ),
             SizedBox(height: 30),
             ElevatedButton(
-              child: Text(getText(bookToString(Book.room))),
+              child: Text(getText(entityToString(Entity.room))),
               onPressed: () {
                 Navigator.of(context).pushNamed(
                   SelectScreen.routeName,
-                  arguments: Book.room,
+                  arguments: Entity.room,
                 );
               },
             ),

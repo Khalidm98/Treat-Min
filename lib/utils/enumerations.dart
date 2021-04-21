@@ -1,14 +1,14 @@
-enum Book { clinic, room, service }
+enum Entity { clinic, room, service }
 
-String bookToString(Book book) {
-  switch (book) {
-    case Book.clinic:
+String entityToString(Entity entity) {
+  switch (entity) {
+    case Entity.clinic:
       return 'clinics';
-    case Book.room:
+    case Entity.room:
       return 'rooms';
-    case Book.service:
+    case Entity.service:
       return 'services';
     default:
-      return 'Book Enum';
+      return 'Entity Enum';
   }
 }
