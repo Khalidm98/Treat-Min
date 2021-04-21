@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import './tabs_screen.dart';
 import './verification_screen.dart';
-// import '../api/accounts.dart';
+import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
-// import '../utils/dialogs.dart';
+import '../utils/dialogs.dart';
 import '../widgets/input_field.dart';
 
 enum AuthMode { signUp, logIn }
@@ -90,12 +90,17 @@ class _AuthScreenState extends State<AuthScreen>
     }
   }
 
-  // Future<void> _logIn() async {
-  void _logIn() {
+  Future<void> _logIn() async {
     if (_submit()) {
-      // post data to server
-      // get and store the response
-      Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+      loading(context);
+      final response = await AccountAPI.login(context, _data);
+      Navigator.pop(context);
+
+      if (response == true) {
+        Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+      } else {
+        alert(context, response);
+      }
     }
   }
 

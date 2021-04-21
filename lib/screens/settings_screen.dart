@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 
 import './auth_screen.dart';
 import './tabs_screen.dart';
+import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
 import '../providers/user_data.dart';
+import '../utils/dialogs.dart';
 
 class SettingsScreen extends StatelessWidget {
   void _logOut(BuildContext context) {
@@ -21,8 +23,17 @@ class SettingsScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () async {
-              await Provider.of<UserData>(context, listen: false).logOut();
-              Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+              Navigator.pop(context);
+              loading(context);
+              final response = await AccountAPI.logout(context);
+              Navigator.pop(context);
+
+              if (response == true) {
+                await Provider.of<UserData>(context, listen: false).logOut();
+                Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
+              } else {
+                alert(context, response);
+              }
             },
             child: Text(getText('yes')),
           ),
