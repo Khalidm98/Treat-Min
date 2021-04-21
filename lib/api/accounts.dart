@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../providers/user_data.dart';
 import '../localizations/app_localizations.dart';
 
-class API {
+class AccountAPI {
   static final String _baseURL = 'https://www.treat-min.com/api';
   static final Map<String, String> _headers = {
     "content-type": "application/json",

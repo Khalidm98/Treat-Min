@@ -9,6 +9,10 @@ class AppData with ChangeNotifier {
   bool notifications;
   bool isFirstRun;
 
+  List clinics = [];
+  List rooms = [];
+  List services = [];
+
   Future setLanguage(BuildContext context, String languageCode) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('language', languageCode);
@@ -30,37 +34,36 @@ class AppData with ChangeNotifier {
       isFirstRun = true;
       setNotifications(true);
       setLanguage(context, Localizations.localeOf(context).languageCode);
-    }
-    else {
+    } else {
       isFirstRun = false;
       language = prefs.getString('language');
       notifications = prefs.getBool('notifications');
     }
   }
 
-  List<Map<String, String>> getBookingList(Book book) {
-    switch (book) {
-      case Book.clinic:
-        return [
-          {'name': 'Cardiology', 'icon': 'assets/icons/heart.png'},
-          {'name': 'Chest and Respiratory', 'icon': 'assets/icons/lungs.png'},
-          {'name': 'Dentistry', 'icon': 'assets/icons/tooth.png'},
-          {'name': 'Hepatology', 'icon': 'assets/icons/liver.png'},
-          {'name': 'Internal Medicine', 'icon': 'assets/icons/stomach.png'},
-          {'name': 'Neurosurgery', 'icon': 'assets/icons/brain.png'},
-        ];
-      case Book.service:
-        return [
-          {'name': 'Blood Test', 'icon': 'assets/icons/blood.png'},
-          {'name': 'Heart Echo', 'icon': 'assets/icons/echo.png'},
-          {'name': 'X-Rays', 'icon': 'assets/icons/x-rays.png'},
-        ];
-      case Book.room:
-        return [
-          {'name': 'Delivery Room', 'icon': 'assets/icons/delivery.png'},
-          {'name': 'Dialysis Unit', 'icon': 'assets/icons/dialysis.png'},
-          {'name': 'Nursery', 'icon': 'assets/icons/nursery.png'},
-        ];
+  void setEntities(Entity entity, List list) {
+    switch (entity) {
+      case Entity.clinic:
+        clinics = list;
+        break;
+      case Entity.room:
+        rooms = list;
+        break;
+      case Entity.service:
+        services = list;
+        break;
+    }
+    // notifyListeners();
+  }
+
+  List getEntities(Entity entity) {
+    switch (entity) {
+      case Entity.clinic:
+        return clinics;
+      case Entity.room:
+        return rooms;
+      case Entity.service:
+        return services;
       default:
         return [];
     }

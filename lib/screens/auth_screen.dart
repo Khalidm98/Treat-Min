@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import './tabs_screen.dart';
 import './verification_screen.dart';
-import '../api/accounts.dart';
+// import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
-import '../utils/dialogs.dart';
+// import '../utils/dialogs.dart';
 import '../widgets/input_field.dart';
 
 enum AuthMode { signUp, logIn }
@@ -76,7 +76,7 @@ class _AuthScreenState extends State<AuthScreen>
         arguments: _data['email'],
       );
       // loading(context);
-      // final response = await API.sendEmail(_data['email']);
+      // final response = await AccountAPI.sendEmail(_data['email']);
       // Navigator.pop(context);
       //
       // if (response == true) {

@@ -110,8 +110,8 @@ class AvailableScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final clinic =
-        (ModalRoute.of(context).settings.arguments) as Map<String, String>;
+    final entity =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     setAppLocalization(context);
 
     List<DoctorCard> doctorListSorted() {
@@ -132,7 +132,7 @@ class AvailableScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(clinic['name']),
+        title: Text(entity['name']),
         actions: [
           IconButton(
             icon: Icon(Icons.search),

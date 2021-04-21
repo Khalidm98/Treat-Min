@@ -80,7 +80,7 @@ class _InfoScreenState extends State<InfoScreen> {
     }
 
     loading(context);
-    final response = await API.register(context, _account);
+    final response = await AccountAPI.register(context, _account);
     Navigator.pop(context);
 
     if (response == true) {

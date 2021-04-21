@@ -27,7 +27,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
         showDialog(
           context: context,
           child: FutureBuilder(
-            future: API.sendEmail(email),
+            future: AccountAPI.sendEmail(email),
             builder: (_, response) {
               if (response.connectionState == ConnectionState.waiting) {
                 return AlertDialog(title: CircularProgressIndicator());
@@ -73,7 +73,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
     //
     // final email = ModalRoute.of(context).settings.arguments;
     // loading(context);
-    // final response = await API.verifyEmail(email, code);
+    // final response = await AccountAPI.verifyEmail(email, code);
     // Navigator.pop(context);
     //
     // if (response == true) {

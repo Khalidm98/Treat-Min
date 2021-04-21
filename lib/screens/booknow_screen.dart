@@ -124,7 +124,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     radius: MediaQuery.of(context).size.height / 13,
                     backgroundColor: theme.accentColor,
                     child: CircleAvatar(
-                      child: Image.asset('assets/icons/tooth.png'),
+                      child: Image.asset('assets/icons/default.png'),
                       backgroundColor: Colors.white,
                       radius: MediaQuery.of(context).size.height / 14,
                     ),
