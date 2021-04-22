@@ -13,16 +13,16 @@ import '../widgets/modal_sheet_list_tile.dart';
 class AvailableScreen extends StatelessWidget {
   static const String routeName = '/available';
 
-  bool isClinic(Book book) {
-    if (book == Book.clinic) {
+  bool isClinic(Entity entity) {
+    if (entity == Entity.clinic) {
       return true;
     } else {
       return false;
     }
   }
 
-  fillDetailsList(Book book) {
-    if (isClinic(book)) {
+  fillDetailsList(Entity entity) {
+    if (isClinic(entity)) {
       return [
         DoctorCard(
           name: 'Gerges Wageh',
