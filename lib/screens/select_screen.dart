@@ -58,7 +58,7 @@ class SelectScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pushNamed(
                     AvailableScreen.routeName,
-                    arguments: list[index],
+                    arguments: AvailableScreenData(list[index], entity),
                   );
                 },
               );
