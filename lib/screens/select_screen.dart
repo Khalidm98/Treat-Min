@@ -6,6 +6,7 @@ import '../api/entities.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
 import '../utils/enumerations.dart';
+import '../models/screens_data.dart';
 
 class SelectScreen extends StatelessWidget {
   static const String routeName = '/select';

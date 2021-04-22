@@ -7,9 +7,34 @@ import './info_screen.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/provider_class.dart';
 import '../providers/user_data.dart';
-import '../widgets/current_reservation_card.dart';
+import '../widgets/clinic_reservation_card.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
+  @override
+  _AccountScreenState createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  bool expansionListChanger = false;
+
+  noReservation(ThemeData theme) {
+    return Card(
+      margin: EdgeInsets.all(0),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+        trailing: Icon(
+          Icons.book,
+          color: theme.accentColor,
+        ),
+        title: Text(
+          getText('no_reservations'),
+          style:
+              theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -65,24 +90,24 @@ class AccountScreen extends StatelessWidget {
                   subtitle: Text(userData.phone),
                 ),
                 Divider(height: 0),
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
-                  child: Text(
-                    getText('condition'),
-                    style: theme.textTheme.headline5,
-                  ),
-                ),
-                Card(
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      'Blood Pressure: 120/80 (Normal)\n'
-                      'Body Fats: 7% (Normal)\n'
-                      'PCR Test Result: Negative',
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
+                //   child: Text(
+                //     getText('condition'),
+                //     style: theme.textTheme.headline5,
+                //   ),
+                // ),
+                // Card(
+                //   margin: EdgeInsets.zero,
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(15.0),
+                //     child: Text(
+                //       'Blood Pressure: 120/80 (Normal)\n'
+                //       'Body Fats: 7% (Normal)\n'
+                //       'PCR Test Result: Negative',
+                //     ),
+                //   ),
+                // ),
                 Container(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
                   child: Text(
@@ -97,25 +122,60 @@ class AccountScreen extends StatelessWidget {
                         itemCount: Provider.of<ProviderClass>(context)
                             .reservations
                             .length,
-                        itemBuilder: (context, i) => CurrentReservationCard(
+                        itemBuilder: (context, i) => ClinicReservationCard(
                             Provider.of<ProviderClass>(context)
                                 .reservations[i]),
                       )
-                    : Card(
-                        margin: EdgeInsets.all(0),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                          trailing: Icon(
-                            Icons.book,
-                            color: theme.accentColor,
-                          ),
-                          title: Text(
-                            getText('no_reservations'),
-                            style: theme.textTheme.subtitle2
-                                .copyWith(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ),
+                    : noReservation(theme),
+                SizedBox(height: 15),
+                Container(
+                  padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
+                  child: Text(
+                    getText('history_reservations'),
+                    style: theme.textTheme.headline5,
+                  ),
+                ),
+                //same list as reservations just for testing
+                Provider.of<ProviderClass>(context).reservations.length != 0
+                    ? Container(
+                        decoration: BoxDecoration(
+                            border: !expansionListChanger
+                                ? Border.all(color: theme.accentColor, width: 2)
+                                : Border.all(color: Colors.white, width: 2)),
+                        child: ExpansionTile(
+                            onExpansionChanged: (bool) {
+                              setState(() {
+                                expansionListChanger = bool;
+                              });
+                            },
+                            title: !expansionListChanger
+                                ? FittedBox(
+                                    child: Text(
+                                        getText(
+                                            'Show your reservations history'),
+                                        textAlign: TextAlign.center),
+                                  )
+                                : FittedBox(
+                                    child: Text(
+                                        getText(
+                                            'Hide your reservations history'),
+                                        textAlign: TextAlign.center),
+                                  ),
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: Provider.of<ProviderClass>(context)
+                                    .reservations
+                                    .length,
+                                itemBuilder: (context, i) =>
+                                    ClinicReservationCard(
+                                        Provider.of<ProviderClass>(context)
+                                            .reservations[i]),
+                              )
+                            ]),
+                      )
+                    : noReservation(theme),
                 SizedBox(height: 15)
               ],
             )
