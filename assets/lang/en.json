@@ -53,7 +53,8 @@
   "not_logged_in": "You are not logged in",
   "condition": "Health Condition",
   "reservations": "Current Reservations",
-  "no_reservations": "There are no current reservations",
+  "history_reservations": "History Reservations",
+  "no_reservations": "There are no reservations",
   "cancel": "Cancel",
   "cancel_message": "Are you sure that you want to cancel this reservation?",
   "sort": "Sort By",
@@ -66,5 +67,12 @@
   "date_error": "Please choose an appointment date.",
   "view_reviews": "View users reviews",
   "hide_reviews": "Hide users reviews",
-  "reserved_successfully": "Your Appointment Has Been Reserved Successfully"
+  "reserved_successfully": "Your Appointment Has Been Reserved Successfully",
+  "Rate Your Appointment": "Rate Your Appointment",
+  "rate": "Rate",
+  "Show your reservations history": "Show your reservations history",
+  "Hide your reservations history": "Hide your reservations history",
+  "Submit Review": "Submit Review"
+
+
 }

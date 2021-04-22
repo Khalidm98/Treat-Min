@@ -6,7 +6,6 @@ class ProviderClass with ChangeNotifier {
   List<bool> sortingVars = [false, false, true];
   //for testing purposes
   List<ReservedSchedule> reservations = [];
-  List<ReservedSchedule> historyReservations = [];
   List<Reviews> reviews = [];
 
   void addReview(Reviews review) {
@@ -20,7 +19,7 @@ class ProviderClass with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeReservation(String id, List<ReservedSchedule> reservations) {
+  void removeReservation(String id) {
     reservations.removeWhere((element) {
       return element.id == id;
     });

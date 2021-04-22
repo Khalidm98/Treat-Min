@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:treat_min/widgets/translated_text.dart';
 import '../models/reviews.dart';
 import 'rating_hearts.dart';
 
 class ReviewBox extends StatefulWidget {
   final Reviews review;
-  int likes;
-  int dislikes;
 
-  ReviewBox(this.review, this.likes, this.dislikes);
+  ReviewBox(this.review);
   @override
   _ReviewBoxState createState() => _ReviewBoxState();
 }
@@ -53,9 +50,9 @@ class _ReviewBoxState extends State<ReviewBox> {
                           .copyWith(fontWeight: FontWeight.w700),
                       textScaleFactor: 0.9,
                     ),
-                    TranslatedText(
+                    Text(
                       //needs to be updated
-                      jsonKey: 'Months ago',
+                      'Months ago',
                       style: theme.textTheme.subtitle2
                           .copyWith(color: Colors.grey),
                       textScaleFactor: 0.7,
@@ -95,23 +92,23 @@ class _ReviewBoxState extends State<ReviewBox> {
                   onPressed: () {
                     if (likeFlag == 2) {
                       setState(() {
-                        widget.likes += 1;
+                        widget.review.likes += 1;
                       });
                       likeFlag = 0;
                     } else if (likeFlag == 0) {
                       setState(() {
-                        widget.likes -= 1;
+                        widget.review.likes -= 1;
                       });
                       likeFlag = 2;
                     } else {
                       setState(() {
-                        widget.likes += 1;
-                        widget.dislikes -= 1;
+                        widget.review.likes += 1;
+                        widget.review.dislikes -= 1;
                       });
                       likeFlag = 0;
                     }
                   }),
-              Text("${widget.likes}"),
+              Text("${widget.review.likes}"),
               IconButton(
                   icon: Icon(
                     likeFlag == 2 || likeFlag == 0
@@ -122,23 +119,23 @@ class _ReviewBoxState extends State<ReviewBox> {
                   onPressed: () {
                     if (likeFlag == 2) {
                       setState(() {
-                        widget.dislikes += 1;
+                        widget.review.dislikes += 1;
                       });
                       likeFlag = 1;
                     } else if (likeFlag == 1) {
                       setState(() {
-                        widget.dislikes -= 1;
+                        widget.review.dislikes -= 1;
                       });
                       likeFlag = 2;
                     } else {
                       setState(() {
-                        widget.likes -= 1;
-                        widget.dislikes += 1;
+                        widget.review.likes -= 1;
+                        widget.review.dislikes += 1;
                       });
                       likeFlag = 1;
                     }
                   }),
-              Text("${widget.dislikes}"),
+              Text("${widget.review.dislikes}"),
             ],
           ),
         ],

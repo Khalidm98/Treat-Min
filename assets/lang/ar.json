@@ -53,6 +53,7 @@
   "not_logged_in": "أنت غير مسجل",
   "condition": "الحالة الصحية",
   "reservations": "الحجوزات الحالية",
+  "history_reservations": "تاريخ الحجوزات",
   "no_reservations": "لا يوجد حجوزات حالية",
   "cancel": "إلغاء",
   "cancel_message": "هل تريد إلغاء هذا الحجز؟",
@@ -66,5 +67,12 @@
   "date_error": "من فضلك اختر تاريخا لموعد الحجز.",
   "view_reviews": "عرض تقييمات المستخدمين",
   "hide_reviews": "غلق تقييمات المستخدمين",
-  "reserved_successfully": "لقد تم حجز موعدك بنجاح"
+  "reserved_successfully": "لقد تم حجز موعدك بنجاح",
+  "Rate Your Appointment": "تقييم الحجز",
+  "rate": "تقييم",
+  "Show your reservations history": "عرض الحجوزات السابقة",
+  "Hide your reservations history": "اخفاء الحجوزات السابقة",
+  "Submit Review": "تقييم"
+
+
 }

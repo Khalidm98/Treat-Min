@@ -11,7 +11,7 @@ import './providers/provider_class.dart';
 
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
-import './screens/booknow_screen.dart';
+import './screens/booking_screen.dart';
 import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
 import './screens/info_screen.dart';
