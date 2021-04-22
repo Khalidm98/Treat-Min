@@ -5,6 +5,7 @@ import './available_screen.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
 import '../utils/enumerations.dart';
+import '../models/screens_data.dart';
 
 class SelectScreen extends StatelessWidget {
   static const String routeName = '/select';
@@ -36,7 +37,7 @@ class SelectScreen extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed(
                   AvailableScreen.routeName,
-                  arguments: list[index],
+                  arguments: AvailableScreenData(list[index], book),
                 );
               },
             );

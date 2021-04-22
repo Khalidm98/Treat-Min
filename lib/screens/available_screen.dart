@@ -3,64 +3,69 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../localizations/app_localizations.dart';
-import '../models/clinic_schedule.dart';
 import '../providers/provider_class.dart';
 import '../utils/search_bar.dart';
+import '../utils/enumerations.dart';
 import '../widgets/doctor_card.dart';
+import '../models/screens_data.dart';
 import '../widgets/modal_sheet_list_tile.dart';
 
 class AvailableScreen extends StatelessWidget {
   static const String routeName = '/available';
-  final List<DoctorCard> doctorListVar = [
-    DoctorCard(
-      doctorName: 'Gerges Wageh',
-      hospitalName: 'Dar EL-Fouad',
-      schedule: [
-        ClinicSchedule(day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
-        ClinicSchedule(day: 'Sunday', time: '12:00 PM - 14:00 PM'),
-        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
-      ],
-      doctorSpecialty: 'ORTHODONTIC SPECIALIST',
-      examinationFee: 50,
-      rating: 4,
-      hospitalDistance: 90,
-    ),
-    DoctorCard(
-      doctorName: 'Ahmed Khaled Sayed',
-      hospitalName: 'EL-Kahrba',
-      schedule: [
-        ClinicSchedule(day: 'Sunday', time: '12:00 PM - 14:00 PM'),
-        ClinicSchedule(day: 'Sunday', time: '11:00 PM - 12:00 PM'),
-        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM'),
-      ],
-      doctorSpecialty: 'ORTHODONTIC SPECIALIST',
-      examinationFee: 250,
-      rating: 3,
-      hospitalDistance: 10,
-    ),
-    DoctorCard(
-      doctorName: 'Khalid Mohammed Refaat',
-      hospitalName: 'EL-Seoudi EL-Almani',
-      schedule: [ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')],
-      doctorSpecialty: 'Another Specialist',
-      examinationFee: 150,
-      rating: 5,
-      hospitalDistance: 20,
-    ),
-    DoctorCard(
-      doctorName: 'Mohamed Ramadan',
-      hospitalName: 'EL-Nile',
-      schedule: [
-        ClinicSchedule(day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
-        ClinicSchedule(day: 'Monday', time: '12:00 PM - 14:00 PM'),
-        ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
-      ],
-      doctorSpecialty: 'Dentistry SPECIALIST',
-      examinationFee: 350,
-      rating: 4,
-      hospitalDistance: 30,
-    ),
-  ];
+
+  bool isClinic(Book book) {
+    if (book == Book.clinic) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  fillDetailsList(Book book) {
+    if (isClinic(book)) {
+      return [
+        DoctorCard(
+          name: 'Gerges Wageh',
+          hospitalName: 'Dar EL-Fouad',
+          doctorSpecialty: 'ORTHODONTIC SPECIALIST',
+          fees: 50,
+          rating: 4,
+          hospitalDistance: 90,
+          isClinic: true,
+        ),
+        DoctorCard(
+          name: 'Gerges Wageh',
+          hospitalName: 'Dar EL-Fouad',
+          doctorSpecialty: 'ORTHODONTIC SPECIALIST',
+          fees: 50,
+          rating: 4,
+          hospitalDistance: 90,
+          isClinic: true,
+        )
+      ];
+    } else {
+      return [
+        DoctorCard(
+          name: 'Delivery',
+          hospitalName: 'Dar EL-Fouad',
+          doctorSpecialty: 'ORTHODONTIC SPECIALIST',
+          fees: 50,
+          rating: 4,
+          hospitalDistance: 90,
+          isClinic: false,
+        ),
+        DoctorCard(
+          name: 'X-Ray',
+          hospitalName: 'Dar EL-Fouad',
+          doctorSpecialty: 'ORTHODONTIC SPECIALIST',
+          fees: 50,
+          rating: 4,
+          hospitalDistance: 90,
+          isClinic: false,
+        )
+      ];
+    }
+  }
 
   void onSortClick(BuildContext context, ThemeData theme) {
     showModalBottomSheet(
@@ -107,55 +112,53 @@ class AvailableScreen extends StatelessWidget {
     );
   }
 
+  List<DoctorCard> doctorListSorted(
+      BuildContext context, List<DoctorCard> entityDetailsList) {
+    if (Provider.of<ProviderClass>(context).sortingVars[0] == true) {
+      entityDetailsList.sort((a, b) => a.fees.compareTo(b.fees));
+      return entityDetailsList;
+    } else if (Provider.of<ProviderClass>(context).sortingVars[1] == true) {
+      entityDetailsList.sort((a, b) => a.fees.compareTo(b.fees));
+      return entityDetailsList.reversed.toList();
+    } else {
+      entityDetailsList
+          .sort((a, b) => a.hospitalDistance.compareTo(b.hospitalDistance));
+      return entityDetailsList;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final clinic =
-        (ModalRoute.of(context).settings.arguments) as Map<String, String>;
+    final selectScreenData =
+        (ModalRoute.of(context).settings.arguments) as AvailableScreenData;
+    List<DoctorCard> entityDetailsList =
+        fillDetailsList(selectScreenData.entity);
     setAppLocalization(context);
 
-    List<DoctorCard> doctorListSorted() {
-      if (Provider.of<ProviderClass>(context).sortingVars[0] == true) {
-        doctorListVar
-            .sort((a, b) => a.examinationFee.compareTo(b.examinationFee));
-        return doctorListVar;
-      } else if (Provider.of<ProviderClass>(context).sortingVars[1] == true) {
-        doctorListVar
-            .sort((a, b) => a.examinationFee.compareTo(b.examinationFee));
-        return doctorListVar.reversed.toList();
-      } else {
-        doctorListVar
-            .sort((a, b) => a.hospitalDistance.compareTo(b.hospitalDistance));
-        return doctorListVar;
-      }
-    }
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(clinic['name']),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              showSearch(context: context, delegate: DataSearch());
-            },
-          ),
-          IconButton(
-            icon: Image.asset("assets/icons/sort.png", width: 25, height: 25),
-            onPressed: () {
-              onSortClick(context, theme);
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        //shrinkWrap: true,
-        children: [
-          SizedBox(height: 11),
-          ...doctorListSorted(),
-          SizedBox(height: 11),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: Text(selectScreenData.name['name']),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch());
+              },
+            ),
+            IconButton(
+              icon: Image.asset("assets/icons/sort.png", width: 25, height: 25),
+              onPressed: () {
+                onSortClick(context, theme);
+              },
+            ),
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: doctorListSorted(context, entityDetailsList).length,
+          itemBuilder: (context, i) {
+            return doctorListSorted(context, entityDetailsList)[i];
+          },
+        ));
   }
 }

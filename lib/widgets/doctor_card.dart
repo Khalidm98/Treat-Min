@@ -1,12 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import './rating_hearts.dart';
 import '../screens/auth_screen.dart';
+import '../models/screens_data.dart';
+import '../models/card_data.dart';
 import '../localizations/app_localizations.dart';
-import '../models/clinic_schedule.dart';
-import '../screens/booknow_screen.dart';
+import '../screens/booking_screen.dart';
 
 const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
 const double doctorCardIconsWidth = 12.0;
@@ -14,32 +14,76 @@ const double doctorCardIconsHeight = 12.0;
 
 class DoctorCard extends StatefulWidget {
   final String hospitalName;
-  final String doctorName;
+  final String name;
   final String doctorSpecialty;
   final int rating;
-  final List<ClinicSchedule> schedule;
-  final double examinationFee;
+  final double fees;
   final double hospitalDistance;
+  final bool isClinic;
 
   DoctorCard(
       {@required this.hospitalName,
-      @required this.doctorName,
+      @required this.name,
       @required this.doctorSpecialty,
-      @required this.schedule,
-      @required this.examinationFee,
+      @required this.fees,
       this.rating = 0,
-      @required this.hospitalDistance});
+      @required this.hospitalDistance,
+      this.isClinic});
 
   @override
   _DoctorCardState createState() => _DoctorCardState();
 }
 
 class _DoctorCardState extends State<DoctorCard> {
+  checkLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text(getText('must_log_in')),
+          actions: [
+            TextButton(
+              child: Text(getText('cancel')),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text(getText('log_in')),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  AuthScreen.routeName,
+                  (route) => false,
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
+      Navigator.pushNamed(
+        context,
+        BookNowScreen.routeName,
+        arguments: BookNowScreenData(
+            widget.isClinic,
+            CardData(
+                hospitalName: widget.hospitalName,
+                name: widget.name,
+                title: widget.doctorSpecialty,
+                fees: widget.fees,
+                hospitalDistance: widget.hospitalDistance,
+                rating: widget.rating)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     setAppLocalization(context);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 11),
       child: Column(
@@ -63,34 +107,27 @@ class _DoctorCardState extends State<DoctorCard> {
               border: Border.all(color: theme.primaryColorLight),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Row(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Flexible(
-                  child: FittedBox(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.doctorName,
-                          style: theme.textTheme.headline5,
-                        ),
-                        Text(
-                          widget.doctorSpecialty,
-                          style: theme.textTheme.subtitle2,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
                 SizedBox(
-                  width: 15,
+                  child: Text(
+                    widget.name,
+                    style: theme.textTheme.headline5,
+                    textAlign: TextAlign.center,
+                  ),
+                  width: double.infinity,
                 ),
-                RatingHearts(
-                  iconHeight: doctorCardIconsHeight,
-                  iconWidth: doctorCardIconsWidth,
-                  rating: widget.rating,
-                )
+                if (widget.isClinic)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      widget.doctorSpecialty,
+                      style: theme.textTheme.subtitle2,
+                      textAlign: TextAlign.center,
+                    ),
+                  )
               ],
             ),
           ),
@@ -112,119 +149,79 @@ class _DoctorCardState extends State<DoctorCard> {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: widget.schedule.length,
-                      itemBuilder: (context, index) => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FittedBox(
-                            child: Text(
-                              widget.schedule[index].day,
-                              style: theme.textTheme.subtitle2
-                                  .copyWith(fontWeight: FontWeight.w700),
-                              textScaleFactor: 0.8,
-                            ),
+            child: Container(
+              padding: EdgeInsets.only(right: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    color: theme.primaryColor,
+                    padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Text(
+                            "Price",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
                           ),
-                          FittedBox(
-                            child: Text(
-                              widget.schedule[index].time,
-                              style: theme.textTheme.bodyText2.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
-                              textScaleFactor: 0.8,
-                            ),
+                        ),
+                        Divider(),
+                        Container(
+                          child: Text(
+                            "Rating",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Container(
-                  color: Colors.white,
-                  margin: EdgeInsets.fromLTRB(10, 10, 15, 10),
-                  child: Column(
-                    children: [
-                      Text(
-                        '${widget.examinationFee} EGP',
-                        style: theme.textTheme.subtitle1,
-                      ),
-                      SizedBox(height: 6),
-                      SizedBox(
-                        width: 100,
-                        height: 25,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              theme.primaryColor,
-                            ),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              const EdgeInsets.all(5),
-                            ),
-                          ),
-                          child: FittedBox(
-                            child: Text(
-                              getText('book_now'),
-                              style: theme.textTheme.headline5
-                                  .copyWith(color: Colors.white),
-                            ),
-                          ),
-                          onPressed: () async {
-                            final prefs = await SharedPreferences.getInstance();
-                            if (!prefs.containsKey('userData')) {
-                              showDialog(
-                                context: context,
-                                child: AlertDialog(
-                                  title: Text(getText('must_log_in')),
-                                  actions: [
-                                    TextButton(
-                                      child: Text(getText('cancel')),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text(getText('log_in')),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.of(context)
-                                            .pushNamedAndRemoveUntil(
-                                          AuthScreen.routeName,
-                                          (route) => false,
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              Navigator.pushNamed(
-                                context,
-                                BookNowScreen.routeName,
-                                arguments: DoctorCard(
-                                  hospitalName: widget.hospitalName,
-                                  doctorName: widget.doctorName,
-                                  doctorSpecialty: widget.doctorSpecialty,
-                                  schedule: widget.schedule,
-                                  examinationFee: widget.examinationFee,
-                                  hospitalDistance: widget.hospitalDistance,
-                                  rating: widget.rating,
-                                ),
-                              );
-                            }
-                          },
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          '${widget.fees} EGP',
+                          style: theme.textTheme.subtitle1,
+                          textAlign: TextAlign.center,
                         ),
-                      )
-                    ],
+                        Divider(
+                          color: Colors.transparent,
+                        ),
+                        Center(
+                          child: RatingHearts(
+                            iconHeight: doctorCardIconsHeight,
+                            iconWidth: doctorCardIconsWidth,
+                            rating: widget.rating,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          theme.primaryColor,
+                        ),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          const EdgeInsets.all(5),
+                        ),
+                      ),
+                      child: FittedBox(
+                        child: Text(
+                          getText('book_now'),
+                          textScaleFactor: 0.7,
+                          style: theme.textTheme.headline5
+                              .copyWith(color: Colors.white),
+                        ),
+                      ),
+                      onPressed: checkLoggedIn,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

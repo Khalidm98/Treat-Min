@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../widgets/doctor_card.dart';
-import '../models/clinic_schedule.dart';
 
 class DataSearch extends SearchDelegate<String> {
   final hospitals = [
@@ -42,15 +41,10 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildResults(BuildContext context) {
     //TODO:return this Doctor info here
     return DoctorCard(
-      doctorName: 'Dr.Ahmed',
+      name: 'Dr.Ahmed',
       hospitalName: 'Dar elfouad',
-      schedule: [
-        ClinicSchedule(day: 'Monday', time: '16:00-19:00'),
-        ClinicSchedule(day: 'Monday', time: '16:00-19:00'),
-        ClinicSchedule(day: 'Monday', time: '16:00-19:00')
-      ],
       doctorSpecialty: 'ORTHODONTIC',
-      examinationFee: 350,
+      fees: 350,
       rating: 4,
       hospitalDistance: 30,
     );

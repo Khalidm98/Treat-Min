@@ -1,14 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '../models/screens_data.dart';
 import './tabs_screen.dart';
 import '../localizations/app_localizations.dart';
 import '../models/clinic_schedule.dart';
 import '../models/reserved_schedule.dart';
 import '../providers/provider_class.dart';
 import '../widgets/booknow_dropdown_list.dart';
-import '../widgets/doctor_card.dart';
 import '../widgets/rating_hearts.dart';
 import '../widgets/review_box.dart';
 
@@ -78,7 +77,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    DoctorCard receivedDoctorCard = ModalRoute.of(context).settings.arguments;
+    BookNowScreenData receivedData = ModalRoute.of(context).settings.arguments;
     setAppLocalization(context);
 
     void updateDropDownValue(ClinicSchedule dpv) {
@@ -97,13 +96,28 @@ class _BookNowScreenState extends State<BookNowScreen> {
         });
       } else {
         ableToBook = true;
-        ReservedSchedule scheduleModel = ReservedSchedule(
-            DateTime.now().toIso8601String(),
-            receivedDoctorCard.doctorName,
-            receivedDoctorCard.doctorSpecialty,
-            dropDownValue,
-            receivedDoctorCard.hospitalName);
-        Provider.of<ProviderClass>(context).addReservation(scheduleModel);
+        if (receivedData.entity) {
+          ReservedSchedule scheduleModel = ReservedSchedule(
+              id: DateTime.now().toIso8601String(),
+              hospitalName: receivedData.card.hospitalName,
+              isCurrentRes: true,
+              name: receivedData.card.name,
+              schedule: dropDownValue,
+              doctorSpecialty: receivedData.card.title,
+              isClinic: receivedData.entity);
+          Provider.of<ProviderClass>(context).addReservation(
+              scheduleModel, Provider.of<ProviderClass>(context).reservations);
+        } else {
+          ReservedSchedule scheduleModel = ReservedSchedule(
+              id: DateTime.now().toIso8601String(),
+              hospitalName: receivedData.card.hospitalName,
+              isCurrentRes: true,
+              name: receivedData.card.name,
+              schedule: dropDownValue,
+              isClinic: receivedData.entity);
+          Provider.of<ProviderClass>(context).addReservation(
+              scheduleModel, Provider.of<ProviderClass>(context).reservations);
+        }
         _bookSuccess(theme, context);
       }
     }
@@ -132,22 +146,23 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 ),
                 FittedBox(
                   child: Text(
-                    receivedDoctorCard.doctorName,
+                    receivedData.card.name,
                     style: theme.textTheme.headline4,
                   ),
                 ),
-                FittedBox(
-                  child: Text(
-                    receivedDoctorCard.doctorSpecialty,
-                    style: theme.textTheme.headline5
-                        .copyWith(fontWeight: FontWeight.w500),
-                    textScaleFactor: 0.9,
+                if (receivedData.entity)
+                  FittedBox(
+                    child: Text(
+                      receivedData.card.title,
+                      style: theme.textTheme.headline5
+                          .copyWith(fontWeight: FontWeight.w500),
+                      textScaleFactor: 0.9,
+                    ),
                   ),
-                ),
                 RatingHearts(
                     iconHeight: 30,
                     iconWidth: 30,
-                    rating: receivedDoctorCard.rating),
+                    rating: receivedData.card.rating),
                 Text(
                   "Rating from 5 visitors",
                   style: theme.textTheme.headline6,
@@ -156,7 +171,13 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 Container(
                   child: BookNowDropDownList(
                     dropDownValueGetter: updateDropDownValue,
-                    scheduleList: receivedDoctorCard.schedule,
+                    scheduleList: [
+                      ClinicSchedule(
+                          day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
+                      ClinicSchedule(
+                          day: 'Monday', time: '12:00 PM - 14:00 PM'),
+                      ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
+                    ],
                   ),
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -215,11 +236,33 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         color: theme.accentColor,
                       ),
                       children: [
-                        ReviewBox(),
-                        ReviewBox(),
-                        ReviewBox(),
-                        ReviewBox(),
-                        ReviewBox(),
+                        Provider.of<ProviderClass>(context).reviews.length != 0
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: Provider.of<ProviderClass>(context)
+                                    .reviews
+                                    .length,
+                                itemBuilder: (context, i) => ReviewBox(
+                                    Provider.of<ProviderClass>(context)
+                                        .reviews[i]),
+                              )
+                            : Card(
+                                margin: EdgeInsets.all(0),
+                                child: ListTile(
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 15),
+                                  trailing: Icon(
+                                    Icons.rate_review,
+                                    color: theme.accentColor,
+                                  ),
+                                  title: Text(
+                                    'There are no current reviews.',
+                                    style: theme.textTheme.subtitle2
+                                        .copyWith(fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
