@@ -1,14 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/screens_data.dart';
 import './tabs_screen.dart';
 import '../localizations/app_localizations.dart';
 import '../models/clinic_schedule.dart';
-import '../models/reserved_schedule.dart';
 import '../providers/provider_class.dart';
 import '../widgets/booknow_dropdown_list.dart';
-import '../widgets/rating_hearts.dart';
 import '../widgets/review_box.dart';
 
 class BookNowScreen extends StatefulWidget {
@@ -77,7 +74,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    BookNowScreenData receivedData = ModalRoute.of(context).settings.arguments;
+    dynamic receivedData = ModalRoute.of(context).settings.arguments;
     setAppLocalization(context);
 
     void updateDropDownValue(ClinicSchedule dpv) {
@@ -96,28 +93,29 @@ class _BookNowScreenState extends State<BookNowScreen> {
         });
       } else {
         ableToBook = true;
-        if (receivedData.entity) {
-          ReservedSchedule scheduleModel = ReservedSchedule(
-              id: DateTime.now().toIso8601String(),
-              hospitalName: receivedData.card.hospitalName,
-              isCurrentRes: true,
-              name: receivedData.card.name,
-              schedule: dropDownValue,
-              doctorSpecialty: receivedData.card.title,
-              isClinic: receivedData.entity);
-          Provider.of<ProviderClass>(context).addReservation(
-              scheduleModel, Provider.of<ProviderClass>(context).reservations);
-        } else {
-          ReservedSchedule scheduleModel = ReservedSchedule(
-              id: DateTime.now().toIso8601String(),
-              hospitalName: receivedData.card.hospitalName,
-              isCurrentRes: true,
-              name: receivedData.card.name,
-              schedule: dropDownValue,
-              isClinic: receivedData.entity);
-          Provider.of<ProviderClass>(context).addReservation(
-              scheduleModel, Provider.of<ProviderClass>(context).reservations);
-        }
+        // if (receivedData.entity) {
+        //   ReservedSchedule scheduleModel = ReservedSchedule(
+        //       id: DateTime.now().toIso8601String(),
+        //       hospitalName: receivedData.card.detail,
+        //       isCurrentRes: true,
+        //       name: receivedData.card.name,
+        //       schedule: dropDownValue,
+        //       doctorSpecialty: receivedData.card.title,
+        //       isClinic: receivedData.entity);
+        //   Provider.of<ProviderClass>(context).addReservation(
+        //       scheduleModel, Provider.of<ProviderClass>(context).reservations);
+        // } else {
+        //   ReservedSchedule scheduleModel = ReservedSchedule(
+        //       id: DateTime.now().toIso8601String(),
+        //       hospitalName: receivedData.card.hospitalName,
+        //       isCurrentRes: true,
+        //       name: receivedData.card.name,
+        //       schedule: dropDownValue,
+        //       isClinic: receivedData.entity);
+        //   Provider.of<ProviderClass>(context).addReservation(
+        //       scheduleModel, Provider.of<ProviderClass>(context).reservations);
+        // }
+        // }
         _bookSuccess(theme, context);
       }
     }
@@ -144,29 +142,29 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     ),
                   ),
                 ),
-                FittedBox(
-                  child: Text(
-                    receivedData.card.name,
-                    style: theme.textTheme.headline4,
-                  ),
-                ),
-                if (receivedData.entity)
-                  FittedBox(
-                    child: Text(
-                      receivedData.card.title,
-                      style: theme.textTheme.headline5
-                          .copyWith(fontWeight: FontWeight.w500),
-                      textScaleFactor: 0.9,
-                    ),
-                  ),
-                RatingHearts(
-                    iconHeight: 30,
-                    iconWidth: 30,
-                    rating: receivedData.card.rating),
-                Text(
-                  "Rating from 5 visitors",
-                  style: theme.textTheme.headline6,
-                ),
+                // FittedBox(
+                //   child: Text(
+                //     receivedData.card.name,
+                //     style: theme.textTheme.headline4,
+                //   ),
+                // ),
+                // if (receivedData.entity)
+                //   FittedBox(
+                //     child: Text(
+                //       receivedData.card.title,
+                //       style: theme.textTheme.headline5
+                //           .copyWith(fontWeight: FontWeight.w500),
+                //       textScaleFactor: 0.9,
+                //     ),
+                //   ),
+                // RatingHearts(
+                //     iconHeight: 30,
+                //     iconWidth: 30,
+                //     rating: receivedData.card.rating),
+                // Text(
+                //   "Rating from 5 visitors",
+                //   style: theme.textTheme.headline6,
+                // ),
                 SizedBox(height: 20),
                 Container(
                   child: BookNowDropDownList(

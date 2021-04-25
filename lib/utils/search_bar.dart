@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../widgets/doctor_card.dart';
 
 class DataSearch extends SearchDelegate<String> {
   final hospitals = [
@@ -40,14 +39,6 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     //TODO:return this Doctor info here
-    return DoctorCard(
-      name: 'Dr.Ahmed',
-      hospitalName: 'Dar elfouad',
-      doctorSpecialty: 'ORTHODONTIC',
-      fees: 350,
-      rating: 4,
-      hospitalDistance: 30,
-    );
   }
 
   @override

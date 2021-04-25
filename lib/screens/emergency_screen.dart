@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:treat_min/widgets/translated_text.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 // don't forget to edit android and ios files
 
@@ -29,7 +28,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: TranslatedText(jsonKey: 'Emergency')),
+      appBar: AppBar(title: Text('Emergency')),
       body: FutureBuilder(
         future: Location().getLocation(),
         builder: (_, location) {

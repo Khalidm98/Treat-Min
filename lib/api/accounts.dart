@@ -19,7 +19,6 @@ class AccountAPI {
       body: {"email": email},
     );
 
-
     if (response.statusCode == 200) {
       return true;
     } else if (response.statusCode == 400) {

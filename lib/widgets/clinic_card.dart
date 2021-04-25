@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './rating_hearts.dart';
 import '../screens/auth_screen.dart';
-import '../models/screens_data.dart';
 import '../models/card_data.dart';
 import '../localizations/app_localizations.dart';
 import '../screens/booking_screen.dart';
@@ -12,29 +11,16 @@ const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
 const double doctorCardIconsWidth = 12.0;
 const double doctorCardIconsHeight = 12.0;
 
-class DoctorCard extends StatefulWidget {
-  final String hospitalName;
-  final String name;
-  final String doctorSpecialty;
-  final int rating;
-  final double fees;
-  final double hospitalDistance;
-  final bool isClinic;
+class ClinicCard extends StatefulWidget {
+  final ClinicDetail clinicCardData;
 
-  DoctorCard(
-      {@required this.hospitalName,
-      @required this.name,
-      @required this.doctorSpecialty,
-      @required this.fees,
-      this.rating = 0,
-      @required this.hospitalDistance,
-      this.isClinic});
+  ClinicCard({@required this.clinicCardData});
 
   @override
-  _DoctorCardState createState() => _DoctorCardState();
+  _ClinicCardState createState() => _ClinicCardState();
 }
 
-class _DoctorCardState extends State<DoctorCard> {
+class _ClinicCardState extends State<ClinicCard> {
   checkLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
@@ -66,15 +52,12 @@ class _DoctorCardState extends State<DoctorCard> {
       Navigator.pushNamed(
         context,
         BookNowScreen.routeName,
-        arguments: BookNowScreenData(
-            widget.isClinic,
-            CardData(
-                hospitalName: widget.hospitalName,
-                name: widget.name,
-                title: widget.doctorSpecialty,
-                fees: widget.fees,
-                hospitalDistance: widget.hospitalDistance,
-                rating: widget.rating)),
+        arguments: ClinicDetail(
+            doctor: widget.clinicCardData.doctor,
+            id: widget.clinicCardData.id,
+            hospital: widget.clinicCardData.hospital,
+            price: widget.clinicCardData.price,
+            ratingTotal: widget.clinicCardData.ratingTotal),
       );
     }
   }
@@ -94,40 +77,40 @@ class _DoctorCardState extends State<DoctorCard> {
             margin: EdgeInsets.symmetric(horizontal: 7),
             width: double.infinity,
             child: Text(
-              widget.hospitalName,
+              widget.clinicCardData.hospital,
               style: theme.textTheme.headline6.copyWith(
                 color: Colors.white,
               ),
             ),
           ),
           Container(
+            margin: EdgeInsets.symmetric(horizontal: 0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(2.0),
               border: Border.all(color: theme.primaryColorLight),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   child: Text(
-                    widget.name,
+                    widget.clinicCardData.doctor.name,
                     style: theme.textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),
                   width: double.infinity,
                 ),
-                if (widget.isClinic)
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      widget.doctorSpecialty,
-                      style: theme.textTheme.subtitle2,
-                      textAlign: TextAlign.center,
-                    ),
-                  )
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    widget.clinicCardData.doctor.title,
+                    style: theme.textTheme.subtitle2,
+                    textAlign: TextAlign.center,
+                  ),
+                )
               ],
             ),
           ),
@@ -149,57 +132,56 @@ class _DoctorCardState extends State<DoctorCard> {
                 ),
               ],
             ),
-            child: Container(
-              padding: EdgeInsets.only(right: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    color: theme.primaryColor,
-                    padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Text(
-                            "Price",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        Divider(),
-                        Container(
-                          child: Text(
-                            "Rating",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          '${widget.fees} EGP',
-                          style: theme.textTheme.subtitle1,
+            child: Row(
+              children: [
+                Container(
+                  color: theme.primaryColor,
+                  padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Text(
+                          "Price",
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Divider(
-                          color: Colors.transparent,
+                      ),
+                      Divider(),
+                      Container(
+                        child: Text(
+                          "Rating",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Center(
-                          child: RatingHearts(
-                            iconHeight: doctorCardIconsHeight,
-                            iconWidth: doctorCardIconsWidth,
-                            rating: widget.rating,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Expanded(
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        '${widget.clinicCardData.price} EGP',
+                        style: theme.textTheme.subtitle1,
+                        textAlign: TextAlign.center,
+                      ),
+                      Divider(
+                        color: Colors.transparent,
+                      ),
+                      Center(
+                        child: RatingHearts(
+                          iconHeight: doctorCardIconsHeight,
+                          iconWidth: doctorCardIconsWidth,
+                          rating: widget.clinicCardData.ratingTotal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5),
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
@@ -220,8 +202,8 @@ class _DoctorCardState extends State<DoctorCard> {
                       onPressed: checkLoggedIn,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

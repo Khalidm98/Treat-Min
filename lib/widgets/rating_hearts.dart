@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'doctor_card.dart';
+import 'clinic_card.dart';
 
 class RatingHearts extends StatelessWidget {
   final double iconWidth;

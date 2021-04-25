@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:custom_switch_button/custom_switch_button.dart';
-import 'package:treat_min/widgets/translated_text.dart';
 
 class ModalSheetListTile extends StatelessWidget {
   final String text;
@@ -17,7 +16,7 @@ class ModalSheetListTile extends StatelessWidget {
     final theme = Theme.of(context);
     return ListTile(
       dense: true,
-      title: TranslatedText(jsonKey: text),
+      title: Text(text),
       trailing: GestureDetector(
         onTap: onSwitchChange,
         child: Container(
