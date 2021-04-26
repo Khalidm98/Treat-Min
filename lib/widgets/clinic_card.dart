@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:treat_min/models/screens_data.dart';
+import 'package:treat_min/utils/enumerations.dart';
 import './rating_hearts.dart';
 import '../screens/auth_screen.dart';
 import '../models/card_data.dart';
@@ -13,8 +15,9 @@ const double doctorCardIconsHeight = 12.0;
 
 class ClinicCard extends StatefulWidget {
   final ClinicDetail clinicCardData;
-
-  ClinicCard({@required this.clinicCardData});
+  final Entity entity;
+  final int entityId;
+  ClinicCard({@required this.clinicCardData, this.entity, this.entityId});
 
   @override
   _ClinicCardState createState() => _ClinicCardState();
@@ -52,12 +55,15 @@ class _ClinicCardState extends State<ClinicCard> {
       Navigator.pushNamed(
         context,
         BookNowScreen.routeName,
-        arguments: ClinicDetail(
-            doctor: widget.clinicCardData.doctor,
-            id: widget.clinicCardData.id,
-            hospital: widget.clinicCardData.hospital,
-            price: widget.clinicCardData.price,
-            ratingTotal: widget.clinicCardData.ratingTotal),
+        arguments: BookNowScreenData(
+            entityId: widget.entityId.toString(),
+            entity: widget.entity,
+            cardDetail: ClinicDetail(
+                doctor: widget.clinicCardData.doctor,
+                id: widget.clinicCardData.id,
+                hospital: widget.clinicCardData.hospital,
+                price: widget.clinicCardData.price,
+                ratingTotal: widget.clinicCardData.ratingTotal)),
       );
     }
   }

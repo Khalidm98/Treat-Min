@@ -6,3 +6,11 @@ class AvailableScreenData {
 
   AvailableScreenData(this.entityMap, this.entity);
 }
+
+class BookNowScreenData {
+  final String entityId;
+  final Entity entity;
+  final dynamic cardDetail;
+
+  BookNowScreenData({this.entity, this.entityId, this.cardDetail});
+}

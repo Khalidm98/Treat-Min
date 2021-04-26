@@ -12,8 +12,19 @@ import '../models/screens_data.dart';
 import '../widgets/modal_sheet_list_tile.dart';
 import '../api/actions.dart';
 
-class AvailableScreen extends StatelessWidget {
+class AvailableScreen extends StatefulWidget {
   static const String routeName = '/available';
+
+  @override
+  _AvailableScreenState createState() => _AvailableScreenState();
+}
+
+class _AvailableScreenState extends State<AvailableScreen> {
+  Future<String> response;
+  ClinicCardData clinicData;
+  SORCardData sorData;
+  List<ClinicCard> clinicDetailsList = [];
+  List<SORCard> sorDetailsList = [];
 
   void onSortClick(BuildContext context, ThemeData theme) {
     showModalBottomSheet(
@@ -90,28 +101,49 @@ class AvailableScreen extends StatelessWidget {
     }
   }
 
+  noEntity(ThemeData theme, AvailableScreenData selectScreenData) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Column(children: [
+        Spacer(flex: 1),
+        Expanded(
+          flex: 2,
+          child: Image.asset(
+            "assets/images/doctor_sad.png",
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Expanded(
+          flex: 2,
+          child: Text(
+            "Unfortunately, No ${entityToString(selectScreenData.entity)} are"
+            " available in this section for now. Please check again later!",
+            textAlign: TextAlign.center,
+            style: theme.textTheme.headline6.copyWith(color: theme.accentColor),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    final selectScreenData =
+        (ModalRoute.of(context).settings.arguments) as AvailableScreenData;
+    response = ActionAPI.getEntityDetail(
+        entityToString(selectScreenData.entity),
+        selectScreenData.entityMap['id'].toString());
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    List<ClinicCard> clinicDetailsList = [];
-    List<SORCard> sorDetailsList = [];
 
     final selectScreenData =
         (ModalRoute.of(context).settings.arguments) as AvailableScreenData;
-
-    Future getDetails() async {
-      String jsonResponse = await ActionAPI.getEntityDetail(
-          entityToString(selectScreenData.entity),
-          selectScreenData.entityMap['id'].toString());
-      if (jsonResponse == "Something went wrong") {
-        return jsonResponse;
-      }
-      if (selectScreenData.entity == Entity.clinic) {
-        return clinicCardFromJson(jsonResponse);
-      } else {
-        return sorCardFromJson(jsonResponse);
-      }
-    }
 
     setAppLocalization(context);
 
@@ -134,12 +166,12 @@ class AvailableScreen extends StatelessWidget {
           ],
         ),
         body: FutureBuilder(
-          future: getDetails(),
+          future: response,
           builder: (_, response) {
             if (response.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
-            if (response.data is String) {
+            if (response.data == "Something went wrong") {
               return Center(
                 child: Text(
                   response.data,
@@ -149,49 +181,31 @@ class AvailableScreen extends StatelessWidget {
                 ),
               );
             }
-            if (response.hasData && response.data.details.length == 0) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(children: [
-                  Spacer(flex: 1),
-                  Expanded(
-                    flex: 2,
-                    child: Image.asset(
-                      "assets/images/doctor_sad.png",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      "Unfortunately, No ${entityToString(selectScreenData.entity)} are"
-                      " available in this section for now. Please check again later!",
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.headline6
-                          .copyWith(color: theme.accentColor),
-                    ),
-                  ),
-                ]),
-              );
-            }
             if (response.hasData && selectScreenData.entity == Entity.clinic) {
-              clinicDetailsList = response.data.details
-                  .asMap()
-                  .entries
-                  .map<ClinicCard>((detail) {
+              clinicData = clinicCardFromJson(response.data);
+              if (clinicData.details.length == 0) {
+                return noEntity(theme, selectScreenData);
+              }
+              clinicDetailsList =
+                  clinicData.details.asMap().entries.map<ClinicCard>((detail) {
                 return ClinicCard(
-                  clinicCardData: response.data.details[detail.key],
+                  entityId: selectScreenData.entityMap['id'],
+                  entity: selectScreenData.entity,
+                  clinicCardData: clinicData.details[detail.key],
                 );
               }).toList();
-            } else if (response.hasData &&
-                (selectScreenData.entity == Entity.room ||
-                    selectScreenData.entity == Entity.service)) {
+            }
+            if (response.hasData && selectScreenData.entity != Entity.clinic) {
+              sorData = sorCardFromJson(response.data);
+              if (sorData.details.length == 0) {
+                return noEntity(theme, selectScreenData);
+              }
               sorDetailsList =
-                  response.data.details.asMap().entries.map<SORCard>((detail) {
+                  sorData.details.asMap().entries.map<SORCard>((detail) {
                 return SORCard(
-                  sorCardData: response.data.details[detail.key],
+                  entityId: selectScreenData.entityMap['id'],
+                  entity: selectScreenData.entity,
+                  sorCardData: sorData.details[detail.key],
                 );
               }).toList();
             }

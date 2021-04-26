@@ -1,12 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/api/actions.dart';
+import 'package:treat_min/models/screens_data.dart';
+import 'package:treat_min/utils/enumerations.dart';
 import './tabs_screen.dart';
 import '../localizations/app_localizations.dart';
-import '../models/clinic_schedule.dart';
+import '../models/schedule.dart';
 import '../providers/provider_class.dart';
-import '../widgets/booknow_dropdown_list.dart';
+import '../widgets/book_now_dropdown_list.dart';
 import '../widgets/review_box.dart';
+import '../widgets/rating_hearts.dart';
 
 class BookNowScreen extends StatefulWidget {
   static const String routeName = '/booknow';
@@ -18,7 +22,8 @@ class BookNowScreen extends StatefulWidget {
 class _BookNowScreenState extends State<BookNowScreen> {
   bool expansionListChanger = false;
   bool ableToBook = true;
-  ClinicSchedule dropDownValue = ClinicSchedule(day: null, time: null);
+  Schedule dropDownValue = Schedule(day: null, start: null, end: null);
+  Future<String> response;
 
   void _bookSuccess(ThemeData theme, BuildContext context) {
     setAppLocalization(context);
@@ -72,22 +77,27 @@ class _BookNowScreenState extends State<BookNowScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    dynamic receivedData = ModalRoute.of(context).settings.arguments;
+    response = ActionAPI.getEntitySchedule(entityToString(receivedData.entity),
+        receivedData.entityId, receivedData.cardDetail.id.toString());
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    dynamic receivedData = ModalRoute.of(context).settings.arguments;
+    BookNowScreenData receivedData = ModalRoute.of(context).settings.arguments;
     setAppLocalization(context);
-
-    void updateDropDownValue(ClinicSchedule dpv) {
-      setState(() {
-        dropDownValue = dpv;
-        if (dropDownValue.time != null) {
-          ableToBook = true;
-        }
-      });
+    void updateDropDownValue(Schedule dpv) {
+      dropDownValue = dpv;
+      if (dropDownValue.start != null) {
+        ableToBook = true;
+      }
     }
 
     void checkToBook() {
-      if (dropDownValue.time == null) {
+      if (dropDownValue.start == null) {
         setState(() {
           ableToBook = false;
         });
@@ -124,7 +134,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(title: Text(getText('book_now'))),
       body: ListView(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(20),
         children: [
           Container(
             color: Colors.white,
@@ -142,45 +152,59 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     ),
                   ),
                 ),
-                // FittedBox(
-                //   child: Text(
-                //     receivedData.card.name,
-                //     style: theme.textTheme.headline4,
-                //   ),
-                // ),
-                // if (receivedData.entity)
-                //   FittedBox(
-                //     child: Text(
-                //       receivedData.card.title,
-                //       style: theme.textTheme.headline5
-                //           .copyWith(fontWeight: FontWeight.w500),
-                //       textScaleFactor: 0.9,
-                //     ),
-                //   ),
-                // RatingHearts(
-                //     iconHeight: 30,
-                //     iconWidth: 30,
-                //     rating: receivedData.card.rating),
-                // Text(
-                //   "Rating from 5 visitors",
-                //   style: theme.textTheme.headline6,
-                // ),
+                FittedBox(
+                  child: Text(
+                    receivedData.entity == Entity.clinic
+                        ? receivedData.cardDetail.doctor.name
+                        : receivedData.cardDetail.hospital,
+                    style: theme.textTheme.headline4,
+                  ),
+                ),
+                if (receivedData.entity == Entity.clinic)
+                  FittedBox(
+                    child: Text(
+                      receivedData.cardDetail.doctor.title,
+                      style: theme.textTheme.headline5
+                          .copyWith(fontWeight: FontWeight.w500),
+                      textScaleFactor: 0.9,
+                    ),
+                  ),
+                RatingHearts(
+                    iconHeight: 30,
+                    iconWidth: 30,
+                    rating: receivedData.cardDetail.ratingTotal),
+                Text(
+                  "Rating from ${receivedData.cardDetail.ratingUsers == null ? 0 : receivedData.cardDetail.ratingUsers} visitors",
+                  style: theme.textTheme.headline6,
+                ),
                 SizedBox(height: 20),
-                Container(
-                  child: BookNowDropDownList(
-                    dropDownValueGetter: updateDropDownValue,
-                    scheduleList: [
-                      ClinicSchedule(
-                          day: 'Wednesday', time: '9:00 PM - 12:00 PM'),
-                      ClinicSchedule(
-                          day: 'Monday', time: '12:00 PM - 14:00 PM'),
-                      ClinicSchedule(day: 'Friday', time: '11:00 PM - 12:00 PM')
-                    ],
-                  ),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: theme.accentColor),
-                  ),
+                FutureBuilder(
+                  future: response,
+                  builder: (_, response) {
+                    if (response.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+                    if (response.data == "Something went wrong") {
+                      return Center(
+                        child: Text(
+                          response.data,
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.headline6
+                              .copyWith(color: theme.errorColor),
+                        ),
+                      );
+                    }
+                    Schedules schedules = schedulesFromJson(response.data);
+                    return Container(
+                        child: BookNowDropDownList(
+                          dropDownValueGetter: updateDropDownValue,
+                          scheduleList: schedules.schedules,
+                        ),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: theme.accentColor),
+                        ));
+                  },
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(

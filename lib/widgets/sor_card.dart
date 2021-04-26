@@ -1,9 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:treat_min/utils/enumerations.dart';
 import './rating_hearts.dart';
 import '../screens/auth_screen.dart';
 import '../models/card_data.dart';
+import '../models/screens_data.dart';
 import '../localizations/app_localizations.dart';
 import '../screens/booking_screen.dart';
 
@@ -13,8 +15,10 @@ const double doctorCardIconsHeight = 12.0;
 
 class SORCard extends StatefulWidget {
   final SORDetail sorCardData;
+  final Entity entity;
+  final int entityId;
 
-  SORCard({@required this.sorCardData});
+  SORCard({@required this.sorCardData, this.entity, this.entityId});
 
   @override
   _SORCardState createState() => _SORCardState();
@@ -52,11 +56,14 @@ class _SORCardState extends State<SORCard> {
       Navigator.pushNamed(
         context,
         BookNowScreen.routeName,
-        arguments: SORDetail(
-            id: widget.sorCardData.id,
-            hospital: widget.sorCardData.hospital,
-            price: widget.sorCardData.price,
-            ratingTotal: widget.sorCardData.ratingTotal),
+        arguments: BookNowScreenData(
+            entityId: widget.entityId.toString(),
+            entity: widget.entity,
+            cardDetail: SORDetail(
+                id: widget.sorCardData.id,
+                hospital: widget.sorCardData.hospital,
+                price: widget.sorCardData.price,
+                ratingTotal: widget.sorCardData.ratingTotal)),
       );
     }
   }

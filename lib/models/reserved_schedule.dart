@@ -1,18 +1,18 @@
-import '../models/clinic_schedule.dart';
+import '../models/schedule.dart';
 
 class ReservedSchedule {
   final String id;
   final String hospitalName;
   final String name;
   final String doctorSpecialty;
-  final ClinicSchedule schedule;
+  //final ClinicSchedule schedule;
   final bool isCurrentRes;
   final bool isClinic;
   ReservedSchedule(
       {this.id,
       this.name,
       this.doctorSpecialty,
-      this.schedule,
+      //this.schedule,
       this.hospitalName,
       this.isCurrentRes,
       this.isClinic});

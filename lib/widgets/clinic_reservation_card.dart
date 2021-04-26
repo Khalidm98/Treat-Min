@@ -158,14 +158,14 @@ class _ClinicReservationCardState extends State<ClinicReservationCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    widget.sched.schedule.day,
-                    textScaleFactor: 0.9,
-                  ),
-                  Text(
-                    widget.sched.schedule.time,
-                    textScaleFactor: 0.9,
-                  ),
+                  // Text(
+                  //   widget.sched.schedule.day,
+                  //   textScaleFactor: 0.9,
+                  // ),
+                  // Text(
+                  //   widget.sched.schedule.time,
+                  //   textScaleFactor: 0.9,
+                  // ),
                   widget.sched.isCurrentRes
                       ? SizedBox(
                           height: 30,

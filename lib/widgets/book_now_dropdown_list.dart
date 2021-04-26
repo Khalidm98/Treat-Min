@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../localizations/app_localizations.dart';
-import '../models/clinic_schedule.dart';
+import '../models/schedule.dart';
 
 class BookNowDropDownList extends StatefulWidget {
-  final List<ClinicSchedule> scheduleList;
-  final Function(ClinicSchedule) dropDownValueGetter;
+  final List<Schedule> scheduleList;
+  final Function(Schedule) dropDownValueGetter;
   BookNowDropDownList({this.scheduleList, this.dropDownValueGetter});
   @override
   _BookNowDropDownListState createState() =>
@@ -14,8 +14,8 @@ class BookNowDropDownList extends StatefulWidget {
 
 class _BookNowDropDownListState extends State<BookNowDropDownList> {
   Function dropDownValueGetter;
-  List<ClinicSchedule> scheduleList;
-  ClinicSchedule dropDownValue;
+  List<Schedule> scheduleList;
+  Schedule dropDownValue;
   _BookNowDropDownListState(this.scheduleList, this.dropDownValueGetter);
 
   @override
@@ -44,15 +44,14 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
             dropDownValue = newValue;
           });
         },
-        items: scheduleList.map<DropdownMenuItem>((ClinicSchedule schedule) {
+        items: scheduleList.map<DropdownMenuItem>((Schedule schedule) {
           return DropdownMenuItem(
             value: schedule,
             child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: FittedBox(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Center(
                 child: Text(
-                  schedule.toString(),
-                ),
+                    "${schedule.day} - ( From ${schedule.start.substring(0, 5)} to ${schedule.end.substring(0, 5)} ) "),
               ),
             ),
           );
