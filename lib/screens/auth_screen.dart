@@ -5,11 +5,11 @@ import './tabs_screen.dart';
 import './verification_screen.dart';
 import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
-import '../utils/dialogs.dart';
 import '../widgets/input_field.dart';
+import '../utils/dialogs.dart';
+// import '../widgets/social_button.dart';
 
-enum AuthMode { signUp, logIn }
-enum Social { google, facebook }
+enum AuthMode { signUp, login }
 
 class AuthScreen extends StatefulWidget {
   static const String routeName = '/auth';
@@ -21,12 +21,12 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  AuthMode _mode = AuthMode.signUp;
+  final Map<String, String> _data = Map();
+  AuthMode _mode = AuthMode.login;
   AnimationController _controller;
-  Animation<double> _opacity;
+  Animation<double> _animation;
   bool _passObscure = true;
   TapGestureRecognizer _switchMode;
-  Map<String, String> _data = Map();
 
   @override
   void initState() {
@@ -37,15 +37,15 @@ class _AuthScreenState extends State<AuthScreen>
       duration: const Duration(milliseconds: 300),
     );
 
-    _opacity = Tween(begin: 0.0, end: 1.0).animate(
+    _animation = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
+    _controller.forward();
 
     _switchMode = TapGestureRecognizer()
       ..onTap = () {
-        _formKey.currentState.reset();
         if (_mode == AuthMode.signUp) {
-          setState(() => _mode = AuthMode.logIn);
+          setState(() => _mode = AuthMode.login);
           _controller.forward();
         } else {
           setState(() => _mode = AuthMode.signUp);
@@ -61,73 +61,52 @@ class _AuthScreenState extends State<AuthScreen>
     super.dispose();
   }
 
-  bool _submit() {
+  Future<void> _signUp() async {
     if (!_formKey.currentState.validate()) {
-      return false;
+      return;
     }
     _formKey.currentState.save();
-    return true;
-  }
 
-  Future<void> _signUp() async {
-    if (_submit()) {
+    final response = await AccountAPI.registerEmail(context, _data['email']);
+    if (response) {
       Navigator.of(context).pushNamed(
         VerificationScreen.routeName,
-        arguments: _data['email'],
+        arguments: {'mode': _mode, 'email': _data['email']},
       );
-      // loading(context);
-      // final response = await AccountAPI.sendEmail(_data['email']);
-      // Navigator.pop(context);
-      //
-      // if (response == true) {
-      //   Navigator.of(context).pushNamed(
-      //     VerificationScreen.routeName,
-      //     arguments: _data['email'],
-      //   );
-      // } else {
-      //   alert(context, response);
-      // }
     }
   }
 
   Future<void> _logIn() async {
-    if (_submit()) {
-      loading(context);
-      final response = await AccountAPI.login(context, _data);
-      Navigator.pop(context);
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
 
-      if (response == true) {
-        Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
-      } else {
-        alert(context, response);
-      }
+    final response = await AccountAPI.login(context, _data);
+    if (response) {
+      Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
     }
   }
 
-  // Widget _socialButton(Social social) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 10),
-  //     child: ElevatedButton.icon(
-  //       onPressed: () {},
-  //       icon: Image.asset(
-  //         'assets/icons/${social == Social.google ? 'google' : 'facebook'}.png',
-  //         height: 30,
-  //       ),
-  //       label: Text(
-  //         '${getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in')} '
-  //         '${getText(social == Social.google ? 'google' : 'facebook')}',
-  //       ),
-  //       style: ButtonStyle(
-  //         backgroundColor: MaterialStateProperty.all<Color>(
-  //           social == Social.google ? Colors.white : Colors.indigo[600],
-  //         ),
-  //         foregroundColor: MaterialStateProperty.all<Color>(
-  //           social == Social.google ? Colors.black : Colors.white,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Future<void> _forgotPassword() async {
+    _mode = AuthMode.signUp;
+    if (!_formKey.currentState.validate()) {
+      _mode = AuthMode.login;
+      return;
+    }
+    _formKey.currentState.save();
+    _mode = AuthMode.login;
+
+    prompt(context, 'Are you sure you forgot your password?', onYes: () async {
+      final response = await AccountAPI.passwordEmail(context, _data['email']);
+      if (response) {
+        Navigator.of(context).pushNamed(
+          VerificationScreen.routeName,
+          arguments: {'mode': _mode, 'email': _data['email']},
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,25 +123,11 @@ class _AuthScreenState extends State<AuthScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Align(
-                alignment: Localizations.localeOf(context).languageCode == 'en'
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
-                child: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(TabsScreen.routeName);
-                  },
-                  splashRadius: 25,
-                  splashColor: theme.primaryColorLight,
-                ),
-              ),
               Text(
                 getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in'),
                 style: theme.textTheme.headline4,
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Form(
                 key: _formKey,
                 child: Column(
@@ -192,64 +157,80 @@ class _AuthScreenState extends State<AuthScreen>
                         ),
                       ),
                     ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      constraints: BoxConstraints(
-                        maxHeight: _mode == AuthMode.signUp ? 0 : 150,
-                      ),
+                    SizeTransition(
+                      sizeFactor: _animation,
                       child: FadeTransition(
-                        opacity: _opacity,
-                        child: InputField(
-                          label: getText('password'),
-                          textFormField: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: '********',
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  setState(() => _passObscure = !_passObscure);
-                                },
-                                child: Icon(_passObscure
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
+                        opacity: _animation,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              InputField(
+                                label: getText('password'),
+                                textFormField: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: '********',
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _passObscure = !_passObscure;
+                                        });
+                                      },
+                                      child: Icon(_passObscure
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
+                                    ),
+                                  ),
+                                  obscureText: _passObscure,
+                                  onSaved: (value) {
+                                    if (_mode == AuthMode.login) {
+                                      _data['password'] = value;
+                                    }
+                                  },
+                                  validator: (value) {
+                                    if (_mode == AuthMode.signUp) {
+                                      return null;
+                                    } else if (value.isEmpty) {
+                                      return getText('password_empty');
+                                    } else if (value.length < 8) {
+                                      return getText('password_length');
+                                    } else if (int.tryParse(value) != null) {
+                                      return getText('password_numbers');
+                                    }
+                                    return null;
+                                  },
+                                ),
                               ),
-                            ),
-                            obscureText: _passObscure,
-                            onSaved: (value) {
-                              if (_mode == AuthMode.logIn) {
-                                _data['password'] = value;
-                              }
-                            },
-                            validator: (value) {
-                              if (_mode == AuthMode.signUp) {
-                                return null;
-                              } else if (value.isEmpty) {
-                                return getText('password_empty');
-                              } else if (value.length < 8) {
-                                return getText('password_length');
-                              } else if (int.tryParse(value) != null) {
-                                return getText('password_numbers');
-                              }
-                              return null;
-                            },
+                              const SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: _forgotPassword,
+                                child: Text(
+                                  'Forgot your password?',
+                                  style: theme.textTheme.subtitle1
+                                      .copyWith(color: theme.hintColor),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: ElevatedButton(
-                          child: Text(
-                            getText(
-                              _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
-                            ),
-                          ),
-                          onPressed: () {
-                            FocusScope.of(context).unfocus();
-                            _mode == AuthMode.signUp ? _signUp() : _logIn();
-                          }),
-                    ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: ElevatedButton(
+                  child: Text(
+                    getText(
+                      _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
+                    ),
+                  ),
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    _mode == AuthMode.signUp ? _signUp() : _logIn();
+                  },
                 ),
               ),
               // Divider(
@@ -259,8 +240,8 @@ class _AuthScreenState extends State<AuthScreen>
               //   endIndent: 10,
               //   color: Colors.grey,
               // ),
-              // _socialButton(Social.google),
-              // _socialButton(Social.facebook),
+              // SocialButton(_mode, Social.google),
+              // SocialButton(_mode, Social.facebook),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: RichText(
@@ -286,6 +267,20 @@ class _AuthScreenState extends State<AuthScreen>
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 15),
+        child: FloatingActionButton(
+          child: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+          },
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          splashColor: theme.primaryColor,
+          elevation: 0,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
     );
   }
 }

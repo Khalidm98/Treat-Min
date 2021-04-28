@@ -15,6 +15,7 @@ import './screens/booking_screen.dart';
 import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
 import './screens/info_screen.dart';
+import './screens/password_screen.dart';
 import './screens/select_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/tabs_screen.dart';
@@ -199,6 +200,7 @@ class _MyAppState extends State<MyApp> {
           EmergencyScreen.routeName: (_) => EmergencyScreen(),
           GetStartedScreen.routeName: (_) => GetStartedScreen(),
           InfoScreen.routeName: (_) => InfoScreen(),
+          PasswordScreen.routeName: (_) => PasswordScreen(),
           SelectScreen.routeName: (_) => SelectScreen(),
           TabsScreen.routeName: (_) => TabsScreen(),
           VerificationScreen.routeName: (_) => VerificationScreen(),

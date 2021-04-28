@@ -1,14 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import './password_screen.dart';
 import './tabs_screen.dart';
 import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/user_data.dart';
-import '../utils/dialogs.dart';
 import '../widgets/input_field.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _InfoScreenState extends State<InfoScreen> {
   File _image;
   bool _passObscure = true;
   DateTime _date;
-  int _gender = -1;
+  String _gender;
 
   @override
   void didChangeDependencies() {
@@ -38,8 +39,10 @@ class _InfoScreenState extends State<InfoScreen> {
         }
         _date = userData.birth;
         _dateController.text = _date.toIso8601String().substring(0, 10);
+        _gender = userData.gender;
       } else {
-        _date = DateTime.now().subtract(Duration(days: 365 * 20 + 5));
+        _date = DateTime.now().subtract(const Duration(days: 365 * 20 + 5));
+        _gender = 'i';
       }
     }
   }
@@ -50,9 +53,9 @@ class _InfoScreenState extends State<InfoScreen> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
-    if (_gender < 1) {
-      setState(() => _gender = 0);
+  Future<void> _submit(bool isLoggedIn) async {
+    if (_gender.isEmpty || _gender == 'i') {
+      setState(() => _gender = '');
       _formKey.currentState.validate();
       return;
     } else if (!_formKey.currentState.validate()) {
@@ -60,34 +63,30 @@ class _InfoScreenState extends State<InfoScreen> {
     }
 
     _formKey.currentState.save();
-    _account['gender'] = _gender == 1 ? 'M' : 'F';
-    _account['email'] = ModalRoute.of(context).settings.arguments;
-    // if (_image != null) {
-    //   final dir = await getApplicationDocumentsDirectory();
-    //   final path = '${dir.path}/user.png';
-    //   imageCache.clear();
-    //   final photo = await _image.copy(path);
-    //   _account['photo'] = photo;
-    // }
+    _account['gender'] = _gender;
     if (_image == null) {
       _account['photo'] = '';
     } else {
       final dir = await getApplicationDocumentsDirectory();
-      final path = '${dir.path}/account.photo';
+      final path = '${dir.path}/user.png';
       imageCache.clear();
-      await _image.copy(path);
-      _account['photo'] = path;
+      final photo = await _image.copy(path);
+      _account['photo'] = photo.path;
     }
 
-    loading(context);
-    final response = await AccountAPI.register(context, _account);
-    Navigator.pop(context);
-
-    if (response == true) {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+    if (isLoggedIn) {
+      final userData = Provider.of<UserData>(context, listen: false);
+      _account['token'] = userData.token;
+      _account['email'] = userData.email;
+      await userData.saveData(_account);
+      Navigator.pop(context);
     } else {
-      alert(context, response);
+      _account['email'] = ModalRoute.of(context).settings.arguments;
+      final response = await AccountAPI.register(context, _account);
+      if (response) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(TabsScreen.routeName, (route) => false);
+      }
     }
   }
 
@@ -95,9 +94,28 @@ class _InfoScreenState extends State<InfoScreen> {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      final theme = Theme.of(context);
+      final file = await ImageCropper.cropImage(
+        sourcePath: pickedFile.path,
+        maxWidth: 400,
+        maxHeight: 400,
+        aspectRatioPresets: [CropAspectRatioPreset.square],
+        compressFormat: ImageCompressFormat.png,
+        cropStyle: CropStyle.circle,
+        androidUiSettings: AndroidUiSettings(
+          activeControlsWidgetColor: Colors.grey[400],
+          backgroundColor: Colors.white,
+          dimmedLayerColor: Colors.white,
+          showCropGrid: false,
+          toolbarColor: theme.accentColor,
+          toolbarWidgetColor: Colors.grey[300],
+        ),
+      );
+      if (file != null) {
+        setState(() {
+          _image = file;
+        });
+      }
     }
   }
 
@@ -107,7 +125,7 @@ class _InfoScreenState extends State<InfoScreen> {
       initialDate: _date,
       firstDate: DateTime.now().subtract(Duration(days: 365 * 80 + 20)),
       lastDate: DateTime.now().subtract(Duration(days: 365 * 12 + 3)),
-      helpText: AppLocalizations.of(context).getText('select_date'),
+      helpText: getText('select_date'),
     );
     if (picked != null) {
       _date = picked;
@@ -173,40 +191,52 @@ class _InfoScreenState extends State<InfoScreen> {
                 ],
               ),
               SizedBox(height: 30),
+              !isLoggedIn
+                  ? const SizedBox()
+                  : ElevatedButton(
+                      child: Text('Change Password'),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(PasswordScreen.routeName);
+                      },
+                    ),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
-                    InputField(
-                      label: getText('password'),
-                      textFormField: TextFormField(
-                        decoration: InputDecoration(
-                          hintText: '********',
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              setState(() => _passObscure = !_passObscure);
-                            },
-                            child: Icon(_passObscure
-                                ? Icons.visibility
-                                : Icons.visibility_off),
+                    isLoggedIn
+                        ? const SizedBox()
+                        : InputField(
+                            label: getText('password'),
+                            textFormField: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: '********',
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    setState(
+                                        () => _passObscure = !_passObscure);
+                                  },
+                                  child: Icon(_passObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                              textInputAction: TextInputAction.next,
+                              obscureText: _passObscure,
+                              onSaved: (value) => _account['password'] = value,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return getText('password_empty');
+                                } else if (value.length < 8) {
+                                  return getText('password_length');
+                                } else if (int.tryParse(value) != null) {
+                                  return getText('password_numbers');
+                                }
+                                return null;
+                              },
+                            ),
                           ),
-                        ),
-                        textInputAction: TextInputAction.next,
-                        obscureText: _passObscure,
-                        onSaved: (value) => _account['password'] = value,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return getText('password_empty');
-                          } else if (value.length < 8) {
-                            return getText('password_length');
-                          } else if (int.tryParse(value) != null) {
-                            return getText('password_numbers');
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     InputField(
                       label: getText('name'),
                       textFormField: TextFormField(
@@ -225,7 +255,7 @@ class _InfoScreenState extends State<InfoScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     InputField(
                       label: getText('phone'),
                       textFormField: TextFormField(
@@ -249,7 +279,7 @@ class _InfoScreenState extends State<InfoScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
                         FocusScope.of(context).unfocus();
@@ -276,13 +306,13 @@ class _InfoScreenState extends State<InfoScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Text(getText('gender'), style: theme.textTheme.subtitle1),
                   Spacer(),
                   Radio(
-                    value: 1,
+                    value: 'M',
                     groupValue: _gender,
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
@@ -293,7 +323,7 @@ class _InfoScreenState extends State<InfoScreen> {
                   ),
                   Spacer(),
                   Radio(
-                    value: 2,
+                    value: 'F',
                     groupValue: _gender,
                     onChanged: (value) => setState(() => _gender = value),
                     activeColor: theme.primaryColorDark,
@@ -304,7 +334,7 @@ class _InfoScreenState extends State<InfoScreen> {
                   ),
                 ],
               ),
-              _gender == 0
+              _gender.isEmpty
                   ? Text(
                       'Please select your gender!',
                       style: theme.textTheme.caption.copyWith(
@@ -316,7 +346,7 @@ class _InfoScreenState extends State<InfoScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 child: ElevatedButton(
                   child: Text(getText(isLoggedIn ? 'save' : 'finish')),
-                  onPressed: _submit,
+                  onPressed: () => _submit(isLoggedIn),
                 ),
               ),
             ],

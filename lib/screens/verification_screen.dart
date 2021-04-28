@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import './auth_screen.dart' show AuthMode;
 import './info_screen.dart';
+import './password_screen.dart';
 import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../utils/dialogs.dart';
@@ -22,29 +24,21 @@ class _VerificationScreenState extends State<VerificationScreen> {
   void initState() {
     super.initState();
     _resendCode = TapGestureRecognizer()
-      ..onTap = () {
-        final email = ModalRoute.of(context).settings.arguments;
-        showDialog(
-          context: context,
-          child: FutureBuilder(
-            future: AccountAPI.sendEmail(email),
-            builder: (_, response) {
-              if (response.connectionState == ConnectionState.waiting) {
-                return AlertDialog(title: CircularProgressIndicator());
-              }
-              return AlertDialog(
-                title: Text(response.data
-                    ? getText('resend_message')
-                    : 'Something went wrong!'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(getText('ok')),
-                  ),
-                ],
-              );
-            },
-          ),
+      ..onTap = () async {
+        prompt(
+          context,
+          'Are you sure you want us to send a new code to your email?',
+          onYes: () async {
+            final args = ModalRoute.of(context).settings.arguments as Map;
+            final email = args['email'];
+            final mode = args['mode'];
+            final response = mode == AuthMode.signUp
+                ? await AccountAPI.registerEmail(context, email)
+                : await AccountAPI.passwordEmail(context, email);
+            if (response) {
+              alert(context, getText('resend_message'));
+            }
+          },
         );
       };
   }
@@ -58,29 +52,32 @@ class _VerificationScreenState extends State<VerificationScreen> {
   }
 
   Future<void> _verify() async {
-    final email = ModalRoute.of(context).settings.arguments;
-    Navigator.of(context).pushNamed(InfoScreen.routeName, arguments: email);
-    // String strCode = '';
-    // for (TextEditingController num in _controllers) {
-    //   strCode += num.text;
-    // }
-    //
-    // final code = int.tryParse(strCode);
-    // if (code == null) {
-    //   alert(context, 'Code must consist of exactly 4 digits!');
-    //   return;
-    // }
-    //
-    // final email = ModalRoute.of(context).settings.arguments;
-    // loading(context);
-    // final response = await AccountAPI.verifyEmail(email, code);
-    // Navigator.pop(context);
-    //
-    // if (response == true) {
-    //   Navigator.of(context).pushNamed(InfoScreen.routeName, arguments: email);
-    // } else {
-    //   alert(context, response);
-    // }
+    String strCode = '';
+    for (TextEditingController num in _controllers) {
+      strCode += num.text;
+    }
+
+    final code = int.tryParse(strCode);
+    if (code == null) {
+      alert(context, 'Code must consist of exactly 4 digits!');
+      return;
+    }
+
+    final args = ModalRoute.of(context).settings.arguments as Map;
+    final email = args['email'];
+    final mode = args['mode'];
+    if (mode == AuthMode.signUp) {
+      final response = await AccountAPI.registerCode(context, email, code);
+      if (response == true) {
+        Navigator.of(context).pushNamed(InfoScreen.routeName, arguments: email);
+      }
+    } else {
+      final response = await AccountAPI.passwordCode(context, email, code);
+      if (response == true) {
+        Navigator.of(context)
+            .pushNamed(PasswordScreen.routeName, arguments: email);
+      }
+    }
   }
 
   Widget _codeInputField(ThemeData theme) {
@@ -207,9 +204,10 @@ class _VerificationScreenState extends State<VerificationScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(top: 15),
         child: FloatingActionButton(
-          child: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          child: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
           backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
           splashColor: theme.primaryColor,
           elevation: 0,
         ),
