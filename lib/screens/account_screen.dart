@@ -162,7 +162,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         : current[index].service != null
                                             ? Entity.service
                                             : Entity.room,
-                                    id: current[index].id,
+                                    appointmentId: current[index].id,
                                     onCancel: () {
                                       setState(() {
                                         didChangeDependencies();
@@ -208,6 +208,23 @@ class _AccountScreenState extends State<AccountScreen> {
                                 return ReservationCard(
                                   reservedEntityDetails: history[index],
                                   isCurrentRes: false,
+                                  entity: history[index].clinic != null
+                                      ? Entity.clinic
+                                      : history[index].service != null
+                                          ? Entity.service
+                                          : Entity.room,
+                                  entityId: history[index].clinicId != null
+                                      ? history[index].clinicId
+                                      : history[index].serviceId != null
+                                          ? history[index].serviceId
+                                          : history[index].roomId,
+                                  entityDetailId: history[index]
+                                              .clinicDetailId !=
+                                          null
+                                      ? history[index].clinicDetailId
+                                      : history[index].serviceDetailId != null
+                                          ? history[index].serviceDetailId
+                                          : history[index].roomDetailId,
                                 );
                               })
                           : noReservation(theme);

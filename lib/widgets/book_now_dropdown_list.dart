@@ -24,36 +24,38 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
     setAppLocalization(context);
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15),
+      margin: EdgeInsets.fromLTRB(16, 0, 16, 9),
       child: DropdownButtonHideUnderline(
-        child: Container(
-          child: DropdownButton(
-            dropdownColor: Colors.white,
-            isExpanded: true,
-            hint: Text(getText('choose_date')),
-            value: dropDownValue,
-            icon: Icon(
-              Icons.date_range,
-              color: theme.accentColor,
-            ),
-            iconSize: 30,
-            elevation: 1,
-            style: theme.textTheme.headline6,
-            onChanged: (newValue) {
-              dropDownValueGetter(newValue);
-              setState(() {
-                dropDownValue = newValue;
-              });
-            },
-            items: scheduleList.map<DropdownMenuItem>((Schedule schedule) {
-              return DropdownMenuItem(
-                value: schedule,
-                child: Text(
-                  "${schedule.day} - ( From ${schedule.start.substring(0, 5)} to ${schedule.end.substring(0, 5)} ) ",
-                ),
-              );
-            }).toList(),
+        child: DropdownButton(
+          dropdownColor: Colors.white,
+          isExpanded: true,
+          hint: Text(
+            getText('choose_date'),
+            style: theme.textTheme.headline6.copyWith(fontSize: 16),
           ),
+          value: dropDownValue,
+          icon: Icon(
+            Icons.date_range,
+            color: theme.primaryColor,
+          ),
+          iconSize: 30,
+          elevation: 1,
+          style: theme.textTheme.headline6,
+          onChanged: (newValue) {
+            dropDownValueGetter(newValue);
+            setState(() {
+              dropDownValue = newValue;
+            });
+          },
+          items: scheduleList.map<DropdownMenuItem>((Schedule schedule) {
+            return DropdownMenuItem(
+              value: schedule,
+              child: Text(
+                "${schedule.day} - ( From ${schedule.start.substring(0, 5)} to ${schedule.end.substring(0, 5)} ) ",
+                style: theme.textTheme.headline6.copyWith(fontSize: 16),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

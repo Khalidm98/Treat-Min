@@ -63,7 +63,8 @@ class _ClinicCardState extends State<ClinicCard> {
                 id: widget.clinicCardData.id,
                 hospital: widget.clinicCardData.hospital,
                 price: widget.clinicCardData.price,
-                ratingTotal: widget.clinicCardData.ratingTotal)),
+                ratingTotal: widget.clinicCardData.ratingTotal,
+                ratingUsers: widget.clinicCardData.ratingUsers)),
       );
     }
   }

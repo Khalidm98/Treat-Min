@@ -41,22 +41,33 @@ class CurrentOrPast {
 }
 
 class ReservedEntityDetails {
-  ReservedEntityDetails({
-    this.id,
-    this.room,
-    this.hospital,
-    this.price,
-    this.schedule,
-    this.status,
-    this.appointmentDate,
-    this.service,
-    this.doctor,
-    this.clinic,
-  });
+  ReservedEntityDetails(
+      {this.id,
+      this.room,
+      this.hospital,
+      this.price,
+      this.schedule,
+      this.status,
+      this.appointmentDate,
+      this.service,
+      this.doctor,
+      this.clinic,
+      this.clinicId,
+      this.clinicDetailId,
+      this.roomId,
+      this.roomDetailId,
+      this.serviceId,
+      this.serviceDetailId});
 
   int id;
   String room;
   String hospital;
+  int clinicId;
+  int clinicDetailId;
+  int roomId;
+  int roomDetailId;
+  int serviceId;
+  int serviceDetailId;
   int price;
   Schedule schedule;
   String status;
@@ -67,15 +78,25 @@ class ReservedEntityDetails {
 
   factory ReservedEntityDetails.fromJson(Map<String, dynamic> json) =>
       ReservedEntityDetails(
-        id: json["id"],
-        room: json["room"] == null ? null : json["room"],
-        hospital: json["hospital"],
-        price: json["price"],
-        schedule: Schedule.fromJson(json["schedule"]),
-        status: json["status"],
-        appointmentDate: json["appointment_date"],
-        service: json["service"] == null ? null : json["service"],
-        doctor: json["doctor"] == null ? null : json["doctor"],
-        clinic: json["clinic"] == null ? null : json["clinic"],
-      );
+          id: json["id"],
+          room: json["room"] == null ? null : json["room"],
+          hospital: json["hospital"],
+          price: json["price"],
+          schedule: Schedule.fromJson(json["schedule"]),
+          status: json["status"],
+          appointmentDate: json["appointment_date"],
+          service: json["service"] == null ? null : json["service"],
+          doctor: json["doctor"] == null ? null : json["doctor"],
+          clinic: json["clinic"] == null ? null : json["clinic"],
+          clinicId: json["clinic_id"] == null ? null : json["clinic_id"],
+          clinicDetailId: json["clinic_detail_id"] == null
+              ? null
+              : json["clinic_detail_id"],
+          roomId: json["room_id"] == null ? null : json["room_id"],
+          roomDetailId:
+              json["room_detail_id"] == null ? null : json["room_detail_id"],
+          serviceId: json["service_id"] == null ? null : json["service_id"],
+          serviceDetailId: json["service_detail_id"] == null
+              ? null
+              : json["service_detail_id"]);
 }

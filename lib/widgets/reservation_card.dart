@@ -9,7 +9,9 @@ class ReservationCard extends StatefulWidget {
   final ReservedEntityDetails reservedEntityDetails;
   final bool isCurrentRes;
   final Entity entity;
-  final int id;
+  final int entityId;
+  final int entityDetailId;
+  final int appointmentId;
   final VoidCallback onCancel;
 
   ReservationCard(
@@ -17,7 +19,9 @@ class ReservationCard extends StatefulWidget {
       this.isCurrentRes,
       this.onCancel,
       this.entity,
-      this.id});
+      this.entityId,
+      this.entityDetailId,
+      this.appointmentId});
 
   @override
   _ReservationCardState createState() => _ReservationCardState();
@@ -42,8 +46,8 @@ class _ReservationCardState extends State<ReservationCard> {
             actions: [
               TextButton(
                   onPressed: () async {
-                    await ActionAPI.cancelAppointment(
-                        context, entityToString(widget.entity), widget.id);
+                    await ActionAPI.cancelAppointment(context,
+                        entityToString(widget.entity), widget.appointmentId);
                     widget.onCancel();
                     Navigator.pop(context);
                   },
@@ -109,15 +113,14 @@ class _ReservationCardState extends State<ReservationCard> {
                         ),
                       ),
                     ),
-                    onPressed: () {
-                      //todo:get rate api data?
-                      // ActionAPI.rateAppointment(
-                      //     context,
-                      //     entityToString(widget.entity),
-                      //     entityId,
-                      //     entityDetailId,
-                      //     rating,
-                      //     review);
+                    onPressed: () async {
+                      await ActionAPI.rateAppointment(
+                          context,
+                          entityToString(widget.entity),
+                          widget.entityId.toString(),
+                          widget.entityDetailId.toString(),
+                          ratingVal.toString(),
+                          myController.text);
                       Navigator.pop(context);
                     },
                     child: Text(getText('Submit Review'), maxLines: 1),
@@ -160,25 +163,39 @@ class _ReservationCardState extends State<ReservationCard> {
                 style: theme.textTheme.headline5.copyWith(color: Colors.white),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
-              child: Text(
-                widget.reservedEntityDetails.clinic != null
-                    ? widget.reservedEntityDetails.clinic
-                    : widget.reservedEntityDetails.service != null
-                        ? widget.reservedEntityDetails.service
-                        : widget.reservedEntityDetails.room,
-                style: theme.textTheme.headline6
-                    .copyWith(fontWeight: FontWeight.w700),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
+                  child: Text(
+                    widget.reservedEntityDetails.clinic != null
+                        ? widget.reservedEntityDetails.clinic
+                        : widget.reservedEntityDetails.service != null
+                            ? widget.reservedEntityDetails.service
+                            : widget.reservedEntityDetails.room,
+                    style: theme.textTheme.headline6
+                        .copyWith(fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  child: Text(
+                    "Price : ${widget.reservedEntityDetails.price} EGP",
+                    style: theme.textTheme.button,
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Text(
-                "Price : ${widget.reservedEntityDetails.price}",
-                style: theme.textTheme.caption,
+            if (widget.entity == Entity.clinic)
+              Padding(
+                padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
+                child: Text(
+                  widget.reservedEntityDetails.doctor,
+                  style: theme.textTheme.headline6
+                      .copyWith(fontSize: 16, color: theme.accentColor),
+                ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
               child: Row(
@@ -187,9 +204,14 @@ class _ReservationCardState extends State<ReservationCard> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.reservedEntityDetails.appointmentDate),
                       Text(
-                          "${widget.reservedEntityDetails.schedule.start.substring(0, 5)} - ${widget.reservedEntityDetails.schedule.end.substring(0, 5)}")
+                        widget.reservedEntityDetails.appointmentDate,
+                        style: theme.textTheme.button,
+                      ),
+                      Text(
+                          "${widget.reservedEntityDetails.schedule.start.substring(0, 5)} to ${widget.reservedEntityDetails.schedule.end.substring(0, 5)}"),
+                      Text(
+                          "Status : ${widget.reservedEntityDetails.status == "W" ? "Waiting" : widget.reservedEntityDetails.status == "R" ? "Rejected" : "Accepted"}")
                     ],
                   ),
                   widget.isCurrentRes
