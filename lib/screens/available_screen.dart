@@ -101,7 +101,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
     }
   }
 
-  noEntity(ThemeData theme, AvailableScreenData selectScreenData) {
+  noEntityDetails(ThemeData theme, AvailableScreenData selectScreenData) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(children: [
@@ -184,7 +184,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
             if (response.hasData && selectScreenData.entity == Entity.clinic) {
               clinicData = clinicCardFromJson(response.data);
               if (clinicData.details.length == 0) {
-                return noEntity(theme, selectScreenData);
+                return noEntityDetails(theme, selectScreenData);
               }
               clinicDetailsList =
                   clinicData.details.asMap().entries.map<ClinicCard>((detail) {
@@ -198,7 +198,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
             if (response.hasData && selectScreenData.entity != Entity.clinic) {
               sorData = sorCardFromJson(response.data);
               if (sorData.details.length == 0) {
-                return noEntity(theme, selectScreenData);
+                return noEntityDetails(theme, selectScreenData);
               }
               sorDetailsList =
                   sorData.details.asMap().entries.map<SORCard>((detail) {

@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:treat_min/utils/enumerations.dart';
 import '../localizations/app_localizations.dart';
-import '../models/reserved_schedule.dart';
-import '../providers/provider_class.dart';
+import '../models/reservations.dart';
+import '../api/actions.dart';
+import 'clickable_rating_hearts.dart';
 
-class ClinicReservationCard extends StatefulWidget {
-  final ReservedSchedule sched;
+class ReservationCard extends StatefulWidget {
+  final ReservedEntityDetails reservedEntityDetails;
+  final bool isCurrentRes;
+  final Entity entity;
+  final int id;
+  final VoidCallback onCancel;
 
-  ClinicReservationCard(this.sched);
+  ReservationCard(
+      {this.reservedEntityDetails,
+      this.isCurrentRes,
+      this.onCancel,
+      this.entity,
+      this.id});
 
   @override
-  _ClinicReservationCardState createState() => _ClinicReservationCardState();
+  _ReservationCardState createState() => _ReservationCardState();
 }
 
-class _ClinicReservationCardState extends State<ClinicReservationCard> {
+class _ReservationCardState extends State<ReservationCard> {
   final myController = TextEditingController();
-
+  int ratingVal = 1;
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -31,9 +41,10 @@ class _ClinicReservationCardState extends State<ClinicReservationCard> {
             title: Text(getText('cancel_message')),
             actions: [
               TextButton(
-                  onPressed: () {
-                    Provider.of<ProviderClass>(context)
-                        .removeReservation(widget.sched.id);
+                  onPressed: () async {
+                    await ActionAPI.cancelAppointment(
+                        context, entityToString(widget.entity), widget.id);
+                    widget.onCancel();
                     Navigator.pop(context);
                   },
                   child: Text(getText('yes'))),
@@ -48,6 +59,10 @@ class _ClinicReservationCardState extends State<ClinicReservationCard> {
         });
   }
 
+  void updateRatingValue(int ratingValue) {
+    ratingVal = ratingValue;
+  }
+
   void rateBox(BuildContext context, ThemeData theme) {
     showDialog(
         context: context,
@@ -60,10 +75,10 @@ class _ClinicReservationCardState extends State<ClinicReservationCard> {
             title: Text(getText('Rate Your Appointment'),
                 textAlign: TextAlign.center),
             content: Column(mainAxisSize: MainAxisSize.min, children: [
-              // ClickableRatingHearts(
-              //     iconHeight: 40,
-              //     iconWidth: 40,
-              //     ratingGetter: updateRatingValue),
+              ClickableRatingHearts(
+                  iconHeight: 40,
+                  iconWidth: 40,
+                  ratingGetter: updateRatingValue),
               TextField(
                 controller: myController,
                 keyboardType: TextInputType.multiline,
@@ -95,7 +110,15 @@ class _ClinicReservationCardState extends State<ClinicReservationCard> {
                       ),
                     ),
                     onPressed: () {
-                      //submit review
+                      //todo:get rate api data?
+                      // ActionAPI.rateAppointment(
+                      //     context,
+                      //     entityToString(widget.entity),
+                      //     entityId,
+                      //     entityDetailId,
+                      //     rating,
+                      //     review);
+                      Navigator.pop(context);
                     },
                     child: Text(getText('Submit Review'), maxLines: 1),
                   ),
@@ -133,40 +156,43 @@ class _ClinicReservationCardState extends State<ClinicReservationCard> {
                     topLeft: Radius.circular(4), topRight: Radius.circular(4)),
               ),
               child: Text(
-                widget.sched.hospitalName,
+                widget.reservedEntityDetails.hospital,
                 style: theme.textTheme.headline5.copyWith(color: Colors.white),
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
               child: Text(
-                widget.sched.name,
+                widget.reservedEntityDetails.clinic != null
+                    ? widget.reservedEntityDetails.clinic
+                    : widget.reservedEntityDetails.service != null
+                        ? widget.reservedEntityDetails.service
+                        : widget.reservedEntityDetails.room,
                 style: theme.textTheme.headline6
                     .copyWith(fontWeight: FontWeight.w700),
               ),
             ),
-            if (widget.sched.isClinic == true)
-              Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Text(
-                  widget.sched.doctorSpecialty,
-                  style: theme.textTheme.caption,
-                ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Text(
+                "Price : ${widget.reservedEntityDetails.price}",
+                style: theme.textTheme.caption,
               ),
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Text(
-                  //   widget.sched.schedule.day,
-                  //   textScaleFactor: 0.9,
-                  // ),
-                  // Text(
-                  //   widget.sched.schedule.time,
-                  //   textScaleFactor: 0.9,
-                  // ),
-                  widget.sched.isCurrentRes
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.reservedEntityDetails.appointmentDate),
+                      Text(
+                          "${widget.reservedEntityDetails.schedule.start.substring(0, 5)} - ${widget.reservedEntityDetails.schedule.end.substring(0, 5)}")
+                    ],
+                  ),
+                  widget.isCurrentRes
                       ? SizedBox(
                           height: 30,
                           width: 85,

@@ -23,39 +23,38 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
     final theme = Theme.of(context);
     setAppLocalization(context);
 
-    return DropdownButtonHideUnderline(
-      child: DropdownButton(
-        isExpanded: true,
-        hint: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(getText('choose_date')),
-        ),
-        value: dropDownValue,
-        icon: Icon(
-          Icons.arrow_drop_down_sharp,
-          color: theme.accentColor,
-        ),
-        iconSize: 40,
-        elevation: 1,
-        style: theme.textTheme.headline6,
-        onChanged: (newValue) {
-          dropDownValueGetter(newValue);
-          setState(() {
-            dropDownValue = newValue;
-          });
-        },
-        items: scheduleList.map<DropdownMenuItem>((Schedule schedule) {
-          return DropdownMenuItem(
-            value: schedule,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Center(
-                child: Text(
-                    "${schedule.day} - ( From ${schedule.start.substring(0, 5)} to ${schedule.end.substring(0, 5)} ) "),
-              ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15),
+      child: DropdownButtonHideUnderline(
+        child: Container(
+          child: DropdownButton(
+            dropdownColor: Colors.white,
+            isExpanded: true,
+            hint: Text(getText('choose_date')),
+            value: dropDownValue,
+            icon: Icon(
+              Icons.date_range,
+              color: theme.accentColor,
             ),
-          );
-        }).toList(),
+            iconSize: 30,
+            elevation: 1,
+            style: theme.textTheme.headline6,
+            onChanged: (newValue) {
+              dropDownValueGetter(newValue);
+              setState(() {
+                dropDownValue = newValue;
+              });
+            },
+            items: scheduleList.map<DropdownMenuItem>((Schedule schedule) {
+              return DropdownMenuItem(
+                value: schedule,
+                child: Text(
+                  "${schedule.day} - ( From ${schedule.start.substring(0, 5)} to ${schedule.end.substring(0, 5)} ) ",
+                ),
+              );
+            }).toList(),
+          ),
+        ),
       ),
     );
   }

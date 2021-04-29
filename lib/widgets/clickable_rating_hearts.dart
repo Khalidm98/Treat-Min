@@ -14,7 +14,7 @@ class ClickableRatingHearts extends StatefulWidget {
 }
 
 class _ClickableRatingHeartsState extends State<ClickableRatingHearts> {
-  int rating = 0;
+  int rating = 1;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -25,11 +25,7 @@ class _ClickableRatingHeartsState extends State<ClickableRatingHearts> {
           child: GestureDetector(
             onTap: () {
               setState(() {
-                if (rating == 1) {
-                  rating = 0;
-                } else {
-                  rating = 1;
-                }
+                rating = 1;
                 widget.ratingGetter(rating);
               });
             },
@@ -47,11 +43,7 @@ class _ClickableRatingHeartsState extends State<ClickableRatingHearts> {
           child: GestureDetector(
             onTap: () {
               setState(() {
-                if (rating == 2) {
-                  rating = 0;
-                } else {
-                  rating = 2;
-                }
+                rating = 2;
                 widget.ratingGetter(rating);
               });
             },
@@ -69,11 +61,7 @@ class _ClickableRatingHeartsState extends State<ClickableRatingHearts> {
           child: GestureDetector(
             onTap: () {
               setState(() {
-                if (rating == 3) {
-                  rating = 0;
-                } else {
-                  rating = 3;
-                }
+                rating = 3;
                 widget.ratingGetter(rating);
               });
             },
@@ -91,11 +79,7 @@ class _ClickableRatingHeartsState extends State<ClickableRatingHearts> {
           child: GestureDetector(
             onTap: () {
               setState(() {
-                if (rating == 4) {
-                  rating = 0;
-                } else {
-                  rating = 4;
-                }
+                rating = 4;
                 widget.ratingGetter(rating);
               });
             },
@@ -113,11 +97,7 @@ class _ClickableRatingHeartsState extends State<ClickableRatingHearts> {
           child: GestureDetector(
             onTap: () {
               setState(() {
-                if (rating == 5) {
-                  rating = 0;
-                } else {
-                  rating = 5;
-                }
+                rating = 5;
                 widget.ratingGetter(rating);
               });
             },

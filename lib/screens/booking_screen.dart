@@ -1,13 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:treat_min/api/actions.dart';
+import 'package:treat_min/models/reviews.dart';
 import 'package:treat_min/models/screens_data.dart';
 import 'package:treat_min/utils/enumerations.dart';
 import './tabs_screen.dart';
 import '../localizations/app_localizations.dart';
 import '../models/schedule.dart';
-import '../providers/provider_class.dart';
 import '../widgets/book_now_dropdown_list.dart';
 import '../widgets/review_box.dart';
 import '../widgets/rating_hearts.dart';
@@ -21,11 +20,18 @@ class BookNowScreen extends StatefulWidget {
 
 class _BookNowScreenState extends State<BookNowScreen> {
   bool expansionListChanger = false;
-  bool ableToBook = true;
+  bool ddvExists = true;
   Schedule dropDownValue = Schedule(day: null, start: null, end: null);
-  Future<String> response;
+  Future<String> schedulesResponse;
+  Future<String> reviewsResponse;
+  String reserveResponse;
+  Reviews reviews;
+  Schedules schedules;
+  String scheduleId;
+  String appointmentDate;
 
-  void _bookSuccess(ThemeData theme, BuildContext context) {
+  void _bookSuccess(ThemeData theme, BuildContext context,
+      BookNowScreenData bookNowScreenData) {
     setAppLocalization(context);
     showDialog(
       context: context,
@@ -36,10 +42,8 @@ class _BookNowScreenState extends State<BookNowScreen> {
             onTap: () {
               Navigator.pop(context);
               Navigator.of(context).pushNamedAndRemoveUntil(
-                TabsScreen.routeName,
-                (route) => false,
-                arguments: 2,
-              );
+                  TabsScreen.routeName, (route) => false,
+                  arguments: 2);
             },
             child: AlertDialog(
               insetPadding: EdgeInsets.zero,
@@ -79,8 +83,11 @@ class _BookNowScreenState extends State<BookNowScreen> {
   @override
   void didChangeDependencies() {
     dynamic receivedData = ModalRoute.of(context).settings.arguments;
-    response = ActionAPI.getEntitySchedule(entityToString(receivedData.entity),
-        receivedData.entityId, receivedData.cardDetail.id.toString());
+    String entity = entityToString(receivedData.entity);
+    String entityId = receivedData.entityId;
+    String detailId = receivedData.cardDetail.id.toString();
+    schedulesResponse = ActionAPI.getEntitySchedule(entity, entityId, detailId);
+    reviewsResponse = ActionAPI.getEntityReviews(entity, entityId, detailId);
     super.didChangeDependencies();
   }
 
@@ -88,45 +95,34 @@ class _BookNowScreenState extends State<BookNowScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     BookNowScreenData receivedData = ModalRoute.of(context).settings.arguments;
+    String entity = entityToString(receivedData.entity);
+    String entityId = receivedData.entityId;
+    String detailId = receivedData.cardDetail.id.toString();
+
     setAppLocalization(context);
+
     void updateDropDownValue(Schedule dpv) {
       dropDownValue = dpv;
       if (dropDownValue.start != null) {
-        ableToBook = true;
+        ddvExists = true;
       }
     }
 
-    void checkToBook() {
+    void checkToBook() async {
       if (dropDownValue.start == null) {
         setState(() {
-          ableToBook = false;
+          ddvExists = false;
         });
       } else {
-        ableToBook = true;
-        // if (receivedData.entity) {
-        //   ReservedSchedule scheduleModel = ReservedSchedule(
-        //       id: DateTime.now().toIso8601String(),
-        //       hospitalName: receivedData.card.detail,
-        //       isCurrentRes: true,
-        //       name: receivedData.card.name,
-        //       schedule: dropDownValue,
-        //       doctorSpecialty: receivedData.card.title,
-        //       isClinic: receivedData.entity);
-        //   Provider.of<ProviderClass>(context).addReservation(
-        //       scheduleModel, Provider.of<ProviderClass>(context).reservations);
-        // } else {
-        //   ReservedSchedule scheduleModel = ReservedSchedule(
-        //       id: DateTime.now().toIso8601String(),
-        //       hospitalName: receivedData.card.hospitalName,
-        //       isCurrentRes: true,
-        //       name: receivedData.card.name,
-        //       schedule: dropDownValue,
-        //       isClinic: receivedData.entity);
-        //   Provider.of<ProviderClass>(context).addReservation(
-        //       scheduleModel, Provider.of<ProviderClass>(context).reservations);
-        // }
-        // }
-        _bookSuccess(theme, context);
+        ddvExists = true;
+        scheduleId = dropDownValue.id.toString();
+        //todo: add date picker instead of fixed date
+        appointmentDate = "2021-09-20";
+        reserveResponse = await ActionAPI.reserveAppointment(
+            context, entity, entityId, detailId, scheduleId, appointmentDate);
+        //todo: check for response and take action
+        _bookSuccess(theme, context, receivedData);
+        print(reserveResponse);
       }
     }
 
@@ -179,7 +175,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 ),
                 SizedBox(height: 20),
                 FutureBuilder(
-                  future: response,
+                  future: schedulesResponse,
                   builder: (_, response) {
                     if (response.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
@@ -194,15 +190,18 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         ),
                       );
                     }
-                    Schedules schedules = schedulesFromJson(response.data);
+                    schedules = schedulesFromJson(response.data);
+
                     return Container(
                         child: BookNowDropDownList(
                           dropDownValueGetter: updateDropDownValue,
                           scheduleList: schedules.schedules,
                         ),
-                        width: double.infinity,
                         decoration: BoxDecoration(
-                          border: Border.all(color: theme.accentColor),
+                          border: Border(
+                            bottom: BorderSide(
+                                color: Theme.of(context).dividerColor),
+                          ),
                         ));
                   },
                 ),
@@ -218,7 +217,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     checkToBook();
                   },
                 ),
-                if (!ableToBook) ...[
+                if (!ddvExists) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
@@ -258,37 +257,57 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         color: theme.accentColor,
                       ),
                       children: [
-                        Provider.of<ProviderClass>(context).reviews.length != 0
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                physics: ClampingScrollPhysics(),
-                                itemCount: Provider.of<ProviderClass>(context)
-                                    .reviews
-                                    .length,
-                                itemBuilder: (context, i) => ReviewBox(
-                                    Provider.of<ProviderClass>(context)
-                                        .reviews[i]),
-                              )
-                            : Card(
-                                margin: EdgeInsets.all(0),
-                                child: ListTile(
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 15),
-                                  trailing: Icon(
-                                    Icons.rate_review,
-                                    color: theme.accentColor,
-                                  ),
-                                  title: Text(
-                                    'There are no current reviews.',
-                                    style: theme.textTheme.subtitle2
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                ),
+                        FutureBuilder(
+                          future: reviewsResponse,
+                          builder: (_, response) {
+                            if (response.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            }
+                            if (response.data == "Something went wrong") {}
+                            if (response.hasData) {
+                              reviews = reviewsFromJson(response.data);
+                              return reviews.reviews.length != 0
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemCount: reviews.reviews.length,
+                                      itemBuilder: (_, index) {
+                                        return ReviewBox(
+                                            reviews.reviews[index]);
+                                      })
+                                  : Card(
+                                      margin: EdgeInsets.all(0),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        trailing: Icon(
+                                          Icons.rate_review,
+                                          color: theme.accentColor,
+                                        ),
+                                        title: Text(
+                                          'There are no current reviews.',
+                                          style: theme.textTheme.subtitle2
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    );
+                            }
+                            return Center(
+                              child: Text(
+                                response.data,
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.headline6
+                                    .copyWith(color: theme.errorColor),
                               ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           )

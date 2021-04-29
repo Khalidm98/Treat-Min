@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/reserved_schedule.dart';
 import '../models/reviews.dart';
 
 class ProviderClass with ChangeNotifier {
   List<bool> sortingVars = [false, false, true];
   //for testing purposes
-  List<ReservedSchedule> reservations = [];
   List<Reviews> reviews = [];
 
   void addReview(Reviews review) {
@@ -13,18 +11,11 @@ class ProviderClass with ChangeNotifier {
     notifyListeners();
   }
 
-  void addReservation(
-      ReservedSchedule scheduleModel, List<ReservedSchedule> reservations) {
-    reservations.add(scheduleModel);
-    notifyListeners();
-  }
-
-  void removeReservation(String id) {
-    reservations.removeWhere((element) {
-      return element.id == id;
-    });
-    notifyListeners();
-  }
+  // void addReservation(
+  //     ReservedSchedule scheduleModel, List<ReservedSchedule> reservations) {
+  //   reservations.add(scheduleModel);
+  //   notifyListeners();
+  // }
 
   void changeSortPriceLowHigh() {
     sortingVars[0] = !sortingVars[0];
