@@ -259,7 +259,8 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 RatingHearts(
                     iconHeight: 30,
                     iconWidth: 30,
-                    rating: receivedData.cardDetail.ratingTotal),
+                    rating: (receivedData.cardDetail.ratingTotal ~/
+                        receivedData.cardDetail.ratingUsers)),
                 Text(
                   "Rating from  ${receivedData.cardDetail.ratingUsers == null ? 0 : receivedData.cardDetail.ratingUsers}  visitors",
                   style: theme.textTheme.headline6,

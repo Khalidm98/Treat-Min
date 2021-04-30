@@ -114,14 +114,13 @@ class ActionAPI {
       String review) async {
     final token = Provider.of<UserData>(context, listen: false).token;
     final response = await http.post(
-      '$_baseURL/$entity/$entityId/details/$entityDetailId/rate/',
-      headers: {
-        "Authorization": "Token $token",
-        "content-type": "application/json",
-        "accept": "application/json"
-      },
-      body: json.encode({"rating": rating, "review": review}),
-    );
+        '$_baseURL/$entity/$entityId/details/$entityDetailId/rate/',
+        headers: {
+          "Authorization": "Token $token",
+          "content-type": "application/json",
+          "accept": "application/json"
+        },
+        body: json.encode({"rating": rating, "review": review}));
     Map<String, dynamic> jsonResponse = json.decode(response.body);
     if (response.statusCode == 401) {
       return "Invalid Token";
