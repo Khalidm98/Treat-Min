@@ -47,7 +47,7 @@ class AccountAPI {
   static Future<bool> registerCode(
       BuildContext context, String email, int code) async {
     loading(context);
-    final response = await http.post(
+    final response = await http.patch(
       '$_baseURL/register-code/',
       headers: _headers,
       body: json.encode({"email": email, "code": code}),
@@ -171,7 +171,7 @@ class AccountAPI {
   static Future<bool> passwordCode(
       BuildContext context, String email, int code) async {
     loading(context);
-    final response = await http.post(
+    final response = await http.patch(
       '$_baseURL/password-code/',
       headers: _headers,
       body: json.encode({"email": email, "code": code}),
@@ -193,7 +193,7 @@ class AccountAPI {
   static Future<bool> passwordReset(
       BuildContext context, String email, String password) async {
     loading(context);
-    final response = await http.post(
+    final response = await http.patch(
       '$_baseURL/password-reset/',
       body: {"email": email, "password": password},
     );
@@ -215,11 +215,11 @@ class AccountAPI {
   }
 
   static Future<bool> changePassword(
-      BuildContext context, String email, String old, String password) async {
+      BuildContext context, String old, String password) async {
     loading(context);
-    final response = await http.post(
+    final response = await http.patch(
       '$_baseURL/change-password/',
-      body: {"email": email, "old": old, "password": password},
+      body: {"old": old, "password": password},
       headers: {"Authorization": "Token ${token(context)}"},
     );
     Navigator.pop(context);
@@ -240,7 +240,7 @@ class AccountAPI {
     loading(context);
     final file = await http.MultipartFile.fromPath('photo', photo.path);
     final request =
-        http.MultipartRequest('POST', Uri.parse('$_baseURL/change-photo/'));
+        http.MultipartRequest('PATCH', Uri.parse('$_baseURL/change-photo/'));
     request.headers["Authorization"] = "Token ${token(context)}";
     request.files.add(file);
     final response = await request.send();

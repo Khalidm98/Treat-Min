@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/widgets/background_image.dart';
 
 import './available_screen.dart';
 import '../api/entities.dart';
@@ -39,46 +40,48 @@ class SelectScreen extends StatelessWidget {
     final maxID = appData.maxID(entity);
     return Scaffold(
       appBar: AppBar(title: Text(getText(strEntity))),
-      body: ListView.separated(
-        itemCount: list.length,
-        separatorBuilder: (_, __) {
-          return const Divider(
-              thickness: 1, height: 1, indent: 10, endIndent: 10);
-        },
-        itemBuilder: (_, index) {
-          final id = list[index]['id'];
-          return ListTile(
-            leading: id <= maxID
-                ? Image.asset(
-                    'assets/icons/$strEntity/$id.png',
-                    width: 40,
-                    height: 40,
-                  )
-                : Image.network(
-                    '$baseURL/$id.png',
-                    width: 40,
-                    height: 40,
-                    errorBuilder: (_, __, ___) {
-                      return Image.asset(
-                        'assets/icons/heart_outlined.png',
-                        width: 40,
-                        height: 40,
-                      );
-                    },
-                  ),
-            title: Text(
-              list[index]['name'],
-              textScaleFactor: 0.8,
-              style: theme.textTheme.headline5,
-            ),
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                AvailableScreen.routeName,
-                arguments: AvailableScreenData(list[index], entity),
-              );
-            },
-          );
-        },
+      body: BackgroundImage(
+        child: ListView.separated(
+          itemCount: list.length,
+          separatorBuilder: (_, __) {
+            return const Divider(
+                thickness: 1, height: 1, indent: 10, endIndent: 10);
+          },
+          itemBuilder: (_, index) {
+            final id = list[index]['id'];
+            return ListTile(
+              leading: id <= maxID
+                  ? Image.asset(
+                      'assets/icons/$strEntity/$id.png',
+                      width: 40,
+                      height: 40,
+                    )
+                  : Image.network(
+                      '$baseURL/$id.png',
+                      width: 40,
+                      height: 40,
+                      errorBuilder: (_, __, ___) {
+                        return Image.asset(
+                          'assets/icons/heart_outlined.png',
+                          width: 40,
+                          height: 40,
+                        );
+                      },
+                    ),
+              title: Text(
+                list[index]['name'],
+                textScaleFactor: 0.8,
+                style: theme.textTheme.headline5,
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  AvailableScreen.routeName,
+                  arguments: AvailableScreenData(list[index], entity),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

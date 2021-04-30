@@ -19,7 +19,6 @@ class EntityAPI {
   static Future<bool> getEntities(BuildContext context, Entity entity) async {
     final response = await http.get('$_baseURL/${entityToString(entity)}/');
     if (response.statusCode == 200) {
-      // print(utf8.decode(response.bodyBytes));
       Provider.of<AppData>(context, listen: false).setEntities(
         entity,
         json.decode(utf8.decode(response.bodyBytes))[entityToString(entity)],
