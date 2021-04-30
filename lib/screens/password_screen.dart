@@ -44,10 +44,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
     }
 
     if (isLoggedIn) {
-      // update API not to require email
-      final email = Provider.of<UserData>(context, listen: false).email;
       final response = await AccountAPI.changePassword(
-          context, email, _data['old'], _data['password']);
+          context, _data['old'], _data['password']);
       if (response) {
         alert(context, 'Your password was changed successfully.', onOk: () {
           Navigator.pop(context);

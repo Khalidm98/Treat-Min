@@ -5,6 +5,7 @@ import './get_started_screen.dart';
 import './tabs_screen.dart';
 import '../providers/app_data.dart';
 import '../providers/user_data.dart';
+import '../widgets/background_image.dart';
 import '../main.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -68,12 +69,14 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: FadeTransition(
-          opacity: _opacity,
-          child: Container(
-            width: _width.value,
-            child: Image.asset('assets/images/logo.png'),
+      body: BackgroundImage(
+        child: Center(
+          child: FadeTransition(
+            opacity: _opacity,
+            child: Container(
+              width: _width.value,
+              child: Image.asset('assets/images/logo.png'),
+            ),
           ),
         ),
       ),

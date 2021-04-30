@@ -102,6 +102,26 @@ class _InfoScreenState extends State<InfoScreen> {
   }
 
   Future<void> _submit(bool isLoggedIn) async {
+    // if (isLoggedIn) {
+    //   final controller = TextEditingController();
+    //   await showDialog(
+    //     context: context,
+    //     child: AlertDialog(
+    //       title: Text('Current Password'),
+    //       content: TextField(
+    //         controller: controller,
+    //       ),
+    //       actions: [
+    //         TextButton(
+    //           onPressed: () => Navigator.pop(context),
+    //           child: Text(getText('ok')),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    //   controller.dispose();
+    // }
+
     if (_gender.isEmpty || _gender == 'i') {
       setState(() => _gender = '');
       _formKey.currentState.validate();
@@ -127,6 +147,7 @@ class _InfoScreenState extends State<InfoScreen> {
         await AccountAPI.changePhoto(context, _image);
       }
       final userData = Provider.of<UserData>(context, listen: false);
+      _account['email'] = userData.email;
       _account['token'] = userData.token;
       await userData.saveData(_account);
       Navigator.pop(context);
@@ -199,49 +220,22 @@ class _InfoScreenState extends State<InfoScreen> {
                     )
                   ],
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 !isLoggedIn
                     ? const SizedBox()
-                    : Padding(
-                        padding: const EdgeInsets.only(bottom: 30),
-                        child: ElevatedButton(
-                          child: Text('Change Password'),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(PasswordScreen.routeName);
-                          },
-                        ),
+                    : ElevatedButton(
+                        child: Text('Change Password'),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(PasswordScreen.routeName);
+                        },
                       ),
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
                       isLoggedIn
-                          ? InputField(
-                              label: getText('email'),
-                              textFormField: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: 'address@example.com',
-                                ),
-                                initialValue: userData.email,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                onSaved: (value) => _account['email'] = value,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return getText('email_empty');
-                                  } else if (!value.contains('.') ||
-                                      !value.contains('@') ||
-                                      value.indexOf('@') !=
-                                          value.lastIndexOf('@') ||
-                                      value.indexOf('@') >
-                                          value.lastIndexOf('.')) {
-                                    return getText('email_valid');
-                                  }
-                                  return null;
-                                },
-                              ),
-                            )
+                          ? const SizedBox()
                           : InputField(
                               label: getText('password'),
                               textFormField: TextFormField(

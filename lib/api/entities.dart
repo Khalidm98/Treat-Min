@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 // import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
+import '../utils/dialogs.dart';
 import '../utils/enumerations.dart';
 
 class EntityAPI {
@@ -15,16 +16,17 @@ class EntityAPI {
   //   "accept": "application/json"
   // };
 
-  static Future getEntities(BuildContext context, Entity entity) async {
+  static Future<bool> getEntities(BuildContext context, Entity entity) async {
     final response = await http.get('$_baseURL/${entityToString(entity)}/');
     if (response.statusCode == 200) {
-      // print(utf8.decode(response.bodyBytes));
       Provider.of<AppData>(context, listen: false).setEntities(
         entity,
         json.decode(utf8.decode(response.bodyBytes))[entityToString(entity)],
       );
       return true;
+    } else {
+      alert(context, 'Something went wrong!');
     }
-    return 'Something went wrong!';
+    return false;
   }
 }
