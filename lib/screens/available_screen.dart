@@ -1,16 +1,18 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/card_data.dart';
+
+import '../api/actions.dart';
 import '../localizations/app_localizations.dart';
+import '../models/card_data.dart';
+import '../models/screens_data.dart';
 import '../providers/provider_class.dart';
-import '../utils/search_bar.dart';
 import '../utils/enumerations.dart';
+import '../utils/search_bar.dart';
+import '../widgets/background_image.dart';
 import '../widgets/clinic_card.dart';
 import '../widgets/sor_card.dart';
-import '../models/screens_data.dart';
 import '../widgets/modal_sheet_list_tile.dart';
-import '../api/actions.dart';
 
 class AvailableScreen extends StatefulWidget {
   static const String routeName = '/available';
@@ -141,31 +143,30 @@ class _AvailableScreenState extends State<AvailableScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     final selectScreenData =
         (ModalRoute.of(context).settings.arguments) as AvailableScreenData;
-
     setAppLocalization(context);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(selectScreenData.entityMap['name']),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: DataSearch());
-              },
-            ),
-            IconButton(
-              icon: Image.asset("assets/icons/sort.png", width: 25, height: 25),
-              onPressed: () {
-                onSortClick(context, theme);
-              },
-            ),
-          ],
-        ),
-        body: FutureBuilder(
+      appBar: AppBar(
+        title: Text(selectScreenData.entityMap['name']),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: DataSearch());
+            },
+          ),
+          IconButton(
+            icon: Image.asset("assets/icons/sort.png", width: 25, height: 25),
+            onPressed: () {
+              onSortClick(context, theme);
+            },
+          ),
+        ],
+      ),
+      body: BackgroundImage(
+        child: FutureBuilder(
           future: response,
           builder: (_, response) {
             if (response.connectionState == ConnectionState.waiting) {
@@ -176,8 +177,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
                 child: Text(
                   response.data,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headline6
-                      .copyWith(color: theme.errorColor),
+                  style:
+                      theme.textTheme.headline6.copyWith(color: theme.errorColor),
                 ),
               );
             }
@@ -210,15 +211,18 @@ class _AvailableScreenState extends State<AvailableScreen> {
               }).toList();
             }
             return ListView.builder(
-                itemCount: selectScreenData.entity == Entity.clinic
-                    ? clinicDetailsList.length
-                    : sorDetailsList.length,
-                itemBuilder: (context, index) {
-                  return selectScreenData.entity == Entity.clinic
-                      ? clinicListSorter(context, clinicDetailsList)[index]
-                      : sorListSorter(context, sorDetailsList)[index];
-                });
+              itemCount: selectScreenData.entity == Entity.clinic
+                  ? clinicDetailsList.length
+                  : sorDetailsList.length,
+              itemBuilder: (context, index) {
+                return selectScreenData.entity == Entity.clinic
+                    ? clinicListSorter(context, clinicDetailsList)[index]
+                    : sorListSorter(context, sorDetailsList)[index];
+              },
+            );
           },
-        ));
+        ),
+      ),
+    );
   }
 }

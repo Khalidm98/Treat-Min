@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './auth_screen.dart';
 import './tabs_screen.dart';
 import '../localizations/app_localizations.dart';
+import '../widgets/background_image.dart';
 
 class GetStartedScreen extends StatelessWidget {
   static const String routeName = '/get-started';
@@ -11,58 +12,60 @@ class GetStartedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     setAppLocalization(context);
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Image.asset('assets/images/logo.png'),
-              Text(
-                'Care close to home',
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              Image.asset(
-                'assets/images/doctor.png',
-                height: MediaQuery.of(context).size.height * 0.4,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      child: Text(getText('log_in')),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Theme.of(context).accentColor,
+      body: BackgroundImage(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset('assets/images/logo.png'),
+                Text(
+                  'Care close to home',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                Image.asset(
+                  'assets/images/doctor.png',
+                  height: MediaQuery.of(context).size.height * 0.4,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text(getText('log_in')),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).accentColor,
+                          ),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                            Size(0, 40),
+                          ),
                         ),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          Size(0, 40),
-                        ),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(AuthScreen.routeName);
+                        },
                       ),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(AuthScreen.routeName);
-                      },
                     ),
-                  ),
-                  SizedBox(width: 20),
-                  Expanded(
-                    child: ElevatedButton(
-                      child: Text(getText('explore')),
-                      style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          Size(0, 40),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: ElevatedButton(
+                        child: Text(getText('explore')),
+                        style: ButtonStyle(
+                          minimumSize: MaterialStateProperty.all<Size>(
+                            Size(0, 40),
+                          ),
                         ),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(TabsScreen.routeName);
+                        },
                       ),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(TabsScreen.routeName);
-                      },
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -38,7 +38,8 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    //TODO:return this Doctor info here
+    // TODO:return this Doctor info here
+    return SizedBox();
   }
 
   @override
