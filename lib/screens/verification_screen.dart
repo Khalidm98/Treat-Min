@@ -7,6 +7,7 @@ import './password_screen.dart';
 import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../utils/dialogs.dart';
+import '../widgets/background_image.dart';
 
 class VerificationScreen extends StatefulWidget {
   static const String routeName = '/verify';
@@ -144,60 +145,62 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.all(40),
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/logo.png'),
-                    SizedBox(height: 50),
-                    Text(
-                      getText('verify'),
-                      style: theme.textTheme.headline5,
-                      textAlign: TextAlign.center,
-                    ),
-                    _codeInputField(theme),
-                    RichText(
-                      text: TextSpan(
-                        text: getText('no_code'),
-                        style: theme.textTheme.subtitle1
-                            .copyWith(color: theme.hintColor),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: getText('resend'),
-                            style: TextStyle(color: theme.accentColor),
-                            recognizer: _resendCode,
-                          ),
-                        ],
+      body: BackgroundImage(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.all(40),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/logo.png'),
+                      SizedBox(height: 50),
+                      Text(
+                        getText('verify'),
+                        style: theme.textTheme.headline5,
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
+                      _codeInputField(theme),
+                      RichText(
+                        text: TextSpan(
+                          text: getText('no_code'),
+                          style: theme.textTheme.subtitle1
+                              .copyWith(color: theme.hintColor),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: getText('resend'),
+                              style: TextStyle(color: theme.accentColor),
+                              recognizer: _resendCode,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                child: Text(getText('continue')),
-                onPressed: () {
-                  bool isFilled = true;
-                  for (var controller in _controllers) {
-                    if (controller.text.isEmpty) {
-                      isFilled = false;
-                      break;
+                ElevatedButton(
+                  child: Text(getText('continue')),
+                  onPressed: () {
+                    bool isFilled = true;
+                    for (var controller in _controllers) {
+                      if (controller.text.isEmpty) {
+                        isFilled = false;
+                        break;
+                      }
                     }
-                  }
-                  if (isFilled) {
-                    _verify();
-                  } else {
-                    alert(context, getText('code_error'));
-                  }
-                },
-              ),
-            ],
+                    if (isFilled) {
+                      _verify();
+                    } else {
+                      alert(context, getText('code_error'));
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

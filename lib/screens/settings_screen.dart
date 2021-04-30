@@ -9,6 +9,7 @@ import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
 import '../providers/user_data.dart';
+import '../widgets/background_image.dart';
 
 class SettingsScreen extends StatelessWidget {
   void _logOut(BuildContext context) {
@@ -29,86 +30,88 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(getText('settings'))),
-      body: ListView(
-        padding: const EdgeInsets.all(15),
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: ListTile(
-              tileColor: Colors.grey[300],
-              title: Text(
-                getText('language'),
-                style: theme.textTheme.headline6,
-              ),
-              trailing: ToggleSwitch(
-                labels: [getText('english'), getText('arabic')],
-                minWidth: 75,
-                minHeight: 30,
-                cornerRadius: 10,
-                initialLabelIndex: appData.language == 'en' ? 0 : 1,
-                activeBgColor: theme.primaryColorLight,
-                inactiveBgColor: Colors.white,
-                onToggle: (index) {
-                  final lang = index == 0 ? 'en' : 'ar';
-                  if (lang != appData.language) {
-                    Navigator.of(context).pushReplacementNamed(
-                      TabsScreen.routeName,
-                      arguments: 1,
-                    );
-                    appData.setLanguage(context, lang);
-                  }
-                },
-              ),
-            ),
-          ),
-          SizedBox(height: 15),
-          Card(
-            shape: RoundedRectangleBorder(
+      body: BackgroundImage(
+        child: ListView(
+          padding: const EdgeInsets.all(15),
+          children: [
+            ClipRRect(
               borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.all(0),
-            color: Colors.grey[300],
-            child: SwitchListTile(
-              value: appData.notifications,
-              onChanged: (val) => appData.setNotifications(val),
-              title: Text(
-                getText('notifications'),
-                style: theme.textTheme.headline6,
+              child: ListTile(
+                tileColor: Colors.grey[300],
+                title: Text(
+                  getText('language'),
+                  style: theme.textTheme.headline6,
+                ),
+                trailing: ToggleSwitch(
+                  labels: [getText('english'), getText('arabic')],
+                  minWidth: 75,
+                  minHeight: 30,
+                  cornerRadius: 10,
+                  initialLabelIndex: appData.language == 'en' ? 0 : 1,
+                  activeBgColor: theme.primaryColorLight,
+                  inactiveBgColor: Colors.white,
+                  onToggle: (index) {
+                    final lang = index == 0 ? 'en' : 'ar';
+                    if (lang != appData.language) {
+                      Navigator.of(context).pushReplacementNamed(
+                        TabsScreen.routeName,
+                        arguments: 1,
+                      );
+                      appData.setLanguage(context, lang);
+                    }
+                  },
+                ),
               ),
-              activeColor: Colors.white,
-              activeTrackColor: theme.primaryColorLight,
-              inactiveThumbColor: theme.primaryColorLight,
-              inactiveTrackColor: Colors.white,
             ),
-          ),
-          SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: ListTile(
-              tileColor: Colors.grey[300],
-              title: Text(
-                getText(isLoggedIn ? 'log_out' : 'log_in'),
-                style: theme.textTheme.headline6,
+            SizedBox(height: 15),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              trailing: InkWell(
-                onTap: isLoggedIn
-                    ? () => _logOut(context)
-                    : () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(AuthScreen.routeName);
-                      },
-                splashColor: theme.primaryColorDark,
-                child: CircleAvatar(
-                  backgroundColor: theme.primaryColorLight,
-                  child: Icon(
-                    isLoggedIn ? Icons.logout : Icons.login,
-                    color: Colors.white,
+              margin: EdgeInsets.all(0),
+              color: Colors.grey[300],
+              child: SwitchListTile(
+                value: appData.notifications,
+                onChanged: (val) => appData.setNotifications(val),
+                title: Text(
+                  getText('notifications'),
+                  style: theme.textTheme.headline6,
+                ),
+                activeColor: Colors.white,
+                activeTrackColor: theme.primaryColorLight,
+                inactiveThumbColor: theme.primaryColorLight,
+                inactiveTrackColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 15),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: ListTile(
+                tileColor: Colors.grey[300],
+                title: Text(
+                  getText(isLoggedIn ? 'log_out' : 'log_in'),
+                  style: theme.textTheme.headline6,
+                ),
+                trailing: InkWell(
+                  onTap: isLoggedIn
+                      ? () => _logOut(context)
+                      : () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(AuthScreen.routeName);
+                        },
+                  splashColor: theme.primaryColorDark,
+                  child: CircleAvatar(
+                    backgroundColor: theme.primaryColorLight,
+                    child: Icon(
+                      isLoggedIn ? Icons.logout : Icons.login,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../localizations/app_localizations.dart';
@@ -13,6 +16,10 @@ class AccountAPI {
     "content-type": "application/json",
     "accept": "application/json"
   };
+
+  static String token(BuildContext context) {
+    return Provider.of<UserData>(context, listen: false).token;
+  }
 
   static Future<bool> registerEmail(BuildContext context, String email) async {
     loading(context);
@@ -62,11 +69,6 @@ class AccountAPI {
   static Future<bool> register(
       BuildContext context, Map<String, String> userData) async {
     loading(context);
-    final Map<String, String> account = Map.from(userData);
-    account.remove('password');
-    userData['birth'] = userData['birth'].substring(0, 10);
-    userData.remove('photo');
-
     final response = await http.post(
       '$_baseURL/register/',
       body: userData,
@@ -74,8 +76,9 @@ class AccountAPI {
     Navigator.pop(context);
 
     if (response.statusCode == 201) {
-      account['token'] = json.decode(response.body)['token'];
-      await Provider.of<UserData>(context, listen: false).saveData(account);
+      userData.remove('password');
+      userData['token'] = json.decode(response.body)['token'];
+      await Provider.of<UserData>(context, listen: false).saveData(userData);
       return true;
     } else if (response.statusCode == 400) {
       alert(context, json.decode(response.body)['details']);
@@ -96,10 +99,26 @@ class AccountAPI {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      jsonResponse['user'].remove('id');
+      final int id = jsonResponse['user'].remove('id');
+      final httpClient = HttpClient();
+      final request = await httpClient.getUrl(
+          Uri.parse('https://www.treat-min.com/media/photos/users/$id.png'));
+      final photo = await request.close();
+
       final userData = Map<String, String>.from(jsonResponse['user']);
       userData['token'] = jsonResponse['token'];
-      userData['photo'] = '';
+      if (photo.statusCode == 404) {
+        userData['photo'] = '';
+      } else {
+        loading(context);
+        final bytes = await consolidateHttpClientResponseBytes(photo);
+        final dir = await getApplicationDocumentsDirectory();
+        final path = '${dir.path}/user.png';
+        final file = File(path);
+        await file.writeAsBytes(bytes);
+        userData['photo'] = path;
+        Navigator.pop(context);
+      }
       await Provider.of<UserData>(context, listen: false).saveData(userData);
       return true;
     } else if (response.statusCode == 400) {
@@ -112,12 +131,10 @@ class AccountAPI {
 
   static Future<bool> logout(BuildContext context) async {
     loading(context);
-    final token = Provider.of<UserData>(context, listen: false).token;
     final response = await http.post(
       '$_baseURL/logout/',
-      headers: {"Authorization": "Token $token"},
+      headers: {"Authorization": "Token ${token(context)}"},
     );
-    print(token);
     Navigator.pop(context);
 
     if (response.statusCode == 204) {
@@ -200,11 +217,10 @@ class AccountAPI {
   static Future<bool> changePassword(
       BuildContext context, String email, String old, String password) async {
     loading(context);
-    final token = Provider.of<UserData>(context, listen: false).token;
     final response = await http.post(
       '$_baseURL/change-password/',
       body: {"email": email, "old": old, "password": password},
-      headers: {"Authorization": "Token $token"},
+      headers: {"Authorization": "Token ${token(context)}"},
     );
     Navigator.pop(context);
 
@@ -212,6 +228,26 @@ class AccountAPI {
       return true;
     } else if (response.statusCode == 400) {
       alert(context, 'Your current password is incorrect!');
+    } else if (response.statusCode == 401) {
+      alert(context, 'Invalid Token!');
+    } else {
+      alert(context, 'Something went wrong!');
+    }
+    return false;
+  }
+
+  static Future<bool> changePhoto(BuildContext context, File photo) async {
+    loading(context);
+    final file = await http.MultipartFile.fromPath('photo', photo.path);
+    final request =
+        http.MultipartRequest('POST', Uri.parse('$_baseURL/change-photo/'));
+    request.headers["Authorization"] = "Token ${token(context)}";
+    request.files.add(file);
+    final response = await request.send();
+    Navigator.pop(context);
+
+    if (response.statusCode == 202) {
+      return true;
     } else if (response.statusCode == 401) {
       alert(context, 'Invalid Token!');
     } else {

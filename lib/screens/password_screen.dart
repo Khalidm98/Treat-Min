@@ -6,6 +6,7 @@ import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/user_data.dart';
 import '../utils/dialogs.dart';
+import '../widgets/background_image.dart';
 import '../widgets/input_field.dart';
 
 class PasswordScreen extends StatefulWidget {
@@ -73,107 +74,109 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: SafeArea(
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50),
-                  child: Text(
-                    isLoggedIn ? 'Change Password' : 'Password Reset',
-                    style: theme.textTheme.headline4,
+      body: BackgroundImage(
+        child: SafeArea(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: Text(
+                      isLoggedIn ? 'Change Password' : 'Password Reset',
+                      style: theme.textTheme.headline4,
+                    ),
                   ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      !isLoggedIn
-                          ? SizedBox()
-                          : InputField(
-                              label: 'Current Password',
-                              textFormField: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: '********',
-                                  suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _passObscure[0] = !_passObscure[0];
-                                      });
-                                    },
-                                    child: Icon(_passObscure[0]
-                                        ? Icons.visibility
-                                        : Icons.visibility_off),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        !isLoggedIn
+                            ? SizedBox()
+                            : InputField(
+                                label: 'Current Password',
+                                textFormField: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: '********',
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _passObscure[0] = !_passObscure[0];
+                                        });
+                                      },
+                                      child: Icon(_passObscure[0]
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
+                                    ),
                                   ),
+                                  obscureText: _passObscure[0],
+                                  textInputAction: TextInputAction.next,
+                                  onSaved: (value) => _data['old'] = value,
+                                  validator: _validator,
                                 ),
-                                obscureText: _passObscure[0],
-                                textInputAction: TextInputAction.next,
-                                onSaved: (value) => _data['old'] = value,
-                                validator: _validator,
+                              ),
+                        SizedBox(height: !isLoggedIn ? 0 : 30),
+                        InputField(
+                          label: 'New Password',
+                          textFormField: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: '********',
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _passObscure[1] = !_passObscure[1];
+                                  });
+                                },
+                                child: Icon(_passObscure[1]
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
                               ),
                             ),
-                      SizedBox(height: !isLoggedIn ? 0 : 30),
-                      InputField(
-                        label: 'New Password',
-                        textFormField: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: '********',
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _passObscure[1] = !_passObscure[1];
-                                });
-                              },
-                              child: Icon(_passObscure[1]
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                            ),
+                            obscureText: _passObscure[1],
+                            textInputAction: TextInputAction.next,
+                            onSaved: (value) => _data['password'] = value,
+                            validator: _validator,
                           ),
-                          obscureText: _passObscure[1],
-                          textInputAction: TextInputAction.next,
-                          onSaved: (value) => _data['password'] = value,
-                          validator: _validator,
                         ),
-                      ),
-                      const SizedBox(height: 30),
-                      InputField(
-                        label: 'Confirm Password',
-                        textFormField: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: '********',
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _passObscure[2] = !_passObscure[2];
-                                });
-                              },
-                              child: Icon(_passObscure[2]
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
+                        const SizedBox(height: 30),
+                        InputField(
+                          label: 'Confirm Password',
+                          textFormField: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: '********',
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _passObscure[2] = !_passObscure[2];
+                                  });
+                                },
+                                child: Icon(_passObscure[2]
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
+                              ),
                             ),
+                            obscureText: _passObscure[2],
+                            onSaved: (value) => _data['confirm'] = value,
+                            validator: _validator,
                           ),
-                          obscureText: _passObscure[2],
-                          onSaved: (value) => _data['confirm'] = value,
-                          validator: _validator,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  child: Text('Save'),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    _save(isLoggedIn);
-                  },
-                ),
-                const SizedBox(height: 30),
-              ],
+                  const Spacer(),
+                  ElevatedButton(
+                    child: Text('Save'),
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      _save(isLoggedIn);
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                ],
+              ),
             ),
           ),
         ),

@@ -157,6 +157,8 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: Colors.white70,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: greenDark),

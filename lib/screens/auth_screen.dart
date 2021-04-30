@@ -7,6 +7,7 @@ import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../widgets/input_field.dart';
 import '../utils/dialogs.dart';
+import '../widgets/background_image.dart';
 // import '../widgets/social_button.dart';
 
 enum AuthMode { signUp, login }
@@ -115,155 +116,158 @@ class _AuthScreenState extends State<AuthScreen>
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in'),
-                style: theme.textTheme.headline4,
-              ),
-              const SizedBox(height: 40),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: InputField(
-                        label: getText('email'),
-                        textFormField: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'address@example.com',
+      body: BackgroundImage(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in'),
+                  style: theme.textTheme.headline4,
+                ),
+                const SizedBox(height: 40),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: InputField(
+                          label: getText('email'),
+                          textFormField: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: 'address@example.com',
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            onSaved: (value) => _data['email'] = value,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return getText('email_empty');
+                              } else if (!value.contains('.') ||
+                                  !value.contains('@') ||
+                                  value.indexOf('@') !=
+                                      value.lastIndexOf('@') ||
+                                  value.indexOf('@') > value.lastIndexOf('.')) {
+                                return getText('email_valid');
+                              }
+                              return null;
+                            },
                           ),
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          onSaved: (value) => _data['email'] = value,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return getText('email_empty');
-                            } else if (!value.contains('.') ||
-                                !value.contains('@') ||
-                                value.indexOf('@') != value.lastIndexOf('@') ||
-                                value.indexOf('@') > value.lastIndexOf('.')) {
-                              return getText('email_valid');
-                            }
-                            return null;
-                          },
                         ),
                       ),
-                    ),
-                    SizeTransition(
-                      sizeFactor: _animation,
-                      child: FadeTransition(
-                        opacity: _animation,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              InputField(
-                                label: getText('password'),
-                                textFormField: TextFormField(
-                                  decoration: InputDecoration(
-                                    hintText: '********',
-                                    suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _passObscure = !_passObscure;
-                                        });
-                                      },
-                                      child: Icon(_passObscure
-                                          ? Icons.visibility
-                                          : Icons.visibility_off),
+                      SizeTransition(
+                        sizeFactor: _animation,
+                        child: FadeTransition(
+                          opacity: _animation,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                InputField(
+                                  label: getText('password'),
+                                  textFormField: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: '********',
+                                      suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _passObscure = !_passObscure;
+                                          });
+                                        },
+                                        child: Icon(_passObscure
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                      ),
                                     ),
-                                  ),
-                                  obscureText: _passObscure,
-                                  onSaved: (value) {
-                                    if (_mode == AuthMode.login) {
-                                      _data['password'] = value;
-                                    }
-                                  },
-                                  validator: (value) {
-                                    if (_mode == AuthMode.signUp) {
+                                    obscureText: _passObscure,
+                                    onSaved: (value) {
+                                      if (_mode == AuthMode.login) {
+                                        _data['password'] = value;
+                                      }
+                                    },
+                                    validator: (value) {
+                                      if (_mode == AuthMode.signUp) {
+                                        return null;
+                                      } else if (value.isEmpty) {
+                                        return getText('password_empty');
+                                      } else if (value.length < 8) {
+                                        return getText('password_length');
+                                      } else if (int.tryParse(value) != null) {
+                                        return getText('password_numbers');
+                                      }
                                       return null;
-                                    } else if (value.isEmpty) {
-                                      return getText('password_empty');
-                                    } else if (value.length < 8) {
-                                      return getText('password_length');
-                                    } else if (int.tryParse(value) != null) {
-                                      return getText('password_numbers');
-                                    }
-                                    return null;
-                                  },
+                                    },
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              GestureDetector(
-                                onTap: _forgotPassword,
-                                child: Text(
-                                  'Forgot your password?',
-                                  style: theme.textTheme.subtitle1
-                                      .copyWith(color: theme.hintColor),
-                                ),
-                              )
-                            ],
+                                const SizedBox(height: 10),
+                                GestureDetector(
+                                  onTap: _forgotPassword,
+                                  child: Text(
+                                    'Forgot your password?',
+                                    style: theme.textTheme.subtitle1
+                                        .copyWith(color: theme.hintColor),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: ElevatedButton(
-                  child: Text(
-                    getText(
-                      _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
-                    ),
-                  ),
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    _mode == AuthMode.signUp ? _signUp() : _logIn();
-                  },
-                ),
-              ),
-              // Divider(
-              //   thickness: 3,
-              //   height: 30,
-              //   indent: 10,
-              //   endIndent: 10,
-              //   color: Colors.grey,
-              // ),
-              // SocialButton(_mode, Social.google),
-              // SocialButton(_mode, Social.facebook),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: RichText(
-                  text: TextSpan(
-                    text: getText(_mode == AuthMode.signUp
-                        ? 'already_registered'
-                        : 'not_registered'),
-                    style: theme.textTheme.subtitle1
-                        .copyWith(color: theme.hintColor),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: getText(
-                          _mode == AuthMode.signUp ? 'log_in' : 'sign_up',
-                        ),
-                        style: TextStyle(color: theme.primaryColorDark),
-                        recognizer: _switchMode,
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: ElevatedButton(
+                    child: Text(
+                      getText(
+                        _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
+                      ),
+                    ),
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      _mode == AuthMode.signUp ? _signUp() : _logIn();
+                    },
+                  ),
+                ),
+                // Divider(
+                //   thickness: 3,
+                //   height: 30,
+                //   indent: 10,
+                //   endIndent: 10,
+                //   color: Colors.grey,
+                // ),
+                // SocialButton(_mode, Social.google),
+                // SocialButton(_mode, Social.facebook),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: RichText(
+                    text: TextSpan(
+                      text: getText(_mode == AuthMode.signUp
+                          ? 'already_registered'
+                          : 'not_registered'),
+                      style: theme.textTheme.subtitle1
+                          .copyWith(color: theme.hintColor),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: getText(
+                            _mode == AuthMode.signUp ? 'log_in' : 'sign_up',
+                          ),
+                          style: TextStyle(color: theme.primaryColorDark),
+                          recognizer: _switchMode,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

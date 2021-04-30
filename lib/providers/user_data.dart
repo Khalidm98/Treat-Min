@@ -27,6 +27,7 @@ class UserData with ChangeNotifier {
     photo = userData['photo'];
     birth = DateTime.parse(userData['birth']);
     isLoggedIn = true;
+    notifyListeners();
   }
 
   Future<void> saveData(Map<String, String> data) async {
