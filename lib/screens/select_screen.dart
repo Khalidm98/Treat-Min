@@ -11,56 +11,70 @@ import '../models/screens_data.dart';
 class SelectScreen extends StatelessWidget {
   static const String routeName = '/select';
 
+  Future<void> getEntities(BuildContext context, Entity entity) async {
+    final response = await EntityAPI.getEntities(context, entity);
+    if (!response) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final entity = ModalRoute.of(context).settings.arguments;
+    final strEntity = entityToString(entity);
+    final appData = Provider.of<AppData>(context);
+    final list = appData.getEntities(entity);
     setAppLocalization(context);
 
+    if (list.isEmpty) {
+      getEntities(context, entity);
+      return Scaffold(
+        appBar: AppBar(title: Text(getText(strEntity))),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final baseURL = 'https://www.treat-min.com/media/photos/$strEntity';
+    final maxID = appData.maxID(entity);
     return Scaffold(
-      appBar: AppBar(title: Text(getText(entityToString(entity)))),
-      body: FutureBuilder(
-        future: EntityAPI.getEntities(context, entity),
-        builder: (_, response) {
-          if (response.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (response.data is String) {
-            return Center(
-              child: Text(response.data, style: theme.textTheme.headline6),
-            );
-          }
-          final list =
-              Provider.of<AppData>(context, listen: false).getEntities(entity);
-          final baseURL =
-              'https://www.treat-min.com/media/photos/${entityToString(entity)}';
-          return ListView.separated(
-            itemCount: list.length,
-            separatorBuilder: (_, __) {
-              return const Divider(
-                  thickness: 1, height: 1, indent: 10, endIndent: 10);
-            },
-            itemBuilder: (_, index) {
-              return ListTile(
-                leading: Image.network(
-                  '$baseURL/${list[index]['id']}.png',
-                  width: 40,
-                  height: 40,
-                  errorBuilder: (_, __, ___) {
-                    return Image.asset('assets/icons/default.png', width: 40);
-                  },
-                ),
-                title: Text(
-                  list[index]['name'],
-                  textScaleFactor: 0.8,
-                  style: theme.textTheme.headline5,
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    AvailableScreen.routeName,
-                    arguments: AvailableScreenData(list[index], entity),
-                  );
-                },
+      appBar: AppBar(title: Text(getText(strEntity))),
+      body: ListView.separated(
+        itemCount: list.length,
+        separatorBuilder: (_, __) {
+          return const Divider(
+              thickness: 1, height: 1, indent: 10, endIndent: 10);
+        },
+        itemBuilder: (_, index) {
+          final id = list[index]['id'];
+          return ListTile(
+            leading: id <= maxID
+                ? Image.asset(
+                    'assets/icons/$strEntity/$id.png',
+                    width: 40,
+                    height: 40,
+                  )
+                : Image.network(
+                    '$baseURL/$id.png',
+                    width: 40,
+                    height: 40,
+                    errorBuilder: (_, __, ___) {
+                      return Image.asset(
+                        'assets/icons/heart_outlined.png',
+                        width: 40,
+                        height: 40,
+                      );
+                    },
+                  ),
+            title: Text(
+              list[index]['name'],
+              textScaleFactor: 0.8,
+              style: theme.textTheme.headline5,
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                AvailableScreen.routeName,
+                arguments: AvailableScreenData(list[index], entity),
               );
             },
           );

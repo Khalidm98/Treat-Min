@@ -53,7 +53,7 @@ class AppData with ChangeNotifier {
         services = list;
         break;
     }
-    // notifyListeners();
+    notifyListeners();
   }
 
   List getEntities(Entity entity) {
@@ -66,6 +66,19 @@ class AppData with ChangeNotifier {
         return services;
       default:
         return [];
+    }
+  }
+
+  int maxID(Entity entity) {
+    switch (entity) {
+      case Entity.clinic:
+        return 29;
+      case Entity.room:
+        return 3;
+      case Entity.service:
+        return 3;
+      default:
+        return 0;
     }
   }
 }
