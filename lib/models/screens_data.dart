@@ -1,15 +1,16 @@
-import 'card_data.dart';
 import '../utils/enumerations.dart';
 
 class AvailableScreenData {
-  final Map<String, dynamic> name;
+  final Map<String, dynamic> entityMap;
   final Entity entity;
 
-  AvailableScreenData(this.name, this.entity);
+  AvailableScreenData(this.entityMap, this.entity);
 }
 
 class BookNowScreenData {
-  final CardData card;
-  final bool entity;
-  BookNowScreenData(this.entity, this.card);
+  final String entityId;
+  final Entity entity;
+  final dynamic cardDetail;
+
+  BookNowScreenData({this.entity, this.entityId, this.cardDetail});
 }
