@@ -7,7 +7,6 @@ import '../utils/enumerations.dart';
 import './auth_screen.dart';
 import './info_screen.dart';
 import '../localizations/app_localizations.dart';
-import '../providers/provider_class.dart';
 import '../providers/user_data.dart';
 import '../widgets/reservation_card.dart';
 
@@ -41,6 +40,7 @@ class _AccountScreenState extends State<AccountScreen> {
       ),
     );
   }
+
   @override
   void didChangeDependencies() {
     appointmentsResponse = ActionAPI.getUserAppointments(context);
@@ -125,35 +125,34 @@ class _AccountScreenState extends State<AccountScreen> {
                         return Card(child: Text("Something went wrong"));
                       }
                       Reservations reservedAppointments =
-                      reservationsFromJson(response.data);
+                          reservationsFromJson(response.data);
                       current = reservedAppointments.current.clinics +
                           reservedAppointments.current.rooms +
                           reservedAppointments.current.services;
 
                       return current.length != 0
                           ? ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: current.length,
-                          itemBuilder: (_, index) {
-                            return ReservationCard(
-                                reservedEntityDetails: current[index],
-                                isCurrentRes: true,
-                                entity: current[index].clinic != null
-                                    ? Entity.clinic
-                                    : current[index].service != null
-                                    ? Entity.service
-                                    : Entity.room,
-                                appointmentId: current[index].id,
-                                onCancel: () {
-                                  setState(() {
-                                    didChangeDependencies();
-                                  });
-                                });
-                          })
+                              physics: ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: current.length,
+                              itemBuilder: (_, index) {
+                                return ReservationCard(
+                                    reservedEntityDetails: current[index],
+                                    isCurrentRes: true,
+                                    entity: current[index].clinic != null
+                                        ? Entity.clinic
+                                        : current[index].service != null
+                                            ? Entity.service
+                                            : Entity.room,
+                                    appointmentId: current[index].id,
+                                    onCancel: () {
+                                      setState(() {
+                                        didChangeDependencies();
+                                      });
+                                    });
+                              })
                           : noReservation(theme);
                     }),
-
                 Container(
                   padding: const EdgeInsets.only(top: 30, left: 10, bottom: 10),
                   child: Text(
@@ -177,38 +176,38 @@ class _AccountScreenState extends State<AccountScreen> {
                         return Card(child: Text("Something went wrong"));
                       }
                       Reservations reservedAppointments =
-                      reservationsFromJson(response.data);
+                          reservationsFromJson(response.data);
                       history = reservedAppointments.past.clinics +
                           reservedAppointments.past.rooms +
                           reservedAppointments.past.services;
                       return history.length != 0
                           ? ListView.builder(
-                          physics: ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: history.length,
-                          itemBuilder: (_, index) {
-                            return ReservationCard(
-                              reservedEntityDetails: history[index],
-                              isCurrentRes: false,
-                              entity: history[index].clinic != null
-                                  ? Entity.clinic
-                                  : history[index].service != null
-                                  ? Entity.service
-                                  : Entity.room,
-                              entityId: history[index].clinicId != null
-                                  ? history[index].clinicId
-                                  : history[index].serviceId != null
-                                  ? history[index].serviceId
-                                  : history[index].roomId,
-                              entityDetailId: history[index]
-                                  .clinicDetailId !=
-                                  null
-                                  ? history[index].clinicDetailId
-                                  : history[index].serviceDetailId != null
-                                  ? history[index].serviceDetailId
-                                  : history[index].roomDetailId,
-                            );
-                          })
+                              physics: ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: history.length,
+                              itemBuilder: (_, index) {
+                                return ReservationCard(
+                                  reservedEntityDetails: history[index],
+                                  isCurrentRes: false,
+                                  entity: history[index].clinic != null
+                                      ? Entity.clinic
+                                      : history[index].service != null
+                                          ? Entity.service
+                                          : Entity.room,
+                                  entityId: history[index].clinicId != null
+                                      ? history[index].clinicId
+                                      : history[index].serviceId != null
+                                          ? history[index].serviceId
+                                          : history[index].roomId,
+                                  entityDetailId: history[index]
+                                              .clinicDetailId !=
+                                          null
+                                      ? history[index].clinicDetailId
+                                      : history[index].serviceDetailId != null
+                                          ? history[index].serviceDetailId
+                                          : history[index].roomDetailId,
+                                );
+                              })
                           : noReservation(theme);
                     }),
                 SizedBox(height: 15)

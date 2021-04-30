@@ -303,7 +303,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     child: Text(
                       getText('date_error'),
                       style:
-                      theme.textTheme.subtitle2.copyWith(color: Colors.red),
+                          theme.textTheme.subtitle2.copyWith(color: Colors.red),
                     ),
                   ),
                 SizedBox(height: 10),
@@ -335,7 +335,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     child: Text(
                       "Your appointment date day and schedule day must match",
                       style:
-                      theme.textTheme.subtitle2.copyWith(color: Colors.red),
+                          theme.textTheme.subtitle2.copyWith(color: Colors.red),
                     ),
                   ),
                 SizedBox(height: 20),
@@ -395,30 +395,30 @@ class _BookNowScreenState extends State<BookNowScreen> {
                               reviews = reviewsFromJson(response.data);
                               return reviews.reviews.length != 0
                                   ? ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: ClampingScrollPhysics(),
-                                  itemCount: reviews.reviews.length,
-                                  itemBuilder: (_, index) {
-                                    return ReviewBox(
-                                        reviews.reviews[index]);
-                                  })
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemCount: reviews.reviews.length,
+                                      itemBuilder: (_, index) {
+                                        return ReviewBox(
+                                            reviews.reviews[index]);
+                                      })
                                   : Card(
-                                margin: EdgeInsets.all(0),
-                                child: ListTile(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  trailing: Icon(
-                                    Icons.rate_review,
-                                    color: theme.accentColor,
-                                  ),
-                                  title: Text(
-                                    'There are no current reviews.',
-                                    style: theme.textTheme.subtitle2
-                                        .copyWith(
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              );
+                                      margin: EdgeInsets.all(0),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        trailing: Icon(
+                                          Icons.rate_review,
+                                          color: theme.accentColor,
+                                        ),
+                                        title: Text(
+                                          'There are no current reviews.',
+                                          style: theme.textTheme.subtitle2
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    );
                             }
                             return Center(
                               child: Text(
