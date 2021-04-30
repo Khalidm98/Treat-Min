@@ -13,21 +13,21 @@ class AppData with ChangeNotifier {
   List rooms = [];
   List services = [];
 
-  Future setLanguage(BuildContext context, String languageCode) async {
+  Future<void> setLanguage(BuildContext context, String languageCode) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('language', languageCode);
     language = languageCode;
     MyApp.setLocale(context, Locale(languageCode));
   }
 
-  Future setNotifications(bool val) async {
+  Future<void> setNotifications(bool val) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('notifications', val);
     notifications = val;
     notifyListeners();
   }
 
-  Future load(BuildContext context) async {
+  Future<void> load(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('isFirstRun')) {
       prefs.setBool('isFirstRun', false);

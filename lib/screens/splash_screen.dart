@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
                 .pushReplacementNamed(GetStartedScreen.routeName);
           } else {
             MyApp.setLocale(context, Locale(appData.language));
-            await Provider.of<UserData>(context, listen: false).tryAutoLogIn();
+            await Provider.of<UserData>(context, listen: false).tryAutoLogin();
             Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
           }
         });

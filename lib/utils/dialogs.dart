@@ -12,15 +12,50 @@ void loading(BuildContext context) {
   );
 }
 
-void alert(BuildContext context, String message) {
+void alert(BuildContext context, String message, {void Function() onOk}) {
   showDialog(
     context: context,
     child: AlertDialog(
       title: Text(message),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
           child: Text(getText('ok')),
+          onPressed: onOk == null
+              ? () => Navigator.pop(context)
+              : () {
+            Navigator.pop(context);
+            onOk();
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+void prompt(BuildContext context, String message,
+    {void Function() onYes, void Function() onNo}) {
+  showDialog(
+    context: context,
+    child: AlertDialog(
+      title: Text(message),
+      actions: [
+        TextButton(
+          child: Text(getText('no')),
+          onPressed: onNo == null
+              ? () => Navigator.pop(context)
+              : () {
+                  Navigator.pop(context);
+                  onNo();
+                },
+        ),
+        TextButton(
+          child: Text(getText('yes')),
+          onPressed: onYes == null
+              ? () => Navigator.pop(context)
+              : () {
+                  Navigator.pop(context);
+                  onYes();
+                },
         ),
       ],
     ),

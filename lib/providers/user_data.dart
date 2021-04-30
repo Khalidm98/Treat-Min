@@ -12,7 +12,7 @@ class UserData with ChangeNotifier {
   DateTime birth;
   bool isLoggedIn = false;
 
-  Future<void> tryAutoLogIn() async {
+  Future<void> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
       return;
@@ -27,6 +27,7 @@ class UserData with ChangeNotifier {
     photo = userData['photo'];
     birth = DateTime.parse(userData['birth']);
     isLoggedIn = true;
+    notifyListeners();
   }
 
   Future<void> saveData(Map<String, String> data) async {
@@ -36,7 +37,7 @@ class UserData with ChangeNotifier {
       prefs.remove('userData');
     }
     prefs.setString('userData', userData);
-    tryAutoLogIn();
+    tryAutoLogin();
     notifyListeners();
   }
 
