@@ -74,14 +74,13 @@ class _ClinicCardState extends State<ClinicCard> {
     final theme = Theme.of(context);
     setAppLocalization(context);
 
-    print(widget.clinicCardData.ratingTotal);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 11),
       child: Column(
         children: [
           Container(
             decoration: BoxDecoration(color: theme.primaryColor),
-            padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
             margin: EdgeInsets.symmetric(horizontal: 7),
             width: double.infinity,
             child: Text(
@@ -181,8 +180,10 @@ class _ClinicCardState extends State<ClinicCard> {
                         child: RatingHearts(
                           iconHeight: doctorCardIconsHeight,
                           iconWidth: doctorCardIconsWidth,
-                          rating: (widget.clinicCardData.ratingTotal ~/
-                              widget.clinicCardData.ratingUsers),
+                          rating: widget.clinicCardData.ratingUsers != 0
+                              ? (widget.clinicCardData.ratingTotal ~/
+                                  widget.clinicCardData.ratingUsers)
+                              : 0,
                         ),
                       ),
                     ],

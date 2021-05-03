@@ -63,7 +63,8 @@ class _SORCardState extends State<SORCard> {
                 id: widget.sorCardData.id,
                 hospital: widget.sorCardData.hospital,
                 price: widget.sorCardData.price,
-                ratingTotal: widget.sorCardData.ratingTotal)),
+                ratingTotal: widget.sorCardData.ratingTotal,
+                ratingUsers: widget.sorCardData.ratingUsers)),
       );
     }
   }

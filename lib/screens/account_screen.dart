@@ -191,7 +191,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 );
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Text(
@@ -247,7 +247,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 );
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
           ],
         ),
       ),

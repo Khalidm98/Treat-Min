@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:treat_min/utils/enumerations.dart';
 import '../localizations/app_localizations.dart';
@@ -144,121 +145,186 @@ class _ReservationCardState extends State<ReservationCard> {
     setAppLocalization(context);
 
     return Card(
-      margin: EdgeInsets.only(bottom: 10),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(15, 5, 0, 5),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: theme.accentColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(4), topRight: Radius.circular(4)),
-              ),
-              child: Text(
-                widget.reservedEntityDetails.hospital,
-                style: theme.textTheme.headline5.copyWith(color: Colors.white),
-              ),
+      margin: EdgeInsets.only(bottom: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: theme.accentColor,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(4), topRight: Radius.circular(4)),
             ),
-            Row(
+            child: Text(
+              widget.reservedEntityDetails.hospital,
+              style: theme.textTheme.headline5.copyWith(color: Colors.white),
+            ),
+          ),
+          Container(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 0, 0),
-                  child: Text(
-                    widget.reservedEntityDetails.clinic != null
-                        ? widget.reservedEntityDetails.clinic
-                        : widget.reservedEntityDetails.service != null
-                            ? widget.reservedEntityDetails.service
-                            : widget.reservedEntityDetails.room,
-                    style: theme.textTheme.headline6
-                        .copyWith(fontWeight: FontWeight.w700),
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.reservedEntityDetails.clinic != null)
+                      Text(
+                        widget.reservedEntityDetails.doctor,
+                        style: theme.textTheme.headline5.copyWith(fontSize: 18),
+                      ),
+                    Text(
+                      widget.reservedEntityDetails.clinic != null
+                          ? widget.reservedEntityDetails.clinic
+                          : widget.reservedEntityDetails.service != null
+                              ? widget.reservedEntityDetails.service
+                              : widget.reservedEntityDetails.room,
+                      style: widget.reservedEntityDetails.clinic != null
+                          ? theme.textTheme.button
+                          : theme.textTheme.headline5.copyWith(fontSize: 18),
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      children: [
+                        Text(
+                          "${widget.reservedEntityDetails.price}",
+                          style: theme.textTheme.button.copyWith(
+                              fontSize: 26, color: theme.primaryColorDark),
+                        ),
+                        Text(
+                          "EGP",
+                          style: theme.textTheme.button.copyWith(
+                              fontSize: 12, color: theme.primaryColorLight),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                  child: Text(
-                    "Price : ${widget.reservedEntityDetails.price} EGP",
-                    style: theme.textTheme.button,
-                  ),
-                ),
+                widget.isCurrentRes
+                    ? SizedBox(
+                        height: 50,
+                        width: 85,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            confirmReservationCancellation(context);
+                          },
+                          child: Text(getText('cancel'), maxLines: 1),
+                        ),
+                      )
+                    : SizedBox(
+                        height: 50,
+                        width: 85,
+                        child: OutlinedButton(
+                          style: ButtonStyle(
+                            side: MaterialStateProperty.all<BorderSide>(
+                              BorderSide(color: theme.primaryColor),
+                            ),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              theme.primaryColor.withOpacity(0.2),
+                            ),
+                            overlayColor: MaterialStateProperty.all<Color>(
+                              theme.primaryColor.withOpacity(0.4),
+                            ),
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                theme.primaryColor),
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              const TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            rateBox(context, theme);
+                          },
+                          child: Text(getText('rate'), maxLines: 1),
+                        ),
+                      )
               ],
             ),
-            if (widget.entity == Entity.clinic)
-              Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 5),
-                child: Text(
-                  widget.reservedEntityDetails.doctor,
-                  style: theme.textTheme.headline6
-                      .copyWith(fontSize: 16, color: theme.accentColor),
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                border: Border.symmetric(
+                    vertical: BorderSide(
+              width: 2,
+              color: theme.accentColor,
+            ))),
+          ),
+          Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.reservedEntityDetails.appointmentDate,
-                        style: theme.textTheme.button,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          Icons.date_range_rounded,
+                          color: Colors.orange,
+                          size: 30,
+                        ),
                       ),
                       Text(
-                          "${widget.reservedEntityDetails.schedule.start.substring(0, 5)} to ${widget.reservedEntityDetails.schedule.end.substring(0, 5)}"),
-                      Text(
-                          "Status : ${widget.reservedEntityDetails.status == "W" ? "Waiting" : widget.reservedEntityDetails.status == "R" ? "Rejected" : "Accepted"}")
+                        widget.reservedEntityDetails.appointmentDate,
+                        style: theme.textTheme.headline6
+                            .copyWith(fontSize: 14, color: Colors.white),
+                      ),
                     ],
                   ),
-                  widget.isCurrentRes
-                      ? SizedBox(
-                          height: 30,
-                          width: 85,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              confirmReservationCancellation(context);
-                            },
-                            child: Text(getText('cancel'), maxLines: 1),
-                          ),
-                        )
-                      : SizedBox(
-                          height: 30,
-                          width: 105,
-                          child: OutlinedButton(
-                            style: ButtonStyle(
-                              side: MaterialStateProperty.all<BorderSide>(
-                                BorderSide(color: theme.primaryColor),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                theme.primaryColor.withOpacity(0.2),
-                              ),
-                              overlayColor: MaterialStateProperty.all<Color>(
-                                theme.primaryColor.withOpacity(0.4),
-                              ),
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  theme.primaryColor),
-                              textStyle: MaterialStateProperty.all<TextStyle>(
-                                const TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                            onPressed: () {
-                              rateBox(context, theme);
-                            },
-                            child: Text(getText('rate'), maxLines: 1),
-                          ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          Icons.access_time_outlined,
+                          color: theme.primaryColorLight,
+                          size: 30,
                         ),
+                      ),
+                      Text(
+                        "${widget.reservedEntityDetails.schedule.start.substring(0, 5)} to ${widget.reservedEntityDetails.schedule.end.substring(0, 5)}",
+                        style: theme.textTheme.headline6
+                            .copyWith(fontSize: 14, color: Colors.white),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Icon(
+                          Icons.notifications_active_sharp,
+                          color: widget.reservedEntityDetails.status == "W"
+                              ? Colors.grey[400]
+                              : widget.reservedEntityDetails.status == "R"
+                                  ? Colors.red
+                                  : theme.primaryColorDark,
+                          size: 30,
+                        ),
+                      ),
+                      Text(
+                        widget.reservedEntityDetails.status == "W"
+                            ? "Waiting"
+                            : widget.reservedEntityDetails.status == "R"
+                                ? "Rejected"
+                                : "Accepted",
+                        style: theme.textTheme.headline6
+                            .copyWith(fontSize: 14, color: Colors.white),
+                      )
+                    ],
+                  ),
                 ],
               ),
-            ),
-          ],
-        ),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: theme.accentColor,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(4),
+                    bottomRight: Radius.circular(4)),
+              )),
+        ],
       ),
     );
   }
