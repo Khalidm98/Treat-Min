@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,6 +11,7 @@ import './tabs_screen.dart';
 import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/user_data.dart';
+import '../utils/dialogs.dart';
 import '../widgets/background_image.dart';
 import '../widgets/input_field.dart';
 
@@ -24,6 +26,7 @@ class _InfoScreenState extends State<InfoScreen> {
   final Map<String, String> _account = {};
   final GlobalKey<FormState> _formKey = GlobalKey();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
   bool _passObscure = true;
   bool _imageChanged = false;
   File _image;
@@ -52,6 +55,7 @@ class _InfoScreenState extends State<InfoScreen> {
   @override
   void dispose() {
     _dateController.dispose();
+    _passController.dispose();
     super.dispose();
   }
 
@@ -77,9 +81,9 @@ class _InfoScreenState extends State<InfoScreen> {
         ),
       );
       if (file != null) {
+        _imageChanged = true;
         setState(() {
           _image = file;
-          _imageChanged = true;
         });
       }
     }
@@ -102,26 +106,6 @@ class _InfoScreenState extends State<InfoScreen> {
   }
 
   Future<void> _submit(bool isLoggedIn) async {
-    // if (isLoggedIn) {
-    //   final controller = TextEditingController();
-    //   await showDialog(
-    //     context: context,
-    //     child: AlertDialog(
-    //       title: Text('Current Password'),
-    //       content: TextField(
-    //         controller: controller,
-    //       ),
-    //       actions: [
-    //         TextButton(
-    //           onPressed: () => Navigator.pop(context),
-    //           child: Text(getText('ok')),
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    //   controller.dispose();
-    // }
-
     if (_gender.isEmpty || _gender == 'i') {
       setState(() => _gender = '');
       _formKey.currentState.validate();
@@ -132,25 +116,51 @@ class _InfoScreenState extends State<InfoScreen> {
 
     _formKey.currentState.save();
     _account['gender'] = _gender;
-    if (_image == null) {
-      _account['photo'] = '';
-    } else {
+    if (_imageChanged) {
       final dir = await getApplicationDocumentsDirectory();
       final path = '${dir.path}/user.png';
       imageCache.clear();
       await _image.copy(path);
       _account['photo'] = path;
+    } else if (_image == null) {
+      _account['photo'] = '';
+    } else {
+      final dir = await getApplicationDocumentsDirectory();
+      _account['photo'] = '${dir.path}/user.png';
     }
 
     if (isLoggedIn) {
-      if (_imageChanged) {
-        await AccountAPI.changePhoto(context, _image);
+      await showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Current Password'),
+          content: TextField(
+            controller: _passController,
+            obscureText: true,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                _account['password'] = _passController.text;
+                Navigator.pop(context);
+              },
+              child: Text(getText('ok')),
+            ),
+          ],
+        ),
+      );
+
+      if (_account['password'].isEmpty) {
+        alert(context, 'Please confirm your current password!');
+      } else {
+        final response = await AccountAPI.editAccount(context, _account);
+        if (response) {
+          if (_imageChanged) {
+            await AccountAPI.changePhoto(context, _image);
+          }
+          Navigator.pop(context);
+        }
       }
-      final userData = Provider.of<UserData>(context, listen: false);
-      _account['email'] = userData.email;
-      _account['token'] = userData.token;
-      await userData.saveData(_account);
-      Navigator.pop(context);
     } else {
       _account['email'] = ModalRoute.of(context).settings.arguments;
       final response = await AccountAPI.register(context, _account);
