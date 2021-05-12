@@ -21,12 +21,15 @@ class AvailableScreen extends StatefulWidget {
 
 class _AvailableScreenState extends State<AvailableScreen> {
   Future<String> response;
+
   //entities+detail lists
   ClinicCardData clinicData;
   SORCardData sorData;
+
   //search results
   List<ClinicCard> clinicCardsListFiltered = [];
   List<SORCard> sorCardsListFiltered = [];
+
   //rendered
   List<ClinicCard> clinicCardsList = [];
   List<SORCard> sorCardsList = [];
@@ -114,27 +117,24 @@ class _AvailableScreenState extends State<AvailableScreen> {
   noEntityDetails(ThemeData theme, AvailableScreenData selectScreenData) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(children: [
-        Spacer(flex: 1),
-        Expanded(
-          flex: 2,
-          child: Image.asset(
+      child: Column(
+        children: [
+          Image.asset(
             "assets/images/doctor_sad.png",
+            height: 400,
           ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
-            "Unfortunately, No ${entityToString(selectScreenData.entity)} are"
-            " available in this section for now. Please check again later!",
-            textAlign: TextAlign.center,
-            style: theme.textTheme.headline6.copyWith(color: theme.accentColor),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              "Unfortunately, No ${entityToString(selectScreenData.entity)} are"
+              " available in this section for now. Please check again later!",
+              textAlign: TextAlign.center,
+              style:
+                  theme.textTheme.headline6.copyWith(color: theme.accentColor),
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
