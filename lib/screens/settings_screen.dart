@@ -64,26 +64,26 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 15),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              margin: EdgeInsets.all(0),
-              color: Colors.grey[300],
-              child: SwitchListTile(
-                value: appData.notifications,
-                onChanged: (val) => appData.setNotifications(val),
-                title: Text(
-                  getText('notifications'),
-                  style: theme.textTheme.headline6,
-                ),
-                activeColor: Colors.white,
-                activeTrackColor: theme.primaryColorLight,
-                inactiveThumbColor: theme.primaryColorLight,
-                inactiveTrackColor: Colors.white,
-              ),
-            ),
-            SizedBox(height: 15),
+            // Card(
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(10),
+            //   ),
+            //   margin: EdgeInsets.all(0),
+            //   color: Colors.grey[300],
+            //   child: SwitchListTile(
+            //     value: appData.notifications,
+            //     onChanged: (val) => appData.setNotifications(val),
+            //     title: Text(
+            //       getText('notifications'),
+            //       style: theme.textTheme.headline6,
+            //     ),
+            //     activeColor: Colors.white,
+            //     activeTrackColor: theme.primaryColorLight,
+            //     inactiveThumbColor: theme.primaryColorLight,
+            //     inactiveTrackColor: Colors.white,
+            //   ),
+            // ),
+            // SizedBox(height: 15),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: ListTile(

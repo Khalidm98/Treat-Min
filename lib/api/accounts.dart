@@ -255,4 +255,31 @@ class AccountAPI {
     }
     return false;
   }
+
+  static Future<bool> editAccount(
+      BuildContext context, Map<String, String> userData) async {
+    loading(context);
+    final response = await http.patch(
+      '$_baseURL/edit-account/',
+      body: userData,
+      headers: {"Authorization": "Token ${token(context)}"},
+    );
+    Navigator.pop(context);
+
+    if (response.statusCode == 202) {
+      final account = Provider.of<UserData>(context, listen: false);
+      userData.remove('password');
+      userData['token'] = token(context);
+      userData['email'] = account.email;
+      await account.saveData(userData);
+      return true;
+    } else if (response.statusCode == 400) {
+      alert(context, 'Email or password are incorrect!');
+    } else if (response.statusCode == 401) {
+      alert(context, 'Invalid Token!');
+    } else {
+      alert(context, 'Something went wrong!');
+    }
+    return false;
+  }
 }
