@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,17 +57,34 @@ class AppData with ChangeNotifier {
     notifyListeners();
   }
 
-  List getEntities(Entity entity) {
+  List getEntities(BuildContext context, Entity entity) {
+    List list = [];
     switch (entity) {
       case Entity.clinic:
-        return clinics;
+        list = json.decode(json.encode(clinics));
+        break;
       case Entity.room:
-        return rooms;
+        list = json.decode(json.encode(rooms));
+        break;
       case Entity.service:
-        return services;
-      default:
-        return [];
+        list = json.decode(json.encode(services));
+        break;
     }
+
+    final langCode = Localizations.localeOf(context).languageCode;
+    if (langCode == 'en')
+      list.forEach((entity) {
+        entity['name'] =
+            entity['name'].substring(0, entity['name'].lastIndexOf('-') - 1);
+      });
+    else {
+      list.forEach((entity) {
+        entity['name'] =
+            entity['name'].substring(entity['name'].lastIndexOf('-') + 2);
+      });
+      list.sort((a, b) => a['name'].compareTo(b['name']));
+    }
+    return list;
   }
 
   int maxID(Entity entity) {
