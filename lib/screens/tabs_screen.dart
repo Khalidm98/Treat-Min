@@ -15,7 +15,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final CarouselController _slider = CarouselController();
+  final _slider = CarouselController();
   int _currentIndex;
   int _nextIndex;
 

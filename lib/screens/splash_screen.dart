@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
     );
 
     _opacity = Tween(begin: 0.0, end: 1.0).animate(
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
           .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
       _width.addListener(_expand);
       _controller.forward().then((_) {
-        Future.delayed(const Duration(seconds: 2), () async {
+        Future.delayed(const Duration(seconds: 1), () async {
           final appData = Provider.of<AppData>(context, listen: false);
           await appData.load(context);
           if (appData.isFirstRun) {

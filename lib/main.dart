@@ -9,6 +9,7 @@ import './providers/app_data.dart';
 import './providers/user_data.dart';
 import './providers/provider_class.dart';
 
+import './screens/about_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
 import './screens/booking_screen.dart';
@@ -196,6 +197,7 @@ class _MyAppState extends State<MyApp> {
         ),
         home: SplashScreen(),
         routes: {
+          AboutScreen.routeName: (_) => AboutScreen(),
           AuthScreen.routeName: (_) => AuthScreen(),
           AvailableScreen.routeName: (_) => AvailableScreen(),
           BookNowScreen.routeName: (_) => BookNowScreen(),

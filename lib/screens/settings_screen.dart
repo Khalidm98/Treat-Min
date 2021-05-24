@@ -3,6 +3,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:treat_min/utils/dialogs.dart';
 
+import './about_screen.dart';
 import './auth_screen.dart';
 import './tabs_screen.dart';
 import '../api/accounts.dart';
@@ -81,6 +82,24 @@ class SettingsScreen extends StatelessWidget {
             //   ),
             // ),
             // SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(AboutScreen.routeName);
+              },
+              child: Row(
+                children: [
+                  Text(t('about_us'), style: theme.textTheme.headline6),
+                  Spacer(),
+                  Icon(Icons.info, size: 45, color: theme.primaryColorLight),
+                ],
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Colors.grey[300],
+                ),
+              ),
+            ),
+            SizedBox(height: 15),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: ListTile(
