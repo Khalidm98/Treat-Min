@@ -30,7 +30,7 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
           dropdownColor: Colors.white,
           isExpanded: true,
           hint: Text(
-            getText('choose_date'),
+            t('choose_date'),
             style: theme.textTheme.headline6.copyWith(fontSize: 16),
           ),
           value: dropDownValue,

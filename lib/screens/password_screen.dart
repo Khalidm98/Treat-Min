@@ -23,11 +23,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   String _validator(value) {
     if (value.isEmpty) {
-      return getText('password_empty');
+      return t('password_empty');
     } else if (value.length < 8) {
-      return getText('password_length');
+      return t('password_length');
     } else if (int.tryParse(value) != null) {
-      return getText('password_numbers');
+      return t('password_numbers');
     }
     return null;
   }
@@ -39,7 +39,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     _formKey.currentState.save();
 
     if (_data['password'] != _data['confirm']) {
-      alert(context, 'New password and confirm password must match!');
+      alert(context, t('confirm_password_match'));
       return;
     }
 
@@ -47,7 +47,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       final response = await AccountAPI.changePassword(
           context, _data['old'], _data['password']);
       if (response) {
-        alert(context, 'Your password was changed successfully.', onOk: () {
+        alert(context, t('changed_successfully'), onOk: () {
           Navigator.pop(context);
         });
       }
@@ -56,7 +56,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       final response =
           await AccountAPI.passwordReset(context, email, _data['password']);
       if (response) {
-        alert(context, 'Your password was reset successfully.', onOk: () {
+        alert(context, t('reset_successfully'), onOk: () {
           Navigator.of(context)
               .pushNamedAndRemoveUntil(AuthScreen.routeName, (route) => false);
         });
@@ -84,7 +84,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 50),
                     child: Text(
-                      isLoggedIn ? 'Change Password' : 'Password Reset',
+                      t(isLoggedIn ? 'change_password' : 'password_reset'),
                       style: theme.textTheme.headline4,
                     ),
                   ),
@@ -95,7 +95,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         !isLoggedIn
                             ? SizedBox()
                             : InputField(
-                                label: 'Current Password',
+                                label: t('current_password'),
                                 textFormField: TextFormField(
                                   decoration: InputDecoration(
                                     hintText: '********',
@@ -118,7 +118,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                               ),
                         SizedBox(height: !isLoggedIn ? 0 : 30),
                         InputField(
-                          label: 'New Password',
+                          label: t('new_password'),
                           textFormField: TextFormField(
                             decoration: InputDecoration(
                               hintText: '********',
@@ -141,7 +141,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         ),
                         const SizedBox(height: 30),
                         InputField(
-                          label: 'Confirm Password',
+                          label: t('confirm_password'),
                           textFormField: TextFormField(
                             decoration: InputDecoration(
                               hintText: '********',
@@ -166,7 +166,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   ),
                   const Spacer(),
                   ElevatedButton(
-                    child: Text('Save'),
+                    child: Text(t('save')),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
                       _save(isLoggedIn);

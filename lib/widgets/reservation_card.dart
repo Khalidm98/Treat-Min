@@ -31,6 +31,7 @@ class ReservationCard extends StatefulWidget {
 class _ReservationCardState extends State<ReservationCard> {
   final myController = TextEditingController();
   int ratingVal = 1;
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -43,7 +44,7 @@ class _ReservationCardState extends State<ReservationCard> {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text(getText('cancel_message')),
+            title: Text(t('cancel_message')),
             actions: [
               TextButton(
                   onPressed: () async {
@@ -52,12 +53,12 @@ class _ReservationCardState extends State<ReservationCard> {
                     widget.onCancel();
                     Navigator.pop(context);
                   },
-                  child: Text(getText('yes'))),
+                  child: Text(t('yes'))),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(getText('no')),
+                child: Text(t('no')),
               )
             ],
           );
@@ -77,8 +78,10 @@ class _ReservationCardState extends State<ReservationCard> {
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
               side: BorderSide(width: 4.0, color: theme.primaryColor),
             ),
-            title: Text(getText('Rate Your Appointment'),
-                textAlign: TextAlign.center),
+            title: Text(
+              t('Rate Your Appointment'),
+              textAlign: TextAlign.center,
+            ),
             content: Column(mainAxisSize: MainAxisSize.min, children: [
               ClickableRatingHearts(
                   iconHeight: 40,
@@ -124,13 +127,13 @@ class _ReservationCardState extends State<ReservationCard> {
                           myController.text);
                       Navigator.pop(context);
                     },
-                    child: Text(getText('Submit Review'), maxLines: 1),
+                    child: Text(t('Submit Review'), maxLines: 1),
                   ),
                   OutlinedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text(getText('cancel'), maxLines: 1),
+                    child: Text(t('cancel'), maxLines: 1),
                   )
                 ],
               )
@@ -228,7 +231,7 @@ class _ReservationCardState extends State<ReservationCard> {
                                   onPressed: () {
                                     confirmReservationCancellation(context);
                                   },
-                                  child: Text(getText('cancel'), maxLines: 1),
+                                  child: Text(t('cancel'), maxLines: 1),
                                 ),
                               )
                             : SizedBox(
@@ -261,7 +264,7 @@ class _ReservationCardState extends State<ReservationCard> {
                                   onPressed: () {
                                     rateBox(context, theme);
                                   },
-                                  child: Text(getText('rate'), maxLines: 1),
+                                  child: Text(t('rate'), maxLines: 1),
                                 ),
                               )
                       ],

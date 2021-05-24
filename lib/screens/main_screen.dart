@@ -20,7 +20,7 @@ class MainScreen extends StatelessWidget {
               Image.asset('assets/images/logo.png'),
               SizedBox(height: 80),
               ElevatedButton(
-                child: Text(getText(entityToString(Entity.clinic))),
+                child: Text(t(entityToString(Entity.clinic))),
                 onPressed: () {
                   Navigator.of(context).pushNamed(
                     SelectScreen.routeName,
@@ -30,7 +30,7 @@ class MainScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                child: Text(getText(entityToString(Entity.service))),
+                child: Text(t(entityToString(Entity.service))),
                 onPressed: () {
                   Navigator.of(context).pushNamed(
                     SelectScreen.routeName,
@@ -40,7 +40,7 @@ class MainScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                child: Text(getText(entityToString(Entity.room))),
+                child: Text(t(entityToString(Entity.room))),
                 onPressed: () {
                   Navigator.of(context).pushNamed(
                     SelectScreen.routeName,
@@ -53,7 +53,7 @@ class MainScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pushNamed(EmergencyScreen.routeName);
                 },
-                child: Text(getText('emergency')),
+                child: Text(t('emergency')),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
                     Theme.of(context).errorColor,

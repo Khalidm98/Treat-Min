@@ -19,7 +19,7 @@ void alert(BuildContext context, String message, {void Function() onOk}) {
       title: Text(message),
       actions: [
         TextButton(
-          child: Text(getText('ok')),
+          child: Text(t('ok')),
           onPressed: onOk == null
               ? () => Navigator.pop(context)
               : () {
@@ -40,7 +40,7 @@ void prompt(BuildContext context, String message,
       title: Text(message),
       actions: [
         TextButton(
-          child: Text(getText('no')),
+          child: Text(t('no')),
           onPressed: onNo == null
               ? () => Navigator.pop(context)
               : () {
@@ -49,7 +49,7 @@ void prompt(BuildContext context, String message,
                 },
         ),
         TextButton(
-          child: Text(getText('yes')),
+          child: Text(t('yes')),
           onPressed: onYes == null
               ? () => Navigator.pop(context)
               : () {
@@ -60,4 +60,8 @@ void prompt(BuildContext context, String message,
       ],
     ),
   );
+}
+
+void somethingWentWrong(BuildContext context) {
+  alert(context, t('wrong'));
 }

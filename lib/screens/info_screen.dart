@@ -95,7 +95,7 @@ class _InfoScreenState extends State<InfoScreen> {
       initialDate: _date,
       firstDate: DateTime.now().subtract(Duration(days: 365 * 80 + 20)),
       lastDate: DateTime.now().subtract(Duration(days: 365 * 12 + 3)),
-      helpText: getText('select_date'),
+      helpText: t('select_date'),
     );
     if (picked != null) {
       _date = picked;
@@ -133,7 +133,7 @@ class _InfoScreenState extends State<InfoScreen> {
       await showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('Current Password'),
+          title: Text(t('current_password')),
           content: TextField(
             controller: _passController,
             obscureText: true,
@@ -144,14 +144,14 @@ class _InfoScreenState extends State<InfoScreen> {
                 _account['password'] = _passController.text;
                 Navigator.pop(context);
               },
-              child: Text(getText('ok')),
+              child: Text(t('ok')),
             ),
           ],
         ),
       );
 
       if (_account['password'].isEmpty) {
-        alert(context, 'Please confirm your current password!');
+        alert(context, t('confirm_password_empty'));
       } else {
         final response = await AccountAPI.editAccount(context, _account);
         if (response) {
@@ -193,7 +193,7 @@ class _InfoScreenState extends State<InfoScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 30),
                   child: Text(
-                    getText(isLoggedIn ? 'edit' : 'setup'),
+                    t(isLoggedIn ? 'edit' : 'setup'),
                     textAlign: TextAlign.center,
                     style: theme.textTheme.headline4,
                   ),
@@ -234,7 +234,7 @@ class _InfoScreenState extends State<InfoScreen> {
                 !isLoggedIn
                     ? const SizedBox()
                     : ElevatedButton(
-                        child: Text('Change Password'),
+                        child: Text(t('change_password')),
                         onPressed: () {
                           Navigator.of(context)
                               .pushNamed(PasswordScreen.routeName);
@@ -247,7 +247,7 @@ class _InfoScreenState extends State<InfoScreen> {
                       isLoggedIn
                           ? const SizedBox()
                           : InputField(
-                              label: getText('password'),
+                              label: t('password'),
                               textFormField: TextFormField(
                                 decoration: InputDecoration(
                                   hintText: '********',
@@ -267,11 +267,11 @@ class _InfoScreenState extends State<InfoScreen> {
                                     _account['password'] = value,
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return getText('password_empty');
+                                    return t('password_empty');
                                   } else if (value.length < 8) {
-                                    return getText('password_length');
+                                    return t('password_length');
                                   } else if (int.tryParse(value) != null) {
-                                    return getText('password_numbers');
+                                    return t('password_numbers');
                                   }
                                   return null;
                                 },
@@ -279,10 +279,10 @@ class _InfoScreenState extends State<InfoScreen> {
                             ),
                       const SizedBox(height: 30),
                       InputField(
-                        label: getText('name'),
+                        label: t('name'),
                         textFormField: TextFormField(
                           decoration: InputDecoration(
-                            hintText: getText('name_hint'),
+                            hintText: t('name_hint'),
                           ),
                           initialValue: isLoggedIn ? userData.name : '',
                           textCapitalization: TextCapitalization.words,
@@ -290,7 +290,7 @@ class _InfoScreenState extends State<InfoScreen> {
                           onSaved: (value) => _account['name'] = value,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return getText('name_empty');
+                              return t('name_empty');
                             }
                             return null;
                           },
@@ -298,7 +298,7 @@ class _InfoScreenState extends State<InfoScreen> {
                       ),
                       const SizedBox(height: 30),
                       InputField(
-                        label: getText('phone'),
+                        label: t('phone'),
                         textFormField: TextFormField(
                           decoration: InputDecoration(
                             hintText: '01## ### ####',
@@ -310,11 +310,11 @@ class _InfoScreenState extends State<InfoScreen> {
                           onSaved: (value) => _account['phone'] = value,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return getText('phone_empty');
+                              return t('phone_empty');
                             } else if (int.tryParse(value) == null) {
-                              return getText('phone_numbers_only');
+                              return t('phone_numbers_only');
                             } else if (value.length < 11) {
-                              return getText('phone_11_numbers');
+                              return t('phone_11_numbers');
                             }
                             return null;
                           },
@@ -328,7 +328,7 @@ class _InfoScreenState extends State<InfoScreen> {
                         },
                         child: AbsorbPointer(
                           child: InputField(
-                            label: getText('birth'),
+                            label: t('birth'),
                             textFormField: TextFormField(
                               decoration:
                                   InputDecoration(hintText: 'YYYY-MM-DD'),
@@ -339,7 +339,7 @@ class _InfoScreenState extends State<InfoScreen> {
                               },
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return getText('birth_empty');
+                                  return t('birth_empty');
                                 }
                                 return null;
                               },
@@ -353,7 +353,7 @@ class _InfoScreenState extends State<InfoScreen> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text(getText('gender'), style: theme.textTheme.subtitle1),
+                    Text(t('gender'), style: theme.textTheme.subtitle1),
                     Spacer(),
                     Radio(
                       value: 'M',
@@ -362,7 +362,7 @@ class _InfoScreenState extends State<InfoScreen> {
                       activeColor: theme.primaryColorDark,
                     ),
                     Text(
-                      getText('gender_male'),
+                      t('gender_male'),
                       style: theme.textTheme.subtitle1,
                     ),
                     Spacer(),
@@ -373,14 +373,14 @@ class _InfoScreenState extends State<InfoScreen> {
                       activeColor: theme.primaryColorDark,
                     ),
                     Text(
-                      getText('gender_female'),
+                      t('gender_female'),
                       style: theme.textTheme.subtitle1,
                     ),
                   ],
                 ),
                 _gender.isEmpty
                     ? Text(
-                        'Please select your gender!',
+                        t('gender_error'),
                         style: theme.textTheme.caption.copyWith(
                           color: theme.errorColor,
                         ),
@@ -389,7 +389,7 @@ class _InfoScreenState extends State<InfoScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 30),
                   child: ElevatedButton(
-                    child: Text(getText(isLoggedIn ? 'save' : 'finish')),
+                    child: Text(t(isLoggedIn ? 'save' : 'finish')),
                     onPressed: () => _submit(isLoggedIn),
                   ),
                 ),

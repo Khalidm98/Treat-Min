@@ -32,7 +32,7 @@ class GetStartedScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        child: Text(getText('log_in')),
+                        child: Text(t('log_in')),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
                             Theme.of(context).accentColor,
@@ -50,7 +50,7 @@ class GetStartedScreen extends StatelessWidget {
                     SizedBox(width: 20),
                     Expanded(
                       child: ElevatedButton(
-                        child: Text(getText('explore')),
+                        child: Text(t('explore')),
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all<Size>(
                             Size(0, 40),

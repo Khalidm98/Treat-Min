@@ -49,26 +49,26 @@ class _AvailableScreenState extends State<AvailableScreen> {
                 color: theme.primaryColorLight,
                 alignment: Alignment.center,
                 child: Text(
-                  getText('sort'),
+                  t('sort'),
                   style: theme.textTheme.headline5.copyWith(
                     color: Colors.white,
                   ),
                 ),
               ),
               ModalSheetListTile(
-                text: getText('price_low'),
+                text: t('price_low'),
                 value: Provider.of<ProviderClass>(context).sortingVars[0],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceLowHigh,
               ),
               ModalSheetListTile(
-                text: getText('price_high'),
+                text: t('price_high'),
                 value: Provider.of<ProviderClass>(context).sortingVars[1],
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceHighLow,
               ),
               // ModalSheetListTile(
-              //   text: getText('nearest'),
+              //   text: t('nearest'),
               //   value: Provider.of<ProviderClass>(context).sortingVars[2],
               //   onSwitchChange:
               //       Provider.of<ProviderClass>(context).changeSortNearest,

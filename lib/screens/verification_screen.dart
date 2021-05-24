@@ -28,7 +28,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
       ..onTap = () async {
         prompt(
           context,
-          'Are you sure you want us to send a new code to your email?',
+          t('resend_prompt'),
           onYes: () async {
             final args = ModalRoute.of(context).settings.arguments as Map;
             final email = args['email'];
@@ -37,7 +37,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ? await AccountAPI.registerEmail(context, email)
                 : await AccountAPI.passwordEmail(context, email);
             if (response) {
-              alert(context, getText('resend_message'));
+              alert(context, t('resend_success'));
             }
           },
         );
@@ -54,13 +54,17 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   Future<void> _verify() async {
     String strCode = '';
-    for (TextEditingController num in _controllers) {
+    for (var num in _controllers) {
+      if (num.text.isEmpty) {
+        alert(context, t('code_error'));
+        return;
+      }
       strCode += num.text;
     }
 
     final code = int.tryParse(strCode);
     if (code == null) {
-      alert(context, 'Code must consist of exactly 4 digits!');
+      alert(context, t('code_error'));
       return;
     }
 
@@ -160,19 +164,19 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       Image.asset('assets/images/logo.png'),
                       SizedBox(height: 50),
                       Text(
-                        getText('verify'),
+                        t('verify'),
                         style: theme.textTheme.headline5,
                         textAlign: TextAlign.center,
                       ),
                       _codeInputField(theme),
                       RichText(
                         text: TextSpan(
-                          text: getText('no_code'),
+                          text: t('no_code'),
                           style: theme.textTheme.subtitle1
                               .copyWith(color: theme.hintColor),
                           children: <TextSpan>[
                             TextSpan(
-                              text: getText('resend'),
+                              text: t('resend'),
                               style: TextStyle(color: theme.accentColor),
                               recognizer: _resendCode,
                             ),
@@ -183,21 +187,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  child: Text(getText('continue')),
-                  onPressed: () {
-                    bool isFilled = true;
-                    for (var controller in _controllers) {
-                      if (controller.text.isEmpty) {
-                        isFilled = false;
-                        break;
-                      }
-                    }
-                    if (isFilled) {
-                      _verify();
-                    } else {
-                      alert(context, getText('code_error'));
-                    }
-                  },
+                  child: Text(t('continue')),
+                  onPressed: _verify,
                 ),
               ],
             ),

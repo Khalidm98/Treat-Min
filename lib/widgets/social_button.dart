@@ -21,8 +21,8 @@ class SocialButton extends StatelessWidget {
           height: 30,
         ),
         label: Text(
-          '${getText(mode == AuthMode.signUp ? 'sign_up' : 'log_in')} '
-          '${getText(social == Social.google ? 'google' : 'facebook')}',
+          '${t(mode == AuthMode.signUp ? 'sign_up' : 'log_in')} '
+          '${t(social == Social.google ? 'google' : 'facebook')}',
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(

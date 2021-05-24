@@ -31,16 +31,16 @@ class _SORCardState extends State<SORCard> {
       showDialog(
         context: context,
         child: AlertDialog(
-          title: Text(getText('must_log_in')),
+          title: Text(t('must_log_in')),
           actions: [
             TextButton(
-              child: Text(getText('cancel')),
+              child: Text(t('cancel')),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             TextButton(
-              child: Text(getText('log_in')),
+              child: Text(t('log_in')),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.of(context).pushNamedAndRemoveUntil(
@@ -180,7 +180,7 @@ class _SORCardState extends State<SORCard> {
                       ),
                       child: FittedBox(
                         child: Text(
-                          getText('book_now'),
+                          t('book_now'),
                           textScaleFactor: 0.7,
                           style: theme.textTheme.headline5
                               .copyWith(color: Colors.white),

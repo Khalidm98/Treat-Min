@@ -3,6 +3,8 @@ import 'package:location/location.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 // don't forget to edit android and ios files
 
+import '../localizations/app_localizations.dart';
+
 class EmergencyScreen extends StatefulWidget {
   static const String routeName = '/emergency';
 
@@ -28,7 +30,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Emergency')),
+      appBar: AppBar(title: Text(t('emergency'))),
       body: FutureBuilder(
         future: Location().getLocation(),
         builder: (_, location) {

@@ -13,7 +13,7 @@ import '../widgets/background_image.dart';
 
 class SettingsScreen extends StatelessWidget {
   void _logOut(BuildContext context) {
-    prompt(context, getText('log_out_message'), onYes: () async {
+    prompt(context, t('log_out_message'), onYes: () async {
       final response = await AccountAPI.logout(context);
       if (response) {
         Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
@@ -29,7 +29,7 @@ class SettingsScreen extends StatelessWidget {
     setAppLocalization(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(getText('settings'))),
+      appBar: AppBar(title: Text(t('settings'))),
       body: BackgroundImage(
         child: ListView(
           padding: const EdgeInsets.all(15),
@@ -38,12 +38,9 @@ class SettingsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: ListTile(
                 tileColor: Colors.grey[300],
-                title: Text(
-                  getText('language'),
-                  style: theme.textTheme.headline6,
-                ),
+                title: Text(t('language'), style: theme.textTheme.headline6),
                 trailing: ToggleSwitch(
-                  labels: [getText('english'), getText('arabic')],
+                  labels: [t('english'), t('arabic')],
                   minWidth: 75,
                   minHeight: 30,
                   cornerRadius: 10,
@@ -74,7 +71,7 @@ class SettingsScreen extends StatelessWidget {
             //     value: appData.notifications,
             //     onChanged: (val) => appData.setNotifications(val),
             //     title: Text(
-            //       getText('notifications'),
+            //       t('notifications'),
             //       style: theme.textTheme.headline6,
             //     ),
             //     activeColor: Colors.white,
@@ -89,7 +86,7 @@ class SettingsScreen extends StatelessWidget {
               child: ListTile(
                 tileColor: Colors.grey[300],
                 title: Text(
-                  getText(isLoggedIn ? 'log_out' : 'log_in'),
+                  t(isLoggedIn ? 'log_out' : 'log_in'),
                   style: theme.textTheme.headline6,
                 ),
                 trailing: InkWell(

@@ -35,7 +35,7 @@ class _AccountScreenState extends State<AccountScreen> {
           color: theme.accentColor,
         ),
         title: Text(
-          getText('no_reservations'),
+          t('no_reservations'),
           style:
               theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w700),
         ),
@@ -67,12 +67,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 child: Image.asset('assets/images/logo.png'),
               ),
               SizedBox(height: 50),
-              Text(getText('not_logged_in'), style: theme.textTheme.headline5),
+              Text(t('not_logged_in'), style: theme.textTheme.headline5),
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: ElevatedButton(
-                  child: Text(getText('log_in')),
+                  child: Text(t('log_in')),
                   onPressed: () {
                     Navigator.of(context)
                         .pushReplacementNamed(AuthScreen.routeName);
@@ -114,38 +114,35 @@ class _AccountScreenState extends State<AccountScreen> {
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Icon(Icons.account_circle, color: accent, size: 40),
-              title: Text(getText('name')),
+              title: Text(t('name')),
               subtitle: Text(userData.name),
             ),
             const Divider(height: 0),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Icon(Icons.alternate_email, color: accent, size: 40),
-              title: Text(getText('email')),
+              title: Text(t('email')),
               subtitle: Text(userData.email),
             ),
             const Divider(height: 0),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Icon(Icons.phone_android, color: accent, size: 40),
-              title: Text(getText('phone')),
+              title: Text(t('phone')),
               subtitle: Text(userData.phone),
             ),
             const Divider(height: 0),
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Icon(Icons.date_range, color: accent, size: 40),
-              title: Text(getText('birth')),
+              title: Text(t('birth')),
               subtitle: Text(userData.birth.toString().substring(0, 10)),
             ),
             const Divider(height: 0),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Text(
-                getText('reservations'),
-                style: theme.textTheme.headline5,
-              ),
+              child: Text(t('reservations'), style: theme.textTheme.headline5),
             ),
             FutureBuilder(
               future: appointmentsResponse,
@@ -156,7 +153,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   );
                 }
                 if (response.data == "Something went wrong") {
-                  return Card(child: Text("Something went wrong"));
+                  return Card(child: Text(t('wrong')));
                 }
                 Reservations reservedAppointments =
                     reservationsFromJson(response.data);
@@ -194,10 +191,7 @@ class _AccountScreenState extends State<AccountScreen> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Text(
-                getText('history_reservations'),
-                style: theme.textTheme.headline5,
-              ),
+              child: Text(t('history_reservations'), style: theme.textTheme.headline5),
             ),
             FutureBuilder(
               future: appointmentsResponse,
@@ -208,7 +202,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   );
                 }
                 if (response.data == "Something went wrong") {
-                  return Card(child: Text("Something went wrong"));
+                  return Card(child: Text(t('wrong')));
                 }
                 Reservations reservedAppointments =
                     reservationsFromJson(response.data);

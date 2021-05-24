@@ -25,7 +25,7 @@ class EntityAPI {
       );
       return true;
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }

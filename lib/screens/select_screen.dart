@@ -31,7 +31,7 @@ class SelectScreen extends StatelessWidget {
     if (list.isEmpty) {
       getEntities(context, entity);
       return Scaffold(
-        appBar: AppBar(title: Text(getText(strEntity))),
+        appBar: AppBar(title: Text(t(strEntity))),
         body: const Center(child: CircularProgressIndicator()),
       );
     }
@@ -39,7 +39,7 @@ class SelectScreen extends StatelessWidget {
     final baseURL = 'https://www.treat-min.com/media/photos/$strEntity';
     final maxID = appData.maxID(entity);
     return Scaffold(
-      appBar: AppBar(title: Text(getText(strEntity))),
+      appBar: AppBar(title: Text(t(strEntity))),
       body: BackgroundImage(
         child: ListView.separated(
           itemCount: list.length,

@@ -21,7 +21,12 @@ class AppLocalizations {
     _jsonMap = jsonDynamic.map((key, value) => MapEntry(key, value.toString()));
   }
 
-  String getText(String key) => _jsonMap[key];
+  String getText(String key) {
+    if (_jsonMap.containsKey(key)) {
+      return _jsonMap[key];
+    }
+    return 'No Translation Found!';
+  }
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -47,6 +52,6 @@ void setAppLocalization(BuildContext context) {
   appLocalizations = AppLocalizations.of(context);
 }
 
-String getText(String jsonKey) {
+String t(String jsonKey) {
   return appLocalizations.getText(jsonKey);
 }

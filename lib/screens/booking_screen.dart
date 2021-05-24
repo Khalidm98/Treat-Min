@@ -125,7 +125,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                       vertical: 20,
                     ),
                     child: Text(
-                      getText('reserved_successfully'),
+                      t('reserved_successfully'),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headline5
                           .copyWith(color: Colors.white),
@@ -263,7 +263,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text(getText('book_now'))),
+      appBar: AppBar(title: Text(t('book_now'))),
       body: BackgroundImage(
         child: ListView(
           padding: EdgeInsets.all(20),
@@ -348,7 +348,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(
-                        getText('date_error'),
+                        t('date_error'),
                         style: theme.textTheme.subtitle2
                             .copyWith(color: Colors.red),
                       ),
@@ -385,7 +385,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                       )),
                   SizedBox(height: 20),
                   ElevatedButton(
-                    child: Text(getText('book_now')),
+                    child: Text(t('book_now')),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                         theme.accentColor,
@@ -418,7 +418,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                           });
                         },
                         title: Text(
-                          getText(
+                          t(
                             expansionListChanger
                                 ? 'hide_reviews'
                                 : 'view_reviews',

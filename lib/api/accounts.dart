@@ -34,12 +34,12 @@ class AccountAPI {
     } else if (response.statusCode == 400) {
       final Map<String, dynamic> jsonBody = json.decode(response.body);
       if (jsonBody.containsKey('email')) {
-        alert(context, getText('email_valid'));
-      } else if (jsonBody.containsKey('details')) {
-        alert(context, jsonBody['details']);
+        alert(context, t('email_valid'));
+      } else {
+        alert(context, t('already_registered_before'));
       }
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -57,11 +57,11 @@ class AccountAPI {
     if (response.statusCode == 200) {
       return true;
     } else if (response.statusCode == 400) {
-      alert(context, 'The code you entered is not correct!');
+      alert(context, t('incorrect_code'));
     } else if (response.statusCode == 404) {
-      alert(context, 'This email address was not registered before!');
+      alert(context, t('no_register_request'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -81,9 +81,11 @@ class AccountAPI {
       await Provider.of<UserData>(context, listen: false).saveData(userData);
       return true;
     } else if (response.statusCode == 400) {
-      alert(context, json.decode(response.body)['details']);
+      alert(context, t('first_verify'));
+    } else if (response.statusCode == 404) {
+      alert(context, t('no_register_request'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -122,9 +124,9 @@ class AccountAPI {
       await Provider.of<UserData>(context, listen: false).saveData(userData);
       return true;
     } else if (response.statusCode == 400) {
-      alert(context, 'Email or password are incorrect!');
+      alert(context, t('login_error'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -141,9 +143,9 @@ class AccountAPI {
       await Provider.of<UserData>(context, listen: false).logOut();
       return true;
     } else if (response.statusCode == 401) {
-      alert(context, 'Invalid Token!');
+      alert(context, t('invalid_token'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -159,11 +161,11 @@ class AccountAPI {
     if (response.statusCode == 200) {
       return true;
     } else if (response.statusCode == 400) {
-      alert(context, getText('email_valid'));
+      alert(context, t('email_valid'));
     } else if (response.statusCode == 404) {
-      alert(context, 'This email address was not registered before!');
+      alert(context, t('not_registered_before'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -181,11 +183,11 @@ class AccountAPI {
     if (response.statusCode == 200) {
       return true;
     } else if (response.statusCode == 400) {
-      alert(context, 'The code you entered is not correct!');
+      alert(context, t('incorrect_code'));
     } else if (response.statusCode == 404) {
-      alert(context, 'This user didn\'t request to reset his password!');
+      alert(context, t('no_reset_request'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -202,14 +204,12 @@ class AccountAPI {
     if (response.statusCode == 202) {
       return true;
     } else if (response.statusCode == 400) {
-      alert(
-        context,
-        'Please verify your account with the code sent to your email',
-      );
+      alert(context, t('first_verify'));
     } else if (response.statusCode == 404) {
+      // not translated as it cannot happen at all
       alert(context, json.decode(response.body)['details']);
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -227,11 +227,11 @@ class AccountAPI {
     if (response.statusCode == 202) {
       return true;
     } else if (response.statusCode == 400) {
-      alert(context, 'Your current password is incorrect!');
+      alert(context, t('incorrect_password'));
     } else if (response.statusCode == 401) {
-      alert(context, 'Invalid Token!');
+      alert(context, t('invalid_token'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -249,9 +249,9 @@ class AccountAPI {
     if (response.statusCode == 202) {
       return true;
     } else if (response.statusCode == 401) {
-      alert(context, 'Invalid Token!');
+      alert(context, t('invalid_token'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }
@@ -274,11 +274,11 @@ class AccountAPI {
       await account.saveData(userData);
       return true;
     } else if (response.statusCode == 400) {
-      alert(context, 'Email or password are incorrect!');
+      alert(context, t('incorrect_password'));
     } else if (response.statusCode == 401) {
-      alert(context, 'Invalid Token!');
+      alert(context, t('invalid_token'));
     } else {
-      alert(context, 'Something went wrong!');
+      somethingWentWrong(context);
     }
     return false;
   }

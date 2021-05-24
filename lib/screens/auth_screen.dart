@@ -98,7 +98,7 @@ class _AuthScreenState extends State<AuthScreen>
     _formKey.currentState.save();
     _mode = AuthMode.login;
 
-    prompt(context, 'Are you sure you forgot your password?', onYes: () async {
+    prompt(context, t('forgot_password_message'), onYes: () async {
       final response = await AccountAPI.passwordEmail(context, _data['email']);
       if (response) {
         Navigator.of(context).pushNamed(
@@ -126,7 +126,7 @@ class _AuthScreenState extends State<AuthScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  getText(_mode == AuthMode.signUp ? 'sign_up' : 'log_in'),
+                  t(_mode == AuthMode.signUp ? 'sign_up' : 'log_in'),
                   style: theme.textTheme.headline4,
                 ),
                 const SizedBox(height: 40),
@@ -137,7 +137,7 @@ class _AuthScreenState extends State<AuthScreen>
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: InputField(
-                          label: getText('email'),
+                          label: t('email'),
                           textFormField: TextFormField(
                             decoration: InputDecoration(
                               hintText: 'address@example.com',
@@ -147,13 +147,13 @@ class _AuthScreenState extends State<AuthScreen>
                             onSaved: (value) => _data['email'] = value,
                             validator: (value) {
                               if (value.isEmpty) {
-                                return getText('email_empty');
+                                return t('email_empty');
                               } else if (!value.contains('.') ||
                                   !value.contains('@') ||
                                   value.indexOf('@') !=
                                       value.lastIndexOf('@') ||
                                   value.indexOf('@') > value.lastIndexOf('.')) {
-                                return getText('email_valid');
+                                return t('email_valid');
                               }
                               return null;
                             },
@@ -170,7 +170,7 @@ class _AuthScreenState extends State<AuthScreen>
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 InputField(
-                                  label: getText('password'),
+                                  label: t('password'),
                                   textFormField: TextFormField(
                                     decoration: InputDecoration(
                                       hintText: '********',
@@ -195,11 +195,11 @@ class _AuthScreenState extends State<AuthScreen>
                                       if (_mode == AuthMode.signUp) {
                                         return null;
                                       } else if (value.isEmpty) {
-                                        return getText('password_empty');
+                                        return t('password_empty');
                                       } else if (value.length < 8) {
-                                        return getText('password_length');
+                                        return t('password_length');
                                       } else if (int.tryParse(value) != null) {
-                                        return getText('password_numbers');
+                                        return t('password_numbers');
                                       }
                                       return null;
                                     },
@@ -209,7 +209,7 @@ class _AuthScreenState extends State<AuthScreen>
                                 GestureDetector(
                                   onTap: _forgotPassword,
                                   child: Text(
-                                    'Forgot your password?',
+                                    t('forgot_password'),
                                     style: theme.textTheme.subtitle1
                                         .copyWith(color: theme.hintColor),
                                   ),
@@ -226,7 +226,7 @@ class _AuthScreenState extends State<AuthScreen>
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: ElevatedButton(
                     child: Text(
-                      getText(
+                      t(
                         _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
                       ),
                     ),
@@ -249,14 +249,14 @@ class _AuthScreenState extends State<AuthScreen>
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: RichText(
                     text: TextSpan(
-                      text: getText(_mode == AuthMode.signUp
+                      text: t(_mode == AuthMode.signUp
                           ? 'already_registered'
                           : 'not_registered'),
                       style: theme.textTheme.subtitle1
                           .copyWith(color: theme.hintColor),
                       children: <TextSpan>[
                         TextSpan(
-                          text: getText(
+                          text: t(
                             _mode == AuthMode.signUp ? 'log_in' : 'sign_up',
                           ),
                           style: TextStyle(color: theme.primaryColorDark),
