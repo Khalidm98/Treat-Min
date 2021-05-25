@@ -160,7 +160,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 current = reservedAppointments.current.clinics +
                     reservedAppointments.current.rooms +
                     reservedAppointments.current.services;
-
+                if (current == null) {
+                  return Card(child: Text(t('wrong')));
+                }
                 if (current.length == 0) {
                   return noReservation(theme);
                 }
@@ -191,7 +193,8 @@ class _AccountScreenState extends State<AccountScreen> {
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Text(t('history_reservations'), style: theme.textTheme.headline5),
+              child: Text(t('history_reservations'),
+                  style: theme.textTheme.headline5),
             ),
             FutureBuilder(
               future: appointmentsResponse,
@@ -209,7 +212,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 history = reservedAppointments.past.clinics +
                     reservedAppointments.past.rooms +
                     reservedAppointments.past.services;
-
+                if (history == null) {
+                  return Card(child: Text(t('wrong')));
+                }
                 if (history.length == 0) {
                   return noReservation(theme);
                 }

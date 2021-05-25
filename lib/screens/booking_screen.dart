@@ -23,6 +23,7 @@ class BookNowScreen extends StatefulWidget {
 class _BookNowScreenState extends State<BookNowScreen> {
   bool expansionListChanger = false;
   bool ddvExists = true;
+  bool pickedDateCheck = true;
   bool pickedDate = false;
   Schedule dropDownValue = Schedule(day: null, start: null, end: null);
   Future<String> schedulesResponse;
@@ -76,7 +77,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                       vertical: 20,
                     ),
                     child: Text(
-                      "Cannot reserve the same schedule twice in the same day!",
+                      t("reserve_twice"),
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headline5
                           .copyWith(color: Colors.white),
@@ -223,20 +224,31 @@ class _BookNowScreenState extends State<BookNowScreen> {
       setState(() {
         ddvExists = true;
       });
+      if (pickedDate == true) {
+        setState(() {
+          pickedDateCheck = true;
+        });
+      } else {
+        setState(() {
+          pickedDateCheck = false;
+        });
+      }
     }
-    scheduleId = dropDownValue.id.toString();
-    reserveResponse = await ActionAPI.reserveAppointment(
-        context,
-        entity,
-        entityId,
-        detailId,
-        scheduleId,
-        appointmentDate.toString().substring(0, 10));
-    if (reserveResponse == "Your appointment was reserved successfully.") {
-      _bookSuccess(theme, context);
-    } else if (reserveResponse ==
-        "User cannot reserve the same schedule twice in the same day!") {
-      _bookFail(theme, context);
+    if (ddvExists == true && pickedDate == true) {
+      scheduleId = dropDownValue.id.toString();
+      reserveResponse = await ActionAPI.reserveAppointment(
+          context,
+          entity,
+          entityId,
+          detailId,
+          scheduleId,
+          appointmentDate.toString().substring(0, 10));
+      if (reserveResponse == "Your appointment was reserved successfully.") {
+        _bookSuccess(theme, context);
+      } else if (reserveResponse ==
+          "User cannot reserve the same schedule twice in the same day!") {
+        _bookFail(theme, context);
+      }
     }
   }
 
@@ -268,219 +280,258 @@ class _BookNowScreenState extends State<BookNowScreen> {
         child: ListView(
           padding: EdgeInsets.all(20),
           children: [
-            Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: CircleAvatar(
-                      radius: MediaQuery.of(context).size.height / 13,
-                      backgroundColor: theme.accentColor,
-                      child: CircleAvatar(
-                        child: Image.asset('assets/icons/default.png'),
-                        backgroundColor: Colors.white,
-                        radius: MediaQuery.of(context).size.height / 14,
-                      ),
-                    ),
-                  ),
-                  FittedBox(
-                    child: Text(
-                      receivedData.entity == Entity.clinic
-                          ? receivedData.cardDetail.doctor.name
-                          : receivedData.cardDetail.hospital,
-                      style: theme.textTheme.headline4,
-                    ),
-                  ),
-                  if (receivedData.entity == Entity.clinic)
-                    FittedBox(
-                      child: Text(
-                        receivedData.cardDetail.doctor.title,
-                        style: theme.textTheme.headline5
-                            .copyWith(fontWeight: FontWeight.w500),
-                        textScaleFactor: 0.9,
-                      ),
-                    ),
-                  RatingHearts(
-                    iconHeight: 30,
-                    iconWidth: 30,
-                    rating: receivedData.cardDetail.ratingUsers != 0
-                        ? (receivedData.cardDetail.ratingTotal ~/
-                            receivedData.cardDetail.ratingUsers)
-                        : 0,
-                  ),
-                  Text(
-                    "Rating from  ${receivedData.cardDetail.ratingUsers == null ? 0 : receivedData.cardDetail.ratingUsers}  visitors",
-                    style: theme.textTheme.headline6,
-                  ),
-                  SizedBox(height: 20),
-                  FutureBuilder(
-                    future: schedulesResponse,
-                    builder: (_, response) {
-                      if (response.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      }
-                      if (response.data == "Something went wrong") {
-                        return Center(
-                          child: Text(
-                            response.data,
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.headline6
-                                .copyWith(color: theme.errorColor),
-                          ),
-                        );
-                      }
-                      schedules = schedulesFromJson(response.data);
-
-                      return Container(
-                        child: BookNowDropDownList(
-                          dropDownValueGetter: updateDropDownValue,
-                          scheduleList: schedules.schedules,
+            Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: CircleAvatar(
+                          backgroundColor: theme.accentColor,
+                          radius: 75,
+                          child: CircleAvatar(
+                              radius: 70,
+                              child: ClipOval(
+                                child: Image.network(
+                                  "http://treat-min.com/media/photos/doctors/${receivedData.cardDetail.doctor.id}.png",
+                                  fit: BoxFit.fill,
+                                  errorBuilder: (_, __, ___) {
+                                    return Image.asset(
+                                      'assets/icons/default.png',
+                                      fit: BoxFit.fill,
+                                    );
+                                  },
+                                ),
+                              )),
                         ),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: theme.accentColor),
+                      ),
+                      FittedBox(
+                        child: Text(
+                          receivedData.entity == Entity.clinic
+                              ? receivedData.cardDetail.doctor.name
+                              : receivedData.cardDetail.hospital,
+                          style: theme.textTheme.headline4,
+                        ),
+                      ),
+                      if (receivedData.entity == Entity.clinic)
+                        FittedBox(
+                          child: Text(
+                            receivedData.cardDetail.doctor.title,
+                            style: theme.textTheme.headline5
+                                .copyWith(fontWeight: FontWeight.w500),
+                            textScaleFactor: 0.9,
+                            textAlign: TextAlign.center,
                           ),
+                        ),
+                      SizedBox(height: 10),
+                      RatingHearts(
+                        iconHeight: 25,
+                        iconWidth: 25,
+                        rating: receivedData.cardDetail.ratingUsers != 0
+                            ? (receivedData.cardDetail.ratingTotal ~/
+                                receivedData.cardDetail.ratingUsers)
+                            : 0,
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            t("rating_from"),
+                            style: theme.textTheme.headline6,
+                          ),
+                          Text(
+                            "${receivedData.cardDetail.ratingUsers == null ? 0 : receivedData.cardDetail.ratingUsers} ",
+                            style: theme.textTheme.headline6,
+                          ),
+                          Text(
+                            t("visitors"),
+                            style: theme.textTheme.headline6,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+                FutureBuilder(
+                  future: schedulesResponse,
+                  builder: (_, response) {
+                    if (response.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+                    if (response.data == "Something went wrong") {
+                      return Center(
+                        child: Text(
+                          t("wrong"),
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.headline6
+                              .copyWith(color: theme.errorColor),
                         ),
                       );
-                    },
-                  ),
-                  if (!ddvExists)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        t('date_error'),
-                        style: theme.textTheme.subtitle2
-                            .copyWith(color: Colors.red),
-                      ),
-                    ),
-                  SizedBox(height: 10),
-                  Container(
-                      child: ListTile(
-                        leading: Text(
-                          !pickedDate
-                              ? "Choose an appointment date."
-                              : appointmentDate.toString().substring(0, 10),
-                          style:
-                              theme.textTheme.headline6.copyWith(fontSize: 16),
-                        ),
-                        trailing: Icon(
-                          Icons.date_range,
-                          size: 30,
-                          color: theme.primaryColor,
-                        ),
-                        onTap: () async {
-                          if (dropDownValue.day != null) {
-                            await _selectDate(context, dropDownValue);
-                          } else {
-                            setState(() {
-                              ddvExists = false;
-                            });
-                          }
-                        },
+                    }
+                    schedules = schedulesFromJson(response.data);
+
+                    return Container(
+                      child: BookNowDropDownList(
+                        dropDownValueGetter: updateDropDownValue,
+                        scheduleList: schedules.schedules,
                       ),
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(color: theme.accentColor),
                         ),
-                      )),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    child: Text(t('book_now')),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        theme.accentColor,
                       ),
-                    ),
-                    onPressed: () {
-                      checkToBook(entity, entityId, detailId, theme, context);
-                    },
-                  ),
+                    );
+                  },
+                ),
+                if (!ddvExists)
                   Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: !expansionListChanger
-                            ? theme.primaryColorLight
-                            : Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: theme.primaryColorLight
-                                .withOpacity(!expansionListChanger ? 0.5 : 0),
-                            blurRadius: !expansionListChanger ? 3 : 0,
-                          ),
-                        ],
-                      ),
-                      child: ExpansionTile(
-                        onExpansionChanged: (bool) {
-                          setState(() {
-                            expansionListChanger = bool;
-                          });
-                        },
-                        title: Text(
-                          t(
-                            expansionListChanger
-                                ? 'hide_reviews'
-                                : 'view_reviews',
-                          ),
-                          style: theme.textTheme.button.copyWith(fontSize: 16),
-                          textAlign: TextAlign.start,
-                        ),
-                        children: [
-                          FutureBuilder(
-                            future: reviewsResponse,
-                            builder: (_, response) {
-                              if (response.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              }
-                              if (response.data == "Something went wrong") {}
-                              if (response.hasData) {
-                                reviews = reviewsFromJson(response.data);
-                                return reviews.reviews.length != 0
-                                    ? ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: ClampingScrollPhysics(),
-                                        itemCount: reviews.reviews.length,
-                                        itemBuilder: (_, index) {
-                                          return ReviewBox(
-                                              reviews.reviews[index]);
-                                        })
-                                    : Card(
-                                        margin: EdgeInsets.all(0),
-                                        child: ListTile(
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 15),
-                                          trailing: Icon(
-                                            Icons.rate_review,
-                                            color: theme.accentColor,
-                                          ),
-                                          title: Text(
-                                            'There are no current reviews.',
-                                            style: theme.textTheme.subtitle2
-                                                .copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                          ),
-                                        ),
-                                      );
-                              }
-                              return Center(
-                                child: Text(
-                                  response.data,
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.headline6
-                                      .copyWith(color: theme.errorColor),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      t('schedule_error'),
+                      style:
+                          theme.textTheme.subtitle2.copyWith(color: Colors.red),
                     ),
                   ),
-                ],
-              ),
+                SizedBox(height: 10),
+                Container(
+                    child: ListTile(
+                      leading: Text(
+                        !pickedDate
+                            ? t("choose_appointment")
+                            : appointmentDate.toString().substring(0, 10),
+                        style: theme.textTheme.headline6.copyWith(fontSize: 16),
+                      ),
+                      trailing: Icon(
+                        Icons.date_range,
+                        size: 30,
+                        color: theme.primaryColor,
+                      ),
+                      onTap: () async {
+                        if (dropDownValue.day != null) {
+                          await _selectDate(context, dropDownValue);
+                        } else {
+                          setState(() {
+                            ddvExists = false;
+                          });
+                        }
+                      },
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: theme.accentColor),
+                      ),
+                    )),
+                if (!pickedDateCheck)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      t('date_error'),
+                      style:
+                          theme.textTheme.subtitle2.copyWith(color: Colors.red),
+                    ),
+                  ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  child: Text(t('book_now')),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      theme.accentColor,
+                    ),
+                  ),
+                  onPressed: () {
+                    checkToBook(entity, entityId, detailId, theme, context);
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: !expansionListChanger
+                          ? theme.primaryColorLight
+                          : Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.primaryColorLight
+                              .withOpacity(!expansionListChanger ? 0.5 : 0),
+                          blurRadius: !expansionListChanger ? 3 : 0,
+                        ),
+                      ],
+                    ),
+                    child: ExpansionTile(
+                      onExpansionChanged: (bool) {
+                        setState(() {
+                          expansionListChanger = bool;
+                        });
+                      },
+                      title: Text(
+                        t(
+                          expansionListChanger
+                              ? 'hide_reviews'
+                              : 'view_reviews',
+                        ),
+                        style: theme.textTheme.button.copyWith(fontSize: 16),
+                        textAlign: TextAlign.start,
+                      ),
+                      children: [
+                        FutureBuilder(
+                          future: reviewsResponse,
+                          builder: (_, response) {
+                            if (response.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            }
+                            if (response.data == "Something went wrong") {
+                              return Card(child: Text(t("wrong")));
+                            }
+                            if (response.hasData) {
+                              reviews = reviewsFromJson(response.data);
+                              return reviews.reviews.length != 0
+                                  ? ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemCount: reviews.reviews.length,
+                                      itemBuilder: (_, index) {
+                                        return ReviewBox(
+                                            reviews.reviews[index]);
+                                      })
+                                  : Card(
+                                      margin: EdgeInsets.all(0),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        trailing: Icon(
+                                          Icons.rate_review,
+                                          color: theme.accentColor,
+                                        ),
+                                        title: Text(
+                                          t("no_current_reviews"),
+                                          style: theme.textTheme.subtitle2
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    );
+                            }
+                            return Center(
+                              child: Text(
+                                t("wrong"),
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.headline6
+                                    .copyWith(color: theme.errorColor),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),

@@ -9,7 +9,8 @@ import '../models/card_data.dart';
 import '../localizations/app_localizations.dart';
 import '../screens/booking_screen.dart';
 
-const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
+const EdgeInsetsGeometry doctorCardIconsPadding =
+    const EdgeInsets.symmetric(vertical: 4, horizontal: 5);
 const double doctorCardIconsWidth = 12.0;
 const double doctorCardIconsHeight = 12.0;
 
@@ -139,81 +140,91 @@ class _ClinicCardState extends State<ClinicCard> {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                Container(
-                  color: theme.primaryColor,
-                  padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                  child: Column(
-                    children: [
-                      Container(
-                        child: Text(
-                          "Price",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
-                        ),
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      color: theme.primaryColor,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                              t("price"),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          SizedBox(height: 15),
+                          Container(
+                            child: Text(
+                              t("rating"),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
                       ),
-                      Divider(),
-                      Container(
-                        child: Text(
-                          "Rating",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        '${widget.clinicCardData.price} EGP',
-                        style: theme.textTheme.subtitle1,
-                        textAlign: TextAlign.center,
-                      ),
-                      Divider(
-                        color: Colors.transparent,
-                      ),
-                      Center(
-                        child: RatingHearts(
-                          iconHeight: doctorCardIconsHeight,
-                          iconWidth: doctorCardIconsWidth,
-                          rating: widget.clinicCardData.ratingUsers != 0
-                              ? (widget.clinicCardData.ratingTotal ~/
-                                  widget.clinicCardData.ratingUsers)
-                              : 0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          theme.primaryColor,
-                        ),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.all(5),
-                        ),
-                      ),
-                      child: FittedBox(
-                        child: Text(
-                          t('book_now'),
-                          textScaleFactor: 0.7,
-                          style: theme.textTheme.headline5
-                              .copyWith(color: Colors.white),
-                        ),
-                      ),
-                      onPressed: checkLoggedIn,
                     ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${widget.clinicCardData.price} ',
+                              style: theme.textTheme.subtitle1,
+                            ),
+                            Text(
+                              t("egp"),
+                              style: theme.textTheme.subtitle1,
+                            ),
+                          ],
+                        ),
+                        Center(
+                          child: RatingHearts(
+                            iconHeight: doctorCardIconsHeight,
+                            iconWidth: doctorCardIconsWidth,
+                            rating: widget.clinicCardData.ratingUsers != 0
+                                ? (widget.clinicCardData.ratingTotal ~/
+                                    widget.clinicCardData.ratingUsers)
+                                : 0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            theme.primaryColor,
+                          ),
+                        ),
+                        child: FittedBox(
+                          child: Text(
+                            t('view_details'),
+                            textScaleFactor: 0.6,
+                            style: theme.textTheme.headline5
+                                .copyWith(color: Colors.white),
+                          ),
+                        ),
+                        onPressed: checkLoggedIn,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

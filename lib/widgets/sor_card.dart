@@ -128,7 +128,7 @@ class _SORCardState extends State<SORCard> {
                     children: [
                       Container(
                         child: Text(
-                          "Price",
+                          t("price"),
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white),
                         ),
@@ -136,7 +136,7 @@ class _SORCardState extends State<SORCard> {
                       Divider(),
                       Container(
                         child: Text(
-                          "Rating",
+                          t("rating"),
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white),
                         ),
@@ -148,10 +148,18 @@ class _SORCardState extends State<SORCard> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        '${widget.sorCardData.price} EGP',
-                        style: theme.textTheme.subtitle1,
-                        textAlign: TextAlign.center,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${widget.sorCardData.price} ',
+                            style: theme.textTheme.subtitle1,
+                          ),
+                          Text(
+                            t("egp"),
+                            style: theme.textTheme.subtitle1,
+                          ),
+                        ],
                       ),
                       Divider(
                         color: Colors.transparent,

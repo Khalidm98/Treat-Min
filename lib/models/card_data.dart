@@ -6,8 +6,6 @@ ClinicCardData clinicCardFromJson(String str) =>
 SORCardData sorCardFromJson(String str) =>
     SORCardData.fromJson(json.decode(str));
 
-String cardToJson(SORCardData data) => json.encode(data.toJson());
-
 class ClinicCardData {
   ClinicCardData({
     this.entity,
@@ -22,11 +20,6 @@ class ClinicCardData {
         details: List<ClinicDetail>.from(
             json["details"].map((x) => ClinicDetail.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "entity": entity,
-        "details": List<dynamic>.from(details.map((x) => x.toJson())),
-      };
 }
 
 class SORCardData {
@@ -43,11 +36,6 @@ class SORCardData {
         details: List<SORDetail>.from(
             json["details"].map((x) => SORDetail.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "entity": entity,
-        "details": List<dynamic>.from(details.map((x) => x.toJson())),
-      };
 }
 
 class ClinicDetail {
@@ -75,15 +63,6 @@ class ClinicDetail {
         ratingUsers: json["rating_users"],
         doctor: Doctor.fromJson(json["doctor"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "hospital": hospital,
-        "price": price,
-        "rating_total": ratingTotal,
-        "rating_users": ratingUsers,
-        "doctor": doctor.toJson(),
-      };
 }
 
 class SORDetail {
@@ -120,20 +99,17 @@ class SORDetail {
 
 class Doctor {
   Doctor({
+    this.id,
     this.name,
     this.title,
   });
-
+  int id;
   String name;
   String title;
 
   factory Doctor.fromJson(Map<String, dynamic> json) => Doctor(
+        id: json["id"],
         name: json["name"],
         title: json["title"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "title": title,
-      };
 }

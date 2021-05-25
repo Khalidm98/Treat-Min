@@ -18,6 +18,28 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
   Schedule dropDownValue;
   _BookNowDropDownListState(this.scheduleList, this.dropDownValueGetter);
 
+  String getDaysTranslated(Schedule schedule) {
+    if (schedule.day == "SUN") {
+      return t("sun");
+    }
+    if (schedule.day == "MON") {
+      return t("mon");
+    }
+    if (schedule.day == "TUE") {
+      return t("tue");
+    }
+    if (schedule.day == "WED") {
+      return t("wed");
+    }
+    if (schedule.day == "THU") {
+      return t("thu");
+    }
+    if (schedule.day == "FRI") {
+      return t("fri");
+    }
+    return t("sat");
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -29,7 +51,8 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
         child: DropdownButton(
           dropdownColor: Colors.white,
           isExpanded: true,
-          hint: Text(t('choose_date'), style: theme.textTheme.headline6.copyWith(fontSize: 16)),
+          hint: Text(t('choose_date'),
+              style: theme.textTheme.headline6.copyWith(fontSize: 16)),
           value: dropDownValue,
           icon: Icon(
             Icons.date_range,
@@ -47,9 +70,32 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
           items: scheduleList.map<DropdownMenuItem>((Schedule schedule) {
             return DropdownMenuItem(
               value: schedule,
-              child: Text(
-                "${schedule.day} - ( From ${schedule.start.substring(0, 5)} to ${schedule.end.substring(0, 5)} ) ",
-                style: theme.textTheme.headline6.copyWith(fontSize: 16),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${getDaysTranslated(schedule)} - ",
+                      style: theme.textTheme.headline6.copyWith(fontSize: 16),
+                    ),
+                    Text(
+                      t("from"),
+                      style: theme.textTheme.headline6.copyWith(fontSize: 16),
+                    ),
+                    Text(
+                      " ${schedule.start.substring(0, 5)} ",
+                      style: theme.textTheme.headline6.copyWith(fontSize: 16),
+                    ),
+                    Text(
+                      t("to"),
+                      style: theme.textTheme.headline6.copyWith(fontSize: 16),
+                    ),
+                    Text(
+                      " ${schedule.end.substring(0, 5)}",
+                      style: theme.textTheme.headline6.copyWith(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
             );
           }).toList(),

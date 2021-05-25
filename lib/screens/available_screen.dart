@@ -115,27 +115,52 @@ class _AvailableScreenState extends State<AvailableScreen> {
   }
 
   noEntityDetails(ThemeData theme, AvailableScreenData selectScreenData) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: [
-          Image.asset(
-            "assets/images/doctor_sad.png",
-            height: 400,
+    return Column(
+      children: [
+        Image.asset(
+          "assets/images/doctor_sad.png",
+          height: 400,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    t("Unfortunately, No"),
+                    style: theme.textTheme.headline6
+                        .copyWith(color: theme.accentColor),
+                  ),
+                  Text(
+                    "${getEntityTranslated(entityToString(selectScreenData.entity))}",
+                    style: theme.textTheme.headline6
+                        .copyWith(color: theme.accentColor),
+                  ),
+                ],
+              ),
+              Text(
+                t("are available in this section for now. Please check again later!"),
+                style: theme.textTheme.headline6
+                    .copyWith(color: theme.accentColor),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Text(
-              "Unfortunately, No ${entityToString(selectScreenData.entity)} are"
-              " available in this section for now. Please check again later!",
-              textAlign: TextAlign.center,
-              style:
-                  theme.textTheme.headline6.copyWith(color: theme.accentColor),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
+  }
+
+  String getEntityTranslated(String entity) {
+    if (entity == "services") {
+      return t("available_services");
+    }
+    if (entity == "clinics") {
+      return t("available_clinics");
+    }
+    return t("available_rooms");
   }
 
   @override
@@ -200,6 +225,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(selectScreenData.entityMap['name']),
         actions: [
@@ -224,7 +250,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                   controller: myController,
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
-                      hintText: 'Search',
+                      hintText: t('search'),
                       border: InputBorder.none,
                       suffixIcon: IconButton(
                         icon: Icon(Icons.cancel),
@@ -236,83 +262,94 @@ class _AvailableScreenState extends State<AvailableScreen> {
                   onChanged: onSearchTextChanged,
                 ),
               ),
-              FutureBuilder(
-                future: response,
-                builder: (_, response) {
-                  if (response.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (response.data == "Something went wrong") {
-                    return Center(
-                      child: Text(
-                        response.data,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.headline6
-                            .copyWith(color: theme.errorColor),
-                      ),
-                    );
-                  }
-                  if (response.hasData &&
-                      selectScreenData.entity == Entity.clinic) {
-                    clinicData = clinicCardFromJson(response.data);
-                    if (clinicData.details.length == 0) {
-                      return noEntityDetails(theme, selectScreenData);
-                    }
-                    clinicCardsList = clinicData.details
-                        .asMap()
-                        .entries
-                        .map<ClinicCard>((detail) {
-                      return ClinicCard(
-                        entityId: selectScreenData.entityMap['id'],
-                        entity: selectScreenData.entity,
-                        clinicCardData: clinicData.details[detail.key],
-                      );
-                    }).toList();
-                  }
-                  if (response.hasData &&
-                      selectScreenData.entity != Entity.clinic) {
-                    sorData = sorCardFromJson(response.data);
-                    if (sorData.details.length == 0) {
-                      return noEntityDetails(theme, selectScreenData);
-                    }
-                    sorCardsList =
-                        sorData.details.asMap().entries.map<SORCard>((detail) {
-                      return SORCard(
-                        entityId: selectScreenData.entityMap['id'],
-                        entity: selectScreenData.entity,
-                        sorCardData: sorData.details[detail.key],
-                      );
-                    }).toList();
-                  }
-                  return Expanded(
-                    child: clinicCardsListFiltered.length != 0 ||
-                            sorCardsListFiltered.length != 0 ||
-                            myController.text.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: selectScreenData.entity == Entity.clinic
-                                ? clinicCardsListFiltered.length
-                                : sorCardsListFiltered.length,
-                            itemBuilder: (context, index) {
-                              return selectScreenData.entity == Entity.clinic
-                                  ? clinicListSorter(
-                                      context, clinicCardsListFiltered)[index]
-                                  : sorListSorter(
-                                      context, sorCardsListFiltered)[index];
-                            },
-                          )
-                        : ListView.builder(
-                            itemCount: selectScreenData.entity == Entity.clinic
-                                ? clinicCardsList.length
-                                : sorCardsList.length,
-                            itemBuilder: (context, index) {
-                              return selectScreenData.entity == Entity.clinic
-                                  ? clinicListSorter(
-                                      context, clinicCardsList)[index]
-                                  : sorListSorter(context, sorCardsList)[index];
-                            },
-                          ),
-                  );
+              NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (OverscrollIndicatorNotification overScroll) {
+                  overScroll.disallowGlow();
+                  return;
                 },
+                child: FutureBuilder(
+                  future: response,
+                  builder: (_, response) {
+                    if (response.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (response.data == "Something went wrong") {
+                      return Center(
+                        child: Text(
+                          t("wrong"),
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.headline6
+                              .copyWith(color: theme.errorColor),
+                        ),
+                      );
+                    }
+                    if (response.hasData &&
+                        selectScreenData.entity == Entity.clinic) {
+                      clinicData = clinicCardFromJson(response.data);
+                      if (clinicData.details.length == 0) {
+                        return noEntityDetails(theme, selectScreenData);
+                      }
+                      clinicCardsList = clinicData.details
+                          .asMap()
+                          .entries
+                          .map<ClinicCard>((detail) {
+                        return ClinicCard(
+                          entityId: selectScreenData.entityMap['id'],
+                          entity: selectScreenData.entity,
+                          clinicCardData: clinicData.details[detail.key],
+                        );
+                      }).toList();
+                    }
+                    if (response.hasData &&
+                        selectScreenData.entity != Entity.clinic) {
+                      sorData = sorCardFromJson(response.data);
+                      if (sorData.details.length == 0) {
+                        return noEntityDetails(theme, selectScreenData);
+                      }
+                      sorCardsList = sorData.details
+                          .asMap()
+                          .entries
+                          .map<SORCard>((detail) {
+                        return SORCard(
+                          entityId: selectScreenData.entityMap['id'],
+                          entity: selectScreenData.entity,
+                          sorCardData: sorData.details[detail.key],
+                        );
+                      }).toList();
+                    }
+                    return Expanded(
+                      child: clinicCardsListFiltered.length != 0 ||
+                              sorCardsListFiltered.length != 0 ||
+                              myController.text.isNotEmpty
+                          ? ListView.builder(
+                              itemCount:
+                                  selectScreenData.entity == Entity.clinic
+                                      ? clinicCardsListFiltered.length
+                                      : sorCardsListFiltered.length,
+                              itemBuilder: (context, index) {
+                                return selectScreenData.entity == Entity.clinic
+                                    ? clinicListSorter(
+                                        context, clinicCardsListFiltered)[index]
+                                    : sorListSorter(
+                                        context, sorCardsListFiltered)[index];
+                              },
+                            )
+                          : ListView.builder(
+                              itemCount:
+                                  selectScreenData.entity == Entity.clinic
+                                      ? clinicCardsList.length
+                                      : sorCardsList.length,
+                              itemBuilder: (context, index) {
+                                return selectScreenData.entity == Entity.clinic
+                                    ? clinicListSorter(
+                                        context, clinicCardsList)[index]
+                                    : sorListSorter(
+                                        context, sorCardsList)[index];
+                              },
+                            ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

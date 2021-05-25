@@ -84,9 +84,10 @@ class _ReservationCardState extends State<ReservationCard> {
             ),
             content: Column(mainAxisSize: MainAxisSize.min, children: [
               ClickableRatingHearts(
-                  iconHeight: 40,
-                  iconWidth: 40,
+                  iconHeight: 30,
+                  iconWidth: 30,
                   ratingGetter: updateRatingValue),
+              SizedBox(height: 10),
               TextField(
                 controller: myController,
                 keyboardType: TextInputType.multiline,
@@ -145,6 +146,7 @@ class _ReservationCardState extends State<ReservationCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final langCode = Localizations.localeOf(context).languageCode;
     setAppLocalization(context);
 
     return Card(
@@ -158,10 +160,10 @@ class _ReservationCardState extends State<ReservationCard> {
               child: RotatedBox(
                 child: Text(
                   widget.reservedEntityDetails.status == "W"
-                      ? "Waiting"
+                      ? t("waiting")
                       : widget.reservedEntityDetails.status == "R"
-                          ? "Rejected"
-                          : "Accepted",
+                          ? t("rejected")
+                          : t("accepted"),
                   style: theme.textTheme.button.copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -174,8 +176,19 @@ class _ReservationCardState extends State<ReservationCard> {
                         ? Colors.red
                         : theme.primaryColorLight,
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(4),
-                    bottomLeft: Radius.circular(4)),
+                  topLeft: langCode == 'en'
+                      ? Radius.circular(4)
+                      : Radius.circular(0),
+                  bottomLeft: langCode == 'en'
+                      ? Radius.circular(4)
+                      : Radius.circular(0),
+                  topRight: langCode == 'ar'
+                      ? Radius.circular(4)
+                      : Radius.circular(0),
+                  bottomRight: langCode == 'ar'
+                      ? Radius.circular(4)
+                      : Radius.circular(0),
+                ),
               ),
             ),
             Expanded(
@@ -187,8 +200,9 @@ class _ReservationCardState extends State<ReservationCard> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: theme.accentColor,
-                      borderRadius:
-                          BorderRadius.only(topRight: Radius.circular(4)),
+                      borderRadius: langCode == 'en'
+                          ? BorderRadius.only(topRight: Radius.circular(4))
+                          : BorderRadius.only(topLeft: Radius.circular(4)),
                     ),
                     child: Text(
                       widget.reservedEntityDetails.hospital,
@@ -200,44 +214,44 @@ class _ReservationCardState extends State<ReservationCard> {
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (widget.reservedEntityDetails.clinic != null)
-                              Text(
-                                widget.reservedEntityDetails.doctor,
-                                style: theme.textTheme.headline5
-                                    .copyWith(fontSize: 18),
-                              ),
-                            Text(
-                              widget.reservedEntityDetails.clinic != null
-                                  ? widget.reservedEntityDetails.clinic
-                                  : widget.reservedEntityDetails.service != null
-                                      ? widget.reservedEntityDetails.service
-                                      : widget.reservedEntityDetails.room,
-                              style: widget.reservedEntityDetails.clinic != null
-                                  ? theme.textTheme.button
-                                  : theme.textTheme.headline5
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (widget.reservedEntityDetails.clinic != null)
+                                Text(
+                                  widget.reservedEntityDetails.doctor,
+                                  style: theme.textTheme.headline5
                                       .copyWith(fontSize: 18),
-                            ),
-                          ],
+                                ),
+                              Text(
+                                widget.reservedEntityDetails.clinic != null
+                                    ? widget.reservedEntityDetails.clinic
+                                    : widget.reservedEntityDetails.service !=
+                                            null
+                                        ? widget.reservedEntityDetails.service
+                                        : widget.reservedEntityDetails.room,
+                                style:
+                                    widget.reservedEntityDetails.clinic != null
+                                        ? theme.textTheme.button
+                                        : theme.textTheme.headline5
+                                            .copyWith(fontSize: 18),
+                              )
+                            ],
+                          ),
+                          flex: 2,
                         ),
-                        widget.isCurrentRes
-                            ? SizedBox(
-                                height: 50,
-                                width: 85,
-                                child: OutlinedButton(
+                        Expanded(
+                          child: widget.isCurrentRes
+                              ? OutlinedButton(
                                   onPressed: () {
                                     confirmReservationCancellation(context);
                                   },
                                   child: Text(t('cancel'), maxLines: 1),
-                                ),
-                              )
-                            : SizedBox(
-                                height: 50,
-                                width: 85,
-                                child: OutlinedButton(
+                                )
+                              : OutlinedButton(
                                   style: ButtonStyle(
                                     side: MaterialStateProperty.all<BorderSide>(
                                       BorderSide(color: theme.primaryColor),
@@ -266,7 +280,8 @@ class _ReservationCardState extends State<ReservationCard> {
                                   },
                                   child: Text(t('rate'), maxLines: 1),
                                 ),
-                              )
+                          flex: 1,
+                        )
                       ],
                     ),
                     padding: EdgeInsets.all(10),
@@ -280,65 +295,84 @@ class _ReservationCardState extends State<ReservationCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: Icon(
-                                  Icons.date_range_rounded,
-                                  color: Colors.orange,
-                                  size: 30,
-                                ),
+                              Icon(
+                                Icons.date_range_rounded,
+                                color: Colors.orange,
+                                size: 20,
                               ),
                               Text(
                                 widget.reservedEntityDetails.appointmentDate,
                                 style: theme.textTheme.headline6.copyWith(
-                                    fontSize: 14, color: Colors.white),
+                                    fontSize: 12, color: Colors.white),
                               ),
                             ],
                           ),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: Icon(
-                                  Icons.access_time_outlined,
-                                  color: theme.primaryColorLight,
-                                  size: 30,
-                                ),
+                              Icon(
+                                Icons.access_time_outlined,
+                                color: theme.primaryColorLight,
+                                size: 20,
                               ),
-                              Text(
-                                "${widget.reservedEntityDetails.schedule.start.substring(0, 5)} to ${widget.reservedEntityDetails.schedule.end.substring(0, 5)}",
-                                style: theme.textTheme.headline6.copyWith(
-                                    fontSize: 14, color: Colors.white),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "${widget.reservedEntityDetails.schedule.start.substring(0, 5)} ",
+                                    style: theme.textTheme.headline6.copyWith(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                  Text(
+                                    t("to"),
+                                    style: theme.textTheme.headline6.copyWith(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                  Text(
+                                    " ${widget.reservedEntityDetails.schedule.end.substring(0, 5)}",
+                                    style: theme.textTheme.headline6.copyWith(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                ],
                               )
                             ],
                           ),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: Icon(
-                                  Icons.monetization_on,
-                                  color: Colors.lightGreen,
-                                  size: 30,
-                                ),
+                              Icon(
+                                Icons.monetization_on,
+                                color: Colors.lightGreen,
+                                size: 20,
                               ),
-                              Text(
-                                "${widget.reservedEntityDetails.price} EGP",
-                                style: theme.textTheme.headline6.copyWith(
-                                    fontSize: 14, color: Colors.white),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${widget.reservedEntityDetails.price} ",
+                                    style: theme.textTheme.headline6.copyWith(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                  Text(
+                                    t("egp"),
+                                    style: theme.textTheme.headline6.copyWith(
+                                        fontSize: 12, color: Colors.white),
+                                  ),
+                                ],
                               )
                             ],
                           ),
                         ],
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 10),
+                          horizontal: 15, vertical: 5),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: theme.accentColor,
-                        borderRadius:
-                            BorderRadius.only(bottomRight: Radius.circular(4)),
+                        borderRadius: langCode == 'en'
+                            ? BorderRadius.only(bottomRight: Radius.circular(4))
+                            : BorderRadius.only(bottomLeft: Radius.circular(4)),
                       )),
                 ],
               ),
