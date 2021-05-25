@@ -100,7 +100,7 @@ class AccountAPI {
     Navigator.pop(context);
 
     if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
+      final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       final int id = jsonResponse['user'].remove('id');
       final httpClient = HttpClient();
       final request = await httpClient.getUrl(

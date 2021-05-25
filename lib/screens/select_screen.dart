@@ -25,7 +25,7 @@ class SelectScreen extends StatelessWidget {
     final entity = ModalRoute.of(context).settings.arguments;
     final strEntity = entityToString(entity);
     final appData = Provider.of<AppData>(context);
-    final list = appData.getEntities(entity);
+    final list = appData.getEntities(context, entity);
     setAppLocalization(context);
 
     if (list.isEmpty) {
