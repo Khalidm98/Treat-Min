@@ -11,7 +11,6 @@ class AppData with ChangeNotifier {
   bool isFirstRun;
 
   List clinics = [];
-  List rooms = [];
   List services = [];
 
   Future<void> setLanguage(BuildContext context, String languageCode) async {
@@ -47,9 +46,6 @@ class AppData with ChangeNotifier {
       case Entity.clinic:
         clinics = list;
         break;
-      case Entity.room:
-        rooms = list;
-        break;
       case Entity.service:
         services = list;
         break;
@@ -62,9 +58,6 @@ class AppData with ChangeNotifier {
     switch (entity) {
       case Entity.clinic:
         list = json.decode(json.encode(clinics));
-        break;
-      case Entity.room:
-        list = json.decode(json.encode(rooms));
         break;
       case Entity.service:
         list = json.decode(json.encode(services));
@@ -91,8 +84,6 @@ class AppData with ChangeNotifier {
     switch (entity) {
       case Entity.clinic:
         return 29;
-      case Entity.room:
-        return 3;
       case Entity.service:
         return 3;
       default:

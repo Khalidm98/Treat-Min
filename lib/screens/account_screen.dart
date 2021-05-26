@@ -158,7 +158,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 Reservations reservedAppointments =
                     reservationsFromJson(response.data);
                 current = reservedAppointments.current.clinics +
-                    reservedAppointments.current.rooms +
                     reservedAppointments.current.services;
                 if (current == null) {
                   return Card(child: Text(t('wrong')));
@@ -176,9 +175,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       isCurrentRes: true,
                       entity: current[index].clinic != null
                           ? Entity.clinic
-                          : current[index].service != null
-                              ? Entity.service
-                              : Entity.room,
+                          : Entity.service,
                       appointmentId: current[index].id,
                       onCancel: () {
                         setState(() {
@@ -210,7 +207,6 @@ class _AccountScreenState extends State<AccountScreen> {
                 Reservations reservedAppointments =
                     reservationsFromJson(response.data);
                 history = reservedAppointments.past.clinics +
-                    reservedAppointments.past.rooms +
                     reservedAppointments.past.services;
                 if (history == null) {
                   return Card(child: Text(t('wrong')));
@@ -228,19 +224,13 @@ class _AccountScreenState extends State<AccountScreen> {
                       isCurrentRes: false,
                       entity: history[index].clinic != null
                           ? Entity.clinic
-                          : history[index].service != null
-                              ? Entity.service
-                              : Entity.room,
+                          : Entity.service,
                       entityId: history[index].clinicId != null
                           ? history[index].clinicId
-                          : history[index].serviceId != null
-                              ? history[index].serviceId
-                              : history[index].roomId,
+                          : history[index].serviceId,
                       entityDetailId: history[index].clinicDetailId != null
                           ? history[index].clinicDetailId
-                          : history[index].serviceDetailId != null
-                              ? history[index].serviceDetailId
-                              : history[index].roomDetailId,
+                          : history[index].serviceDetailId,
                     );
                   },
                 );

@@ -85,7 +85,7 @@ class _ClinicCardState extends State<ClinicCard> {
             margin: EdgeInsets.symmetric(horizontal: 7),
             width: double.infinity,
             child: Text(
-              widget.clinicCardData.hospital,
+              widget.clinicCardData.hospital.name,
               style: theme.textTheme.headline6.copyWith(
                 color: Colors.white,
               ),

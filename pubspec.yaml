@@ -44,7 +44,6 @@ flutter:
 
   assets:
     - assets/icons/clinics/
-    - assets/icons/rooms/
     - assets/icons/services/
     - assets/icons/nav_bar/
     - assets/icons/

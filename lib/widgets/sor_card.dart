@@ -92,7 +92,7 @@ class _SORCardState extends State<SORCard> {
               children: [
                 SizedBox(
                   child: Text(
-                    widget.sorCardData.hospital,
+                    widget.sorCardData.hospital.name,
                     style: theme.textTheme.headline5,
                     textAlign: TextAlign.center,
                   ),

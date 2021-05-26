@@ -38,16 +38,16 @@ class MainScreen extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 30),
-              ElevatedButton(
-                child: Text(t(entityToString(Entity.room))),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(
-                    SelectScreen.routeName,
-                    arguments: Entity.room,
-                  );
-                },
-              ),
+              // SizedBox(height: 30),
+              // ElevatedButton(
+              //   child: Text(t(entityToString(Entity.room))),
+              //   onPressed: () {
+              //     Navigator.of(context).pushNamed(
+              //       SelectScreen.routeName,
+              //       arguments: Entity.room,
+              //     );
+              //   },
+              // ),
               SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
