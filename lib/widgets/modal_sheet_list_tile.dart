@@ -13,6 +13,7 @@ class ModalSheetListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final langCode = Localizations.localeOf(context).languageCode;
     final theme = Theme.of(context);
     return ListTile(
       dense: true,
@@ -31,12 +32,16 @@ class ModalSheetListTile extends StatelessWidget {
             ],
             borderRadius: BorderRadius.circular(20),
           ),
-          child: CustomSwitchButton(
-            checked: value,
-            unCheckedColor: theme.primaryColorLight,
-            checkedColor: Colors.white,
-            animationDuration: Duration(milliseconds: 200),
-            backgroundColor: value ? theme.primaryColorLight : Colors.white,
+          child: Directionality(
+            textDirection:
+                langCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+            child: CustomSwitchButton(
+              checked: value,
+              unCheckedColor: theme.primaryColorLight,
+              checkedColor: Colors.white,
+              animationDuration: Duration(milliseconds: 200),
+              backgroundColor: value ? theme.primaryColorLight : Colors.white,
+            ),
           ),
         ),
       ),

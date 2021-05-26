@@ -22,19 +22,15 @@ class Reservations {
 class CurrentOrPast {
   CurrentOrPast({
     this.clinics,
-    this.rooms,
     this.services,
   });
 
   List<ReservedEntityDetails> clinics;
-  List<ReservedEntityDetails> rooms;
   List<ReservedEntityDetails> services;
 
   factory CurrentOrPast.fromJson(Map<String, dynamic> json) => CurrentOrPast(
         clinics: List<ReservedEntityDetails>.from(
             json["clinics"].map((x) => ReservedEntityDetails.fromJson(x))),
-        rooms: List<ReservedEntityDetails>.from(
-            json["rooms"].map((x) => ReservedEntityDetails.fromJson(x))),
         services: List<ReservedEntityDetails>.from(
             json["services"].map((x) => ReservedEntityDetails.fromJson(x))),
       );
@@ -43,7 +39,6 @@ class CurrentOrPast {
 class ReservedEntityDetails {
   ReservedEntityDetails(
       {this.id,
-      this.room,
       this.hospital,
       this.price,
       this.schedule,
@@ -54,18 +49,13 @@ class ReservedEntityDetails {
       this.clinic,
       this.clinicId,
       this.clinicDetailId,
-      this.roomId,
-      this.roomDetailId,
       this.serviceId,
       this.serviceDetailId});
 
   int id;
-  String room;
   String hospital;
   int clinicId;
   int clinicDetailId;
-  int roomId;
-  int roomDetailId;
   int serviceId;
   int serviceDetailId;
   int price;
@@ -79,7 +69,6 @@ class ReservedEntityDetails {
   factory ReservedEntityDetails.fromJson(Map<String, dynamic> json) =>
       ReservedEntityDetails(
           id: json["id"],
-          room: json["room"] == null ? null : json["room"],
           hospital: json["hospital"],
           price: json["price"],
           schedule: Schedule.fromJson(json["schedule"]),
@@ -92,9 +81,6 @@ class ReservedEntityDetails {
           clinicDetailId: json["clinic_detail_id"] == null
               ? null
               : json["clinic_detail_id"],
-          roomId: json["room_id"] == null ? null : json["room_id"],
-          roomDetailId:
-              json["room_detail_id"] == null ? null : json["room_detail_id"],
           serviceId: json["service_id"] == null ? null : json["service_id"],
           serviceDetailId: json["service_detail_id"] == null
               ? null

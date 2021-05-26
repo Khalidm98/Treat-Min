@@ -157,10 +157,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
     if (entity == "services") {
       return t("available_services");
     }
-    if (entity == "clinics") {
-      return t("available_clinics");
-    }
-    return t("available_rooms");
+    return t("available_clinics");
   }
 
   @override
@@ -199,7 +196,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
         clinicCardsList.forEach((clinicCard) {
           if (removeWhitespace(clinicCard.clinicCardData.price.toString())
                   .contains(text) ||
-              removeWhitespace(clinicCard.clinicCardData.hospital.toLowerCase())
+              removeWhitespace(
+                      clinicCard.clinicCardData.hospital.name.toLowerCase())
                   .contains(text) ||
               removeWhitespace(
                       clinicCard.clinicCardData.doctor.name.toLowerCase())
@@ -215,7 +213,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
         sorCardsList.forEach((sorCard) {
           if (removeWhitespace(sorCard.sorCardData.price.toString())
                   .contains(text) ||
-              removeWhitespace(sorCard.sorCardData.hospital.toLowerCase())
+              removeWhitespace(sorCard.sorCardData.hospital.name.toLowerCase())
                   .contains(text)) {
             sorCardsListFiltered.add(sorCard);
           }

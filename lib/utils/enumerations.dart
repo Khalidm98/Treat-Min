@@ -1,11 +1,9 @@
-enum Entity { clinic, room, service }
+enum Entity { clinic, service }
 
 String entityToString(Entity entity) {
   switch (entity) {
     case Entity.clinic:
       return 'clinics';
-    case Entity.room:
-      return 'rooms';
     case Entity.service:
       return 'services';
     default:

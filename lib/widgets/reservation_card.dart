@@ -229,10 +229,7 @@ class _ReservationCardState extends State<ReservationCard> {
                               Text(
                                 widget.reservedEntityDetails.clinic != null
                                     ? widget.reservedEntityDetails.clinic
-                                    : widget.reservedEntityDetails.service !=
-                                            null
-                                        ? widget.reservedEntityDetails.service
-                                        : widget.reservedEntityDetails.room,
+                                    : widget.reservedEntityDetails.service,
                                 style:
                                     widget.reservedEntityDetails.clinic != null
                                         ? theme.textTheme.button

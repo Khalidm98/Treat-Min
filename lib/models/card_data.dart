@@ -49,7 +49,7 @@ class ClinicDetail {
   });
 
   int id;
-  String hospital;
+  Hospital hospital;
   int price;
   int ratingTotal;
   int ratingUsers;
@@ -57,7 +57,7 @@ class ClinicDetail {
 
   factory ClinicDetail.fromJson(Map<String, dynamic> json) => ClinicDetail(
         id: json["id"],
-        hospital: json["hospital"],
+        hospital: Hospital.fromJson(json["hospital"]),
         price: json["price"],
         ratingTotal: json["rating_total"],
         ratingUsers: json["rating_users"],
@@ -75,26 +75,42 @@ class SORDetail {
   });
 
   int id;
-  String hospital;
+  Hospital hospital;
   int price;
   int ratingTotal;
   int ratingUsers;
 
   factory SORDetail.fromJson(Map<String, dynamic> json) => SORDetail(
         id: json["id"],
-        hospital: json["hospital"],
+        hospital: Hospital.fromJson(json["hospital"]),
         price: json["price"],
         ratingTotal: json["rating_total"],
         ratingUsers: json["rating_users"],
       );
+}
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "hospital": hospital,
-        "price": price,
-        "rating_total": ratingTotal,
-        "rating_users": ratingUsers,
-      };
+class Hospital {
+  Hospital({
+    this.id,
+    this.name,
+    this.phone,
+    this.city,
+    this.area,
+  });
+
+  int id;
+  String name;
+  String phone;
+  String city;
+  String area;
+
+  factory Hospital.fromJson(Map<String, dynamic> json) => Hospital(
+        id: json["id"],
+        name: json["name"],
+        phone: json["phone"],
+        city: json["city"],
+        area: json["area"],
+      );
 }
 
 class Doctor {
