@@ -158,7 +158,7 @@ class _ClinicCardState extends State<ClinicCard> {
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: 10),
                           Container(
                             child: Text(
                               t("rating"),
@@ -166,6 +166,12 @@ class _ClinicCardState extends State<ClinicCard> {
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
+                          SizedBox(height: 10),
+                          Container(
+                              child: Icon(
+                            Icons.phone,
+                            color: Colors.white,
+                          )),
                         ],
                       ),
                     ),
@@ -180,23 +186,28 @@ class _ClinicCardState extends State<ClinicCard> {
                           children: [
                             Text(
                               '${widget.clinicCardData.price} ',
-                              style: theme.textTheme.subtitle1,
+                              style: theme.textTheme.subtitle1
+                                  .copyWith(color: theme.primaryColor),
                             ),
                             Text(
                               t("egp"),
-                              style: theme.textTheme.subtitle1,
+                              style: theme.textTheme.subtitle1
+                                  .copyWith(color: theme.primaryColor),
                             ),
                           ],
                         ),
-                        Center(
-                          child: RatingHearts(
-                            iconHeight: doctorCardIconsHeight,
-                            iconWidth: doctorCardIconsWidth,
-                            rating: widget.clinicCardData.ratingUsers != 0
-                                ? (widget.clinicCardData.ratingTotal ~/
-                                    widget.clinicCardData.ratingUsers)
-                                : 0,
-                          ),
+                        RatingHearts(
+                          iconHeight: doctorCardIconsHeight,
+                          iconWidth: doctorCardIconsWidth,
+                          rating: widget.clinicCardData.ratingUsers != 0
+                              ? (widget.clinicCardData.ratingTotal ~/
+                                  widget.clinicCardData.ratingUsers)
+                              : 0,
+                        ),
+                        Text(
+                          "${widget.clinicCardData.hospital.phone}",
+                          style: theme.textTheme.subtitle1
+                              .copyWith(color: theme.primaryColor),
                         ),
                       ],
                     ),

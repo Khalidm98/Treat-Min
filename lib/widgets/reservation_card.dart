@@ -127,6 +127,21 @@ class _ReservationCardState extends State<ReservationCard> {
                           ratingVal.toString(),
                           myController.text);
                       Navigator.pop(context);
+                      showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              content: Text(
+                                t("review_share"),
+                                style: theme.textTheme.headline6,
+                              ),
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text(t("close")))
+                              ],
+                            );
+                          });
                     },
                     child: Text(t('Submit Review'), maxLines: 1),
                   ),
@@ -141,6 +156,15 @@ class _ReservationCardState extends State<ReservationCard> {
             ]),
           );
         });
+  }
+
+  String entityTranslation(String multilingualString, String langCode) {
+    int dashIndex = multilingualString.indexOf("-");
+    if (langCode == 'ar') {
+      return multilingualString.substring(dashIndex + 2);
+    } else {
+      return multilingualString.substring(0, dashIndex);
+    }
   }
 
   @override
@@ -214,7 +238,7 @@ class _ReservationCardState extends State<ReservationCard> {
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Column(
@@ -228,8 +252,12 @@ class _ReservationCardState extends State<ReservationCard> {
                                 ),
                               Text(
                                 widget.reservedEntityDetails.clinic != null
-                                    ? widget.reservedEntityDetails.clinic
-                                    : widget.reservedEntityDetails.service,
+                                    ? entityTranslation(
+                                        widget.reservedEntityDetails.clinic,
+                                        langCode)
+                                    : entityTranslation(
+                                        widget.reservedEntityDetails.service,
+                                        langCode),
                                 style:
                                     widget.reservedEntityDetails.clinic != null
                                         ? theme.textTheme.button

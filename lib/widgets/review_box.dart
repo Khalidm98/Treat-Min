@@ -61,20 +61,21 @@ class ReviewBox extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            width: double.infinity,
-            child: Card(
-              color: theme.primaryColorLight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  review.review,
-                  style:
-                      theme.textTheme.subtitle2.copyWith(color: Colors.white),
+          if (review.review.length != 0)
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                color: theme.primaryColorLight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    review.review,
+                    style:
+                        theme.textTheme.subtitle2.copyWith(color: Colors.white),
+                  ),
                 ),
               ),
             ),
-          ),
           // Row(
           //   children: [
           //     IconButton(

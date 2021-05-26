@@ -82,20 +82,21 @@ class SettingsScreen extends StatelessWidget {
             //   ),
             // ),
             // SizedBox(height: 15),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(AboutScreen.routeName);
-              },
-              child: Row(
-                children: [
-                  Text(t('about_us'), style: theme.textTheme.headline6),
-                  Spacer(),
-                  Icon(Icons.info, size: 45, color: theme.primaryColorLight),
-                ],
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.grey[300],
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed(AboutScreen.routeName);
+                },
+                tileColor: Colors.grey[300],
+                title: Text(t('about_us'), style: theme.textTheme.headline6),
+                trailing: CircleAvatar(
+                  backgroundColor: theme.primaryColorLight,
+                  child: Icon(
+                    Icons.info_outline,
+                    size: 38,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

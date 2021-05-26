@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:custom_switch_button/custom_switch_button.dart';
 
 class ModalSheetListTile extends StatelessWidget {
   final String text;
@@ -13,37 +12,16 @@ class ModalSheetListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final langCode = Localizations.localeOf(context).languageCode;
     final theme = Theme.of(context);
     return ListTile(
       dense: true,
       title: Text(text),
-      trailing: GestureDetector(
-        onTap: onSwitchChange,
-        child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 0.5,
-                blurRadius: 2,
-                offset: Offset(0, 0),
-              )
-            ],
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Directionality(
-            textDirection:
-                langCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
-            child: CustomSwitchButton(
-              checked: value,
-              unCheckedColor: theme.primaryColorLight,
-              checkedColor: Colors.white,
-              animationDuration: Duration(milliseconds: 200),
-              backgroundColor: value ? theme.primaryColorLight : Colors.white,
-            ),
-          ),
-        ),
+      trailing: Switch(
+        value: value,
+        onChanged: (value) {
+          onSwitchChange();
+        },
+        activeColor: theme.primaryColor,
       ),
     );
   }

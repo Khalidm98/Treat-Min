@@ -294,24 +294,29 @@ class _BookNowScreenState extends State<BookNowScreen> {
                           child: CircleAvatar(
                               radius: 70,
                               child: ClipOval(
-                                child: Image.network(
-                                  "http://treat-min.com/media/photos/doctors/${receivedData.cardDetail.doctor.id}.png",
-                                  fit: BoxFit.fill,
-                                  errorBuilder: (_, __, ___) {
-                                    return Image.asset(
-                                      'assets/icons/default.png',
-                                      fit: BoxFit.fill,
-                                    );
-                                  },
-                                ),
+                                child: entity == 'clinics'
+                                    ? Image.network(
+                                        "http://treat-min.com/media/photos/doctors/${receivedData.cardDetail.doctor.id}.png",
+                                        fit: BoxFit.fill,
+                                        errorBuilder: (_, __, ___) {
+                                          return Image.asset(
+                                            'assets/icons/default.png',
+                                            fit: BoxFit.fill,
+                                          );
+                                        },
+                                      )
+                                    : Image.asset(
+                                        'assets/icons/default.png',
+                                        fit: BoxFit.fill,
+                                      ),
                               )),
                         ),
                       ),
                       FittedBox(
                         child: Text(
-                          receivedData.entity == Entity.clinic
-                              ? receivedData.cardDetail.doctor.name
-                              : receivedData.cardDetail.hospital,
+                          receivedData.entity == Entity.service
+                              ? receivedData.cardDetail.hospital.name
+                              : receivedData.cardDetail.doctor.name,
                           style: theme.textTheme.headline4,
                         ),
                       ),
