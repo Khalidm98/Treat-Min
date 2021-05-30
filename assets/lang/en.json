@@ -70,6 +70,7 @@
   "main_screen": "--------------------------------------------------",
   "clinics": "Outpatient Clinics",
   "services": "Medical Services",
+  "location_permission": "Allow location permissions to find nearest hospitals to you.",
   "emergency_screen": "--------------------------------------------------",
   "emergency": "Emergency",
   "first_aid": "First aid",

@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
-import 'package:location/location.dart';
 
 import '../localizations/app_localizations.dart';
 import '../utils/location.dart';
@@ -19,8 +17,7 @@ class EmergencyScreen extends StatefulWidget {
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
   final _controller = Completer<GoogleMapController>();
-  LocationData _currentLocation;
-  LatLng _location;
+  LatLng _currentLocation, _location;
   Set<Marker> _markers = {};
   Widget _hospitalDetails = SizedBox();
 
@@ -28,14 +25,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 0), () async {
-      _currentLocation = await getLocation();
-      if (_currentLocation == null) {
+      final current = await getLocation();
+      if (current == null) {
         Navigator.of(context).pop();
       } else {
-        _location = LatLng(
-          _currentLocation.latitude,
-          _currentLocation.longitude,
-        );
+        _currentLocation = LatLng(current.latitude, current.longitude);
+        _location = _currentLocation;
         _setMarkers(_location);
       }
     });
@@ -82,10 +77,14 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           children: [
             Container(
               color: Theme.of(context).primaryColor,
-              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 children: [
-                  Expanded(child: Text(hospital.name)),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(hospital.name),
+                    ),
+                  ),
                   IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () {
@@ -139,6 +138,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       );
     }
 
+    print('maps');
     return Scaffold(
       appBar: AppBar(
         title: Text(t('emergency')),
@@ -168,7 +168,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 southwest: const LatLng(22, 25),
               ),
             ),
-            onTap: _animate,
+            onTap: (location) {
+              _animate(location);
+              if (distance(location, _currentLocation) < 0.05) {
+                if (_location != _currentLocation) {
+                  _location = _currentLocation;
+                  _setMarkers(_location);
+                }
+              }
+            },
             markers: _markers,
             myLocationEnabled: true,
             buildingsEnabled: false,

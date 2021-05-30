@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import './emergency_screen.dart';
 import './select_screen.dart';
 import '../localizations/app_localizations.dart';
+import '../utils/dialogs.dart';
 import '../utils/enumerations.dart';
+import '../utils/location.dart';
 import '../widgets/background_image.dart';
 
 class MainScreen extends StatelessWidget {
@@ -40,8 +42,16 @@ class MainScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(EmergencyScreen.routeName);
+                onPressed: () async {
+                  final hasPermission = await checkPermission();
+                  if (hasPermission) {
+                    Navigator.of(context).pushNamed(EmergencyScreen.routeName);
+                  } else {
+                    prompt(context, t('location_permission'), onYes: () {
+                      Navigator.of(context)
+                          .pushNamed(EmergencyScreen.routeName);
+                    });
+                  }
                 },
                 child: Text(t('emergency')),
                 style: ButtonStyle(
