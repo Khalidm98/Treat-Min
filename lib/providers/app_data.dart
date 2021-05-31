@@ -11,6 +11,7 @@ class AppData with ChangeNotifier {
   String language;
   bool notifications;
   bool isFirstRun;
+  List<bool> sortingVars = [false, false];
   List<FiltrationHospital> hospitals = [];
   List<FiltrationHospital> updatedHospitals = [];
   List<City> cities = [];
@@ -132,6 +133,24 @@ class AppData with ChangeNotifier {
     list = areas;
     //  final langCode = Localizations.localeOf(context).languageCode;
     return list;
+  }
+
+  void changeSortPriceLowHigh() {
+    sortingVars[0] = !sortingVars[0];
+    if (sortingVars[0] == true) {
+      sortingVars[1] = false;
+      // sortingVars[2] = false;
+    }
+    notifyListeners();
+  }
+
+  void changeSortPriceHighLow() {
+    sortingVars[1] = !sortingVars[1];
+    if (sortingVars[1] == true) {
+      sortingVars[0] = false;
+      // sortingVars[2] = false;
+    }
+    notifyListeners();
   }
 
   List getUpdatedAreas(BuildContext context) {

@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import './localizations/app_localizations.dart';
 import './providers/app_data.dart';
 import './providers/user_data.dart';
-import './providers/provider_class.dart';
 
 import './screens/about_screen.dart';
 import './screens/auth_screen.dart';
@@ -65,7 +64,6 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => AppData()),
         ChangeNotifierProvider(create: (_) => UserData()),
-        ChangeNotifierProvider(create: (_) => ProviderClass()),
       ],
       child: MaterialApp(
         title: 'Treat-min',

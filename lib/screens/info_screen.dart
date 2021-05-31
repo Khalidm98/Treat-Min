@@ -156,9 +156,13 @@ class _InfoScreenState extends State<InfoScreen> {
         final response = await AccountAPI.editAccount(context, _account);
         if (response) {
           if (_imageChanged) {
-            await AccountAPI.changePhoto(context, _image);
+            final response = await AccountAPI.changePhoto(context, _image);
+            if (response) {
+              Navigator.pop(context);
+            }
+          } else {
+            Navigator.pop(context);
           }
-          Navigator.pop(context);
         }
       }
     } else {
@@ -359,9 +363,12 @@ class _InfoScreenState extends State<InfoScreen> {
                       onChanged: (value) => setState(() => _gender = value),
                       activeColor: theme.primaryColorDark,
                     ),
-                    Text(
-                      t('gender_male'),
-                      style: theme.textTheme.subtitle1,
+                    GestureDetector(
+                      onTap: () => setState(() => _gender = 'M'),
+                      child: Text(
+                        t('gender_male'),
+                        style: theme.textTheme.subtitle1,
+                      ),
                     ),
                     Spacer(),
                     Radio(
@@ -370,9 +377,12 @@ class _InfoScreenState extends State<InfoScreen> {
                       onChanged: (value) => setState(() => _gender = value),
                       activeColor: theme.primaryColorDark,
                     ),
-                    Text(
-                      t('gender_female'),
-                      style: theme.textTheme.subtitle1,
+                    GestureDetector(
+                      onTap: () => setState(() => _gender = 'F'),
+                      child: Text(
+                        t('gender_female'),
+                        style: theme.textTheme.subtitle1,
+                      ),
                     ),
                   ],
                 ),

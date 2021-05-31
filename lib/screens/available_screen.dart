@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treat_min/api/entities.dart';
 import 'package:treat_min/models/cities_areas.dart';
@@ -10,10 +9,7 @@ import '../localizations/app_localizations.dart';
 import '../models/card_data.dart';
 import '../models/screens_data.dart';
 import '../providers/app_data.dart';
-import '../providers/provider_class.dart';
 import '../utils/enumerations.dart';
-import '../utils/location.dart';
-import '../utils/maps.dart';
 import '../widgets/background_image.dart';
 import '../widgets/clinic_card.dart';
 import '../widgets/input_field.dart';
@@ -28,7 +24,7 @@ class AvailableScreen extends StatefulWidget {
 }
 
 class _AvailableScreenState extends State<AvailableScreen> {
-  LatLng _location;
+  // LatLng _location;
   String entityDetailResponse = "";
   bool filterClicked = false;
   bool searchOn = false;
@@ -79,33 +75,33 @@ class _AvailableScreenState extends State<AvailableScreen> {
               ),
               ModalSheetListTile(
                 text: t('price_low'),
-                value: Provider.of<ProviderClass>(context).sortingVars[0],
+                value: Provider.of<AppData>(context).sortingVars[0],
                 onSwitchChange:
-                    Provider.of<ProviderClass>(context).changeSortPriceLowHigh,
+                    Provider.of<AppData>(context).changeSortPriceLowHigh,
               ),
               ModalSheetListTile(
                 text: t('price_high'),
-                value: Provider.of<ProviderClass>(context).sortingVars[1],
+                value: Provider.of<AppData>(context).sortingVars[1],
                 onSwitchChange:
-                    Provider.of<ProviderClass>(context).changeSortPriceHighLow,
+                    Provider.of<AppData>(context).changeSortPriceHighLow,
               ),
-              ModalSheetListTile(
-                text: t('nearest'),
-                value: Provider.of<ProviderClass>(context).sortingVars[2],
-                onSwitchChange: () async {
-                  final nearest =
-                      Provider.of<ProviderClass>(context).sortingVars[2];
-                  if (nearest) {
-                    Provider.of<ProviderClass>(context).changeSortNearest();
-                  } else {
-                    final location = await getLocation();
-                    if (location != null) {
-                      _location = LatLng(location.latitude, location.longitude);
-                      Provider.of<ProviderClass>(context).changeSortNearest();
-                    }
-                  }
-                },
-              ),
+              // ModalSheetListTile(
+              //   text: t('nearest'),
+              //   value: Provider.of<AppData>(context).sortingVars[2],
+              //   onSwitchChange: () async {
+              //     final nearest =
+              //         Provider.of<AppData>(context).sortingVars[2];
+              //     if (nearest) {
+              //       Provider.of<AppData>(context).changeSortNearest();
+              //     } else {
+              //       final location = await getLocation();
+              //       if (location != null) {
+              //         _location = LatLng(location.latitude, location.longitude);
+              //         Provider.of<AppData>(context).changeSortNearest();
+              //       }
+              //     }
+              //   },
+              // ),
             ],
           ),
         );
@@ -119,56 +115,60 @@ class _AvailableScreenState extends State<AvailableScreen> {
 
   List<ClinicCard> clinicListSorter(
       BuildContext context, List<ClinicCard> entityDetailsList) {
-    if (Provider.of<ProviderClass>(context).sortingVars[0] == true) {
+    if (Provider.of<AppData>(context).sortingVars[0] == true) {
       entityDetailsList.sort(
           (a, b) => a.clinicCardData.price.compareTo(b.clinicCardData.price));
       return entityDetailsList;
-    } else if (Provider.of<ProviderClass>(context).sortingVars[1] == true) {
+    } else if (Provider.of<AppData>(context).sortingVars[1] == true) {
       entityDetailsList.sort(
           (a, b) => a.clinicCardData.price.compareTo(b.clinicCardData.price));
       return entityDetailsList.reversed.toList();
-    } else if (Provider.of<ProviderClass>(context).sortingVars[2] == true) {
-      entityDetailsList.sort((a, b) {
-        final distA = distance(
-          _location,
-          LatLng(a.clinicCardData.hospital.lat, a.clinicCardData.hospital.lng),
-        );
-        final distB = distance(
-          _location,
-          LatLng(b.clinicCardData.hospital.lat, b.clinicCardData.hospital.lng),
-        );
-        return distA.compareTo(distB);
-      });
-      return entityDetailsList;
-    } else {
+    } 
+    // else if (Provider.of<AppData>(context).sortingVars[2] == true) {
+    //   entityDetailsList.sort((a, b) {
+    //     final distA = distance(
+    //       _location,
+    //       LatLng(a.clinicCardData.hospital.lat, a.clinicCardData.hospital.lng),
+    //     );
+    //     final distB = distance(
+    //       _location,
+    //       LatLng(b.clinicCardData.hospital.lat, b.clinicCardData.hospital.lng),
+    //     );
+    //     return distA.compareTo(distB);
+    //   });
+    //   return entityDetailsList;
+    // } 
+    else {
       return entityDetailsList;
     }
   }
 
   List<SORCard> sorListSorter(
       BuildContext context, List<SORCard> entityDetailsList) {
-    if (Provider.of<ProviderClass>(context).sortingVars[0] == true) {
+    if (Provider.of<AppData>(context).sortingVars[0] == true) {
       entityDetailsList
           .sort((a, b) => a.sorCardData.price.compareTo(b.sorCardData.price));
       return entityDetailsList;
-    } else if (Provider.of<ProviderClass>(context).sortingVars[1] == true) {
+    } else if (Provider.of<AppData>(context).sortingVars[1] == true) {
       entityDetailsList
           .sort((a, b) => a.sorCardData.price.compareTo(b.sorCardData.price));
       return entityDetailsList.reversed.toList();
-    } else if (Provider.of<ProviderClass>(context).sortingVars[2] == true) {
-      entityDetailsList.sort((a, b) {
-        final distA = distance(
-          _location,
-          LatLng(a.sorCardData.hospital.lat, a.sorCardData.hospital.lng),
-        );
-        final distB = distance(
-          _location,
-          LatLng(b.sorCardData.hospital.lat, b.sorCardData.hospital.lng),
-        );
-        return distA.compareTo(distB);
-      });
-      return entityDetailsList;
-    } else {
+    } 
+    // else if (Provider.of<AppData>(context).sortingVars[2] == true) {
+    //   entityDetailsList.sort((a, b) {
+    //     final distA = distance(
+    //       _location,
+    //       LatLng(a.sorCardData.hospital.lat, a.sorCardData.hospital.lng),
+    //     );
+    //     final distB = distance(
+    //       _location,
+    //       LatLng(b.sorCardData.hospital.lat, b.sorCardData.hospital.lng),
+    //     );
+    //     return distA.compareTo(distB);
+    //   });
+    //   return entityDetailsList;
+    // } 
+    else {
       return entityDetailsList;
     }
   }
