@@ -81,7 +81,7 @@ class _SORCardState extends State<SORCard> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 7),
             decoration: BoxDecoration(
-              color: theme.primaryColorDark,
+              color: theme.primaryColor,
               border: Border(bottom: BorderSide(color: Colors.white)),
             ),
             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -143,9 +143,10 @@ class _SORCardState extends State<SORCard> {
                           ),
                           SizedBox(height: 10),
                           Container(
-                              child: Icon(
-                            Icons.phone,
-                            color: Colors.white,
+                              child: Text(
+                            t("phone_hospital"),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
                           )),
                         ],
                       ),

@@ -253,18 +253,26 @@ class _BookNowScreenState extends State<BookNowScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    dynamic receivedData = ModalRoute.of(context).settings.arguments;
-    String entity = entityToString(receivedData.entity);
-    String entityId = receivedData.entityId;
-    String detailId = receivedData.cardDetail.id.toString();
-    schedulesResponse = ActionAPI.getEntitySchedule(entity, entityId, detailId);
-    reviewsResponse = ActionAPI.getEntityReviews(entity, entityId, detailId);
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    final widgetsBinding = WidgetsBinding.instance;
+    widgetsBinding.addPostFrameCallback((callback) {
+      if (ModalRoute.of(context).settings.arguments != null) {
+        dynamic receivedData = ModalRoute.of(context).settings.arguments;
+        String entity = entityToString(receivedData.entity);
+        String entityId = receivedData.entityId;
+        String detailId = receivedData.cardDetail.id.toString();
+        schedulesResponse =
+            ActionAPI.getEntitySchedule(entity, entityId, detailId);
+        reviewsResponse =
+            ActionAPI.getEntityReviews(entity, entityId, detailId);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
     final theme = Theme.of(context);
     BookNowScreenData receivedData = ModalRoute.of(context).settings.arguments;
     String entity = entityToString(receivedData.entity);
@@ -294,22 +302,16 @@ class _BookNowScreenState extends State<BookNowScreen> {
                           child: CircleAvatar(
                               radius: 70,
                               child: ClipOval(
-                                child: entity == 'clinics'
-                                    ? Image.network(
-                                        "http://treat-min.com/media/photos/doctors/${receivedData.cardDetail.doctor.id}.png",
-                                        fit: BoxFit.fill,
-                                        errorBuilder: (_, __, ___) {
-                                          return Image.asset(
-                                            'assets/icons/default.png',
-                                            fit: BoxFit.fill,
-                                          );
-                                        },
-                                      )
-                                    : Image.asset(
-                                        'assets/icons/default.png',
-                                        fit: BoxFit.fill,
-                                      ),
-                              )),
+                                  child: Image.network(
+                                "http://treat-min.com/media/photos/hospitals/${receivedData.cardDetail.hospital.id}.png",
+                                fit: BoxFit.fill,
+                                errorBuilder: (_, __, ___) {
+                                  return Image.asset(
+                                    'assets/icons/default.png',
+                                    fit: BoxFit.fill,
+                                  );
+                                },
+                              ))),
                         ),
                       ),
                       FittedBox(
@@ -364,9 +366,6 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 FutureBuilder(
                   future: schedulesResponse,
                   builder: (_, response) {
-                    if (response.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
                     if (response.data == "Something went wrong") {
                       return Center(
                         child: Text(
@@ -377,19 +376,21 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         ),
                       );
                     }
-                    schedules = schedulesFromJson(response.data);
-
-                    return Container(
-                      child: BookNowDropDownList(
-                        dropDownValueGetter: updateDropDownValue,
-                        scheduleList: schedules.schedules,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: theme.accentColor),
+                    if (response.hasData) {
+                      schedules = schedulesFromJson(response.data);
+                      return Container(
+                        child: BookNowDropDownList(
+                          dropDownValueGetter: updateDropDownValue,
+                          scheduleList: schedules.schedules,
                         ),
-                      ),
-                    );
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: theme.accentColor),
+                          ),
+                        ),
+                      );
+                    }
+                    return CircularProgressIndicator();
                   },
                 ),
                 if (!ddvExists)

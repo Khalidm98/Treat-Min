@@ -1,21 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/reviews.dart';
 
 class ProviderClass with ChangeNotifier {
-  List<bool> sortingVars = [false, false, true];
-  //for testing purposes
-  List<Reviews> reviews = [];
-
-  void addReview(Reviews review) {
-    reviews.add(review);
-    notifyListeners();
-  }
-
-  // void addReservation(
-  //     ReservedSchedule scheduleModel, List<ReservedSchedule> reservations) {
-  //   reservations.add(scheduleModel);
-  //   notifyListeners();
-  // }
+  List<bool> sortingVars = [false, false];
+  List<String> city = [];
+  List<String> area = [];
 
   void changeSortPriceLowHigh() {
     sortingVars[0] = !sortingVars[0];

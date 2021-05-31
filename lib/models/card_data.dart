@@ -6,6 +6,8 @@ ClinicCardData clinicCardFromJson(String str) =>
 SORCardData sorCardFromJson(String str) =>
     SORCardData.fromJson(json.decode(str));
 
+Hospitals hospitalsFromJson(String str) => Hospitals.fromJson(json.decode(str));
+
 class ClinicCardData {
   ClinicCardData({
     this.entity,
@@ -89,6 +91,19 @@ class SORDetail {
       );
 }
 
+class Hospitals {
+  Hospitals({
+    this.hospitals,
+  });
+
+  List<FiltrationHospital> hospitals;
+
+  factory Hospitals.fromJson(Map<String, dynamic> json) => Hospitals(
+        hospitals: List<FiltrationHospital>.from(
+            json["hospitals"].map((x) => FiltrationHospital.fromJson(x))),
+      );
+}
+
 class Hospital {
   Hospital({
     this.id,
@@ -108,6 +123,28 @@ class Hospital {
         id: json["id"],
         name: json["name"],
         phone: json["phone"],
+        city: json["city"],
+        area: json["area"],
+      );
+}
+
+class FiltrationHospital {
+  FiltrationHospital({
+    this.id,
+    this.name,
+    this.city,
+    this.area,
+  });
+
+  int id;
+  String name;
+  int city;
+  int area;
+
+  factory FiltrationHospital.fromJson(Map<String, dynamic> json) =>
+      FiltrationHospital(
+        id: json["id"],
+        name: json["name"],
         city: json["city"],
         area: json["area"],
       );

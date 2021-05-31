@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:treat_min/models/card_data.dart';
+import 'package:treat_min/models/cities_areas.dart';
 
 // import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
@@ -28,5 +30,51 @@ class EntityAPI {
       somethingWentWrong(context);
     }
     return false;
+  }
+
+  static Future<bool> getCities(BuildContext context) async {
+    final response = await http.get('$_baseURL/cities/');
+    if (response.statusCode == 200) {
+      Provider.of<AppData>(context, listen: false).setCities(
+          citiesFromJson(utf8.decode(response.bodyBytes)).cities, context);
+      return true;
+    } else {
+      somethingWentWrong(context);
+    }
+    return false;
+  }
+
+  static Future<bool> getAreas(BuildContext context) async {
+    final response = await http.get('$_baseURL/areas/');
+    if (response.statusCode == 200) {
+      Provider.of<AppData>(context, listen: false).setAreas(
+          areasFromJson(utf8.decode(response.bodyBytes)).areas, context);
+      return true;
+    } else {
+      somethingWentWrong(context);
+    }
+    return false;
+  }
+
+  static Future<bool> getHospitals(BuildContext context) async {
+    final response = await http.get('$_baseURL/hospitals/');
+    if (response.statusCode == 200) {
+      Provider.of<AppData>(context, listen: false).setHospitals(
+          hospitalsFromJson(utf8.decode(response.bodyBytes)).hospitals);
+      return true;
+    } else {
+      somethingWentWrong(context);
+    }
+    return false;
+  }
+
+  static Future<String> getCityAreaHospitals(int cityId, int areaId) async {
+    final response =
+        await http.get('$_baseURL/cities/$cityId/areas/$areaId/hospitals/');
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return "Something went wrong!";
+    }
   }
 }

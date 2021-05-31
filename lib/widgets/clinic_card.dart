@@ -168,10 +168,12 @@ class _ClinicCardState extends State<ClinicCard> {
                           ),
                           SizedBox(height: 10),
                           Container(
-                              child: Icon(
-                            Icons.phone,
-                            color: Colors.white,
-                          )),
+                            child: Text(
+                              t("phone_hospital"),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
                         ],
                       ),
                     ),
