@@ -1,4 +1,4 @@
-package com.example.treat_min
+package com.treat_min.android
 
 import io.flutter.embedding.android.FlutterActivity
 
