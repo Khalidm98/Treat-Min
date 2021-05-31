@@ -1,5 +1,31 @@
 import 'package:flutter/material.dart';
 
+ThemeData inputTheme(BuildContext context) {
+  final theme = Theme.of(context);
+  return theme.copyWith(
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white70,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: theme.primaryColorDark),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: theme.primaryColorDark),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: theme.errorColor),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: theme.errorColor),
+      ),
+    ),
+  );
+}
+
 class InputField extends StatelessWidget {
   final String label;
   final TextFormField textFormField;
@@ -11,7 +37,13 @@ class InputField extends StatelessWidget {
     final theme = Theme.of(context);
     return Stack(
       children: [
-        Padding(padding: const EdgeInsets.only(top: 20), child: textFormField),
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Theme(
+            data: inputTheme(context),
+            child: textFormField,
+          ),
+        ),
         Positioned.directional(
           textDirection: Directionality.of(context),
           start: 20,

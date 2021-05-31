@@ -19,7 +19,7 @@ class AboutScreen extends StatelessWidget {
         ' المستشفيات في حالة الطوارئ.\n\n'
         'الفكرة خلف الاسم (تريت-من) هي أن المستخدم يمكنه إيجاد العلاج المناسب'
         ' له في دقيقة واحدة فقط :)\n\n'
-        'تم تطوير هذا التطبيق بواسطة:\n'
+        'مطورين تطبيق المحمول والواجهة الخلفية:\n'
         'خالد محمد رفعت',
         textAlign: TextAlign.justify,
       ),
@@ -27,10 +27,14 @@ class AboutScreen extends StatelessWidget {
       Text('أحمد خالد سيد'),
       Text('ahmedkhaled11119999@gmail.com\n', textAlign: TextAlign.end),
       Text(
+        'مطورين موقع الويب:\n'
+        'منة علاء نعيم\n'
+        'محمد رمضان سيد\n'
+        'جرجس وجيه ثابت\n\n'
         'تحت إشراف:\n'
-        'أ. د. أحمد حسن\n'
-        'م. سارة عبده\n'
-        'رقم الإصدار: 1.0.0',
+        'أ. د. أحمد حسن محمد يوسف\n'
+        'م. سارة عبد العزيز محمود عبده\n\n'
+        'رقم الإصدار: 1.0.0\n',
       ),
     ];
   }
@@ -50,7 +54,7 @@ class AboutScreen extends StatelessWidget {
         'in case of emergency.\n\n'
         'The idea behind the name (Treat-min) is that users can find their '
         'appropriate treatment in just one minute :)\n\n'
-        'This application is developed by:\n'
+        'Mobile application and backend developers:\n'
         'Khalid Muhammad Refaat',
         textAlign: TextAlign.justify,
       ),
@@ -58,10 +62,14 @@ class AboutScreen extends StatelessWidget {
       Text('Ahmed Khalid Sayed'),
       Text('ahmedkhaled11119999@gmail.com\n', textAlign: TextAlign.end),
       Text(
+        'Website developers:\n'
+        'Menna Alaa Naeim\n'
+        'Muhammad Ramadan Sayed\n'
+        'Gerges Wageh Thabet\n\n'
         'Under the supervision of:\n'
-        'Prof. Dr. Ahmed Hassan\n'
-        'Eng. Sarah Abdu\n\n'
-        'Version Number: 1.0.0',
+        'Prof. Dr. Ahmed Hassan Muhammad Yousef\n'
+        'Eng. Sarah Abdulaziz Mahmoud Abdu\n\n'
+        'Version Number: 1.0.0\n',
       ),
     ];
   }

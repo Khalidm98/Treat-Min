@@ -90,13 +90,17 @@ class SettingsScreen extends StatelessWidget {
                 },
                 tileColor: Colors.grey[300],
                 title: Text(t('about_us'), style: theme.textTheme.headline6),
-                trailing: CircleAvatar(
-                  backgroundColor: theme.primaryColorLight,
-                  child: Icon(
-                    Icons.info_outline,
-                    size: 38,
-                    color: Colors.white,
-                  ),
+                trailing: Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      child: CircleAvatar(
+                        radius: 15,
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                    Icon(Icons.help, size: 45, color: theme.primaryColorLight),
+                  ],
                 ),
               ),
             ),
@@ -104,25 +108,22 @@ class SettingsScreen extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: ListTile(
+                onTap: isLoggedIn
+                    ? () => _logOut(context)
+                    : () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(AuthScreen.routeName);
+                      },
                 tileColor: Colors.grey[300],
                 title: Text(
                   t(isLoggedIn ? 'log_out' : 'log_in'),
                   style: theme.textTheme.headline6,
                 ),
-                trailing: InkWell(
-                  onTap: isLoggedIn
-                      ? () => _logOut(context)
-                      : () {
-                          Navigator.of(context)
-                              .pushReplacementNamed(AuthScreen.routeName);
-                        },
-                  splashColor: theme.primaryColorDark,
-                  child: CircleAvatar(
-                    backgroundColor: theme.primaryColorLight,
-                    child: Icon(
-                      isLoggedIn ? Icons.logout : Icons.login,
-                      color: Colors.white,
-                    ),
+                trailing: CircleAvatar(
+                  backgroundColor: theme.primaryColorLight,
+                  child: Icon(
+                    isLoggedIn ? Icons.logout : Icons.login,
+                    color: Colors.white,
                   ),
                 ),
               ),

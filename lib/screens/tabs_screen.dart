@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import './account_screen.dart';
 
-// import './browse_screen.dart';
 import './main_screen.dart';
 import './settings_screen.dart';
 import '../widgets/navigation_bar.dart';
@@ -51,7 +50,6 @@ class _TabsScreenState extends State<TabsScreen> {
         ),
         items: [
           MainScreen(),
-          // BrowseScreen(),
           SettingsScreen(),
           AccountScreen(),
         ],
@@ -66,13 +64,11 @@ class _TabsScreenState extends State<TabsScreen> {
           },
           items: [
             Image.asset('assets/icons/nav_bar/heart_outlined.png'),
-            // Image.asset('assets/icons/medicine_outlined.png'),
             Image.asset('assets/icons/nav_bar/settings_outlined.png'),
             Image.asset('assets/icons/nav_bar/account_outlined.png'),
           ],
           activeItems: [
             Image.asset('assets/icons/nav_bar/heart_filled.png'),
-            // Image.asset('assets/icons/medicine_filled.png'),
             Image.asset('assets/icons/nav_bar/settings_filled.png'),
             Image.asset('assets/icons/nav_bar/account_filled.png'),
           ],
