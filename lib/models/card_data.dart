@@ -111,6 +111,8 @@ class Hospital {
     this.phone,
     this.city,
     this.area,
+    this.lat,
+    this.lng,
   });
 
   int id;
@@ -118,6 +120,8 @@ class Hospital {
   String phone;
   String city;
   String area;
+  double lat;
+  double lng;
 
   factory Hospital.fromJson(Map<String, dynamic> json) => Hospital(
         id: json["id"],
@@ -125,6 +129,8 @@ class Hospital {
         phone: json["phone"],
         city: json["city"],
         area: json["area"],
+        lat: double.parse(json["latitude"]),
+        lng: double.parse(json["longitude"]),
       );
 }
 
@@ -156,6 +162,7 @@ class Doctor {
     this.name,
     this.title,
   });
+
   int id;
   String name;
   String title;

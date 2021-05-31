@@ -5,6 +5,7 @@ import '../localizations/app_localizations.dart';
 import '../models/reservations.dart';
 import '../api/actions.dart';
 import 'clickable_rating_hearts.dart';
+import 'input_field.dart';
 
 class ReservationCard extends StatefulWidget {
   final ReservedEntityDetails reservedEntityDetails;
@@ -88,11 +89,14 @@ class _ReservationCardState extends State<ReservationCard> {
                   iconWidth: 30,
                   ratingGetter: updateRatingValue),
               SizedBox(height: 10),
-              TextField(
-                controller: myController,
-                keyboardType: TextInputType.multiline,
-                minLines: 4, //Normal textInputField will be displayed
-                maxLines: 5, // when user presses enter it will adapt to it
+              Theme(
+                data: inputTheme(context),
+                child: TextField(
+                  controller: myController,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 4, //Normal textInputField will be displayed
+                  maxLines: 5, // when user presses enter it will adapt to it
+                ),
               ),
               SizedBox(height: 10),
               Row(

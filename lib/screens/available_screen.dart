@@ -1,19 +1,24 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:treat_min/api/entities.dart';
 import 'package:treat_min/models/cities_areas.dart';
+
 import '../api/actions.dart';
 import '../localizations/app_localizations.dart';
 import '../models/card_data.dart';
 import '../models/screens_data.dart';
+import '../providers/app_data.dart';
 import '../providers/provider_class.dart';
 import '../utils/enumerations.dart';
+import '../utils/location.dart';
+import '../utils/maps.dart';
 import '../widgets/background_image.dart';
 import '../widgets/clinic_card.dart';
+import '../widgets/input_field.dart';
 import '../widgets/sor_card.dart';
 import '../widgets/modal_sheet_list_tile.dart';
-import '../providers/app_data.dart';
 
 class AvailableScreen extends StatefulWidget {
   static const String routeName = '/available';
@@ -23,6 +28,7 @@ class AvailableScreen extends StatefulWidget {
 }
 
 class _AvailableScreenState extends State<AvailableScreen> {
+  LatLng _location;
   String entityDetailResponse = "";
   bool filterClicked = false;
   bool searchOn = false;
@@ -83,12 +89,23 @@ class _AvailableScreenState extends State<AvailableScreen> {
                 onSwitchChange:
                     Provider.of<ProviderClass>(context).changeSortPriceHighLow,
               ),
-              // ModalSheetListTile(
-              //   text: t('nearest'),
-              //   value: Provider.of<ProviderClass>(context).sortingVars[2],
-              //   onSwitchChange:
-              //       Provider.of<ProviderClass>(context).changeSortNearest,
-              // ),
+              ModalSheetListTile(
+                text: t('nearest'),
+                value: Provider.of<ProviderClass>(context).sortingVars[2],
+                onSwitchChange: () async {
+                  final nearest =
+                      Provider.of<ProviderClass>(context).sortingVars[2];
+                  if (nearest) {
+                    Provider.of<ProviderClass>(context).changeSortNearest();
+                  } else {
+                    final location = await getLocation();
+                    if (location != null) {
+                      _location = LatLng(location.latitude, location.longitude);
+                      Provider.of<ProviderClass>(context).changeSortNearest();
+                    }
+                  }
+                },
+              ),
             ],
           ),
         );
@@ -110,6 +127,19 @@ class _AvailableScreenState extends State<AvailableScreen> {
       entityDetailsList.sort(
           (a, b) => a.clinicCardData.price.compareTo(b.clinicCardData.price));
       return entityDetailsList.reversed.toList();
+    } else if (Provider.of<ProviderClass>(context).sortingVars[2] == true) {
+      entityDetailsList.sort((a, b) {
+        final distA = distance(
+          _location,
+          LatLng(a.clinicCardData.hospital.lat, a.clinicCardData.hospital.lng),
+        );
+        final distB = distance(
+          _location,
+          LatLng(b.clinicCardData.hospital.lat, b.clinicCardData.hospital.lng),
+        );
+        return distA.compareTo(distB);
+      });
+      return entityDetailsList;
     } else {
       return entityDetailsList;
     }
@@ -125,6 +155,19 @@ class _AvailableScreenState extends State<AvailableScreen> {
       entityDetailsList
           .sort((a, b) => a.sorCardData.price.compareTo(b.sorCardData.price));
       return entityDetailsList.reversed.toList();
+    } else if (Provider.of<ProviderClass>(context).sortingVars[2] == true) {
+      entityDetailsList.sort((a, b) {
+        final distA = distance(
+          _location,
+          LatLng(a.sorCardData.hospital.lat, a.sorCardData.hospital.lng),
+        );
+        final distB = distance(
+          _location,
+          LatLng(b.sorCardData.hospital.lat, b.sorCardData.hospital.lng),
+        );
+        return distA.compareTo(distB);
+      });
+      return entityDetailsList;
     } else {
       return entityDetailsList;
     }
@@ -472,15 +515,14 @@ class _AvailableScreenState extends State<AvailableScreen> {
           },
           child: Column(
             children: [
+              const SizedBox(height: 10),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Expanded(
-                      child: RaisedButton(
-                        color: theme.primaryColor,
+                      child: ElevatedButton(
                         child: FittedBox(
                           child: Text(
                             filterOn ? t("close_filter") : t("filter"),
@@ -497,12 +539,19 @@ class _AvailableScreenState extends State<AvailableScreen> {
                             filterOn = !filterOn;
                           });
                         },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            theme.primaryColor,
+                          ),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                            const Size(double.infinity, 40),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(width: 15),
                     Expanded(
-                      child: RaisedButton(
-                        color: theme.primaryColor,
+                      child: ElevatedButton(
                         child: FittedBox(
                           child: Text(
                             searchOn ? t("close_search") : t("open_search"),
@@ -516,12 +565,19 @@ class _AvailableScreenState extends State<AvailableScreen> {
                             searchOn = !searchOn;
                           });
                         },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            theme.primaryColor,
+                          ),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                            const Size(double.infinity, 40),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(width: 15),
                     Expanded(
-                      child: RaisedButton(
-                        color: theme.primaryColor,
+                      child: ElevatedButton(
                         child: FittedBox(
                           child: Text(
                             t("sort"),
@@ -533,6 +589,14 @@ class _AvailableScreenState extends State<AvailableScreen> {
                         onPressed: () {
                           onSortClick(context, theme);
                         },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            theme.primaryColor,
+                          ),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                            const Size(double.infinity, 40),
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -741,81 +805,84 @@ class _AvailableScreenState extends State<AvailableScreen> {
               if (searchOn)
                 Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: TextField(
-                    controller: myController,
-                    decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: t('search'),
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.cancel),
-                          onPressed: () {
-                            myController.clear();
-                            onSearchTextChanged('');
-                          },
-                        )),
-                    onChanged: onSearchTextChanged,
+                  child: Theme(
+                    data: inputTheme(context),
+                    child: TextField(
+                      controller: myController,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          hintText: t('search'),
+                          border: InputBorder.none,
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.cancel),
+                            onPressed: () {
+                              myController.clear();
+                              onSearchTextChanged('');
+                            },
+                          )),
+                      onChanged: onSearchTextChanged,
+                    ),
                   ),
                 ),
               NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (OverscrollIndicatorNotification overScroll) {
-                    overScroll.disallowGlow();
-                    return;
-                  },
-                  child: Expanded(
-                    child: (clinicCardsListSearched.length == 0 &&
-                                selectScreenData.entity == Entity.clinic &&
-                                myController.text.isNotEmpty) ||
-                            (sorCardsListSearched.length == 0 &&
-                                selectScreenData.entity == Entity.service &&
-                                myController.text.isNotEmpty)
-                        ? Center(
-                            child: Text(
-                            t("no_search_results"),
-                            style: theme.textTheme.headline6,
-                          ))
-                        : clinicCardsListSearched.length != 0 ||
-                                sorCardsListSearched.length != 0 ||
-                                myController.text.isNotEmpty
-                            ? ListView.builder(
-                                itemCount:
-                                    selectScreenData.entity == Entity.clinic
-                                        ? clinicCardsListSearched.length
-                                        : sorCardsListSearched.length,
-                                itemBuilder: (context, index) {
-                                  return selectScreenData.entity ==
-                                          Entity.clinic
-                                      ? clinicListSorter(context,
-                                          clinicCardsListSearched)[index]
-                                      : sorListSorter(
-                                          context, sorCardsListSearched)[index];
-                                },
-                              )
-                            : (clinicCardsListFiltered.length == 0 &&
-                                        selectScreenData.entity ==
-                                            Entity.clinic) ||
-                                    (sorCardsListFiltered.length == 0 &&
-                                        selectScreenData.entity ==
-                                            Entity.service)
-                                ? Center(
-                                    child: Text(
-                                    t("no_results"),
-                                    style: theme.textTheme.headline6,
-                                  ))
-                                : ListView.builder(
-                                    itemCount:
-                                        selectScreenData.entity == Entity.clinic
-                                            ? clinicCardsListFiltered.length
-                                            : sorCardsListFiltered.length,
-                                    itemBuilder: (context, index) {
-                                      return selectScreenData.entity ==
-                                              Entity.clinic
-                                          ? clinicListSorter(context,
-                                              clinicCardsListFiltered)[index]
-                                          : sorListSorter(context,
-                                              sorCardsListFiltered)[index];
-                                    }),
-                  )),
+                onNotification: (OverscrollIndicatorNotification overScroll) {
+                  overScroll.disallowGlow();
+                  return;
+                },
+                child: Expanded(
+                  child: (clinicCardsListSearched.length == 0 &&
+                              selectScreenData.entity == Entity.clinic &&
+                              myController.text.isNotEmpty) ||
+                          (sorCardsListSearched.length == 0 &&
+                              selectScreenData.entity == Entity.service &&
+                              myController.text.isNotEmpty)
+                      ? Center(
+                          child: Text(
+                          t("no_search_results"),
+                          style: theme.textTheme.headline6,
+                        ))
+                      : clinicCardsListSearched.length != 0 ||
+                              sorCardsListSearched.length != 0 ||
+                              myController.text.isNotEmpty
+                          ? ListView.builder(
+                              itemCount:
+                                  selectScreenData.entity == Entity.clinic
+                                      ? clinicCardsListSearched.length
+                                      : sorCardsListSearched.length,
+                              itemBuilder: (context, index) {
+                                return selectScreenData.entity == Entity.clinic
+                                    ? clinicListSorter(
+                                        context, clinicCardsListSearched)[index]
+                                    : sorListSorter(
+                                        context, sorCardsListSearched)[index];
+                              },
+                            )
+                          : (clinicCardsListFiltered.length == 0 &&
+                                      selectScreenData.entity ==
+                                          Entity.clinic) ||
+                                  (sorCardsListFiltered.length == 0 &&
+                                      selectScreenData.entity == Entity.service)
+                              ? Center(
+                                  child: Text(
+                                  t("no_results"),
+                                  style: theme.textTheme.headline6,
+                                ))
+                              : ListView.builder(
+                                  itemCount:
+                                      selectScreenData.entity == Entity.clinic
+                                          ? clinicCardsListFiltered.length
+                                          : sorCardsListFiltered.length,
+                                  itemBuilder: (context, index) {
+                                    return selectScreenData.entity ==
+                                            Entity.clinic
+                                        ? clinicListSorter(context,
+                                            clinicCardsListFiltered)[index]
+                                        : sorListSorter(context,
+                                            sorCardsListFiltered)[index];
+                                  },
+                                ),
+                ),
+              ),
             ],
           ),
         ),

@@ -150,7 +150,7 @@ class _InfoScreenState extends State<InfoScreen> {
         ),
       );
 
-      if (_account['password'].isEmpty) {
+      if (_account['password'] == null || _account['password'].isEmpty) {
         alert(context, t('confirm_password_empty'));
       } else {
         final response = await AccountAPI.editAccount(context, _account);

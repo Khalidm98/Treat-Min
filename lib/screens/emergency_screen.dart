@@ -184,13 +184,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           _hospitalDetails
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.healing),
-        label: Text(t('first_aid')),
-        onPressed: () {},
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton.extended(
+      //   icon: const Icon(Icons.healing),
+      //   label: Text(t('first_aid')),
+      //   onPressed: () {},
+      //   backgroundColor: Theme.of(context).primaryColor,
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

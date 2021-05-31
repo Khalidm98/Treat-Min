@@ -8,6 +8,7 @@ import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../utils/dialogs.dart';
 import '../widgets/background_image.dart';
+import '../widgets/input_field.dart';
 
 class VerificationScreen extends StatefulWidget {
   static const String routeName = '/verify';
@@ -96,45 +97,48 @@ class _VerificationScreenState extends State<VerificationScreen> {
           return SizedBox(
             width: side,
             height: side,
-            child: TextField(
-              onChanged: index == 3
-                  ? (num) {
-                      if (num.isNotEmpty) {
-                        if (num.length == 2) {
-                          _controllers[3].text = num[1];
+            child: Theme(
+              data: inputTheme(context),
+              child: TextField(
+                onChanged: index == 3
+                    ? (num) {
+                        if (num.isNotEmpty) {
+                          if (num.length == 2) {
+                            _controllers[3].text = num[1];
+                          }
+                          FocusScope.of(context).unfocus();
                         }
-                        FocusScope.of(context).unfocus();
+                        setState(() {});
                       }
-                      setState(() {});
-                    }
-                  : (num) {
-                      if (num.isNotEmpty) {
-                        if (num.length == 2) {
-                          _controllers[index].text = num[1];
+                    : (num) {
+                        if (num.isNotEmpty) {
+                          if (num.length == 2) {
+                            _controllers[index].text = num[1];
+                          }
+                          _focusNodes[index].requestFocus();
                         }
-                        _focusNodes[index].requestFocus();
-                      }
-                      setState(() {});
-                    },
-              onTap: () {
-                _controllers[index].selection = TextSelection.collapsed(
-                  offset: _controllers[index].text.length,
-                );
-              },
-              controller: _controllers[index],
-              cursorColor: _controllers[index].text.isEmpty
-                  ? theme.primaryColorLight
-                  : Colors.white,
-              decoration: InputDecoration(
-                counterText: '',
-                fillColor: theme.primaryColor,
-                filled: _controllers[index].text.isNotEmpty,
+                        setState(() {});
+                      },
+                onTap: () {
+                  _controllers[index].selection = TextSelection.collapsed(
+                    offset: _controllers[index].text.length,
+                  );
+                },
+                controller: _controllers[index],
+                cursorColor: _controllers[index].text.isEmpty
+                    ? theme.primaryColorLight
+                    : Colors.white,
+                decoration: InputDecoration(
+                  counterText: '',
+                  fillColor: theme.primaryColor,
+                  filled: _controllers[index].text.isNotEmpty,
+                ),
+                focusNode: index == 0 ? null : _focusNodes[index - 1],
+                keyboardType: TextInputType.number,
+                maxLength: 2,
+                style: theme.textTheme.headline5.copyWith(color: Colors.white),
+                textAlign: TextAlign.center,
               ),
-              focusNode: index == 0 ? null : _focusNodes[index - 1],
-              keyboardType: TextInputType.number,
-              maxLength: 2,
-              style: theme.textTheme.headline5.copyWith(color: Colors.white),
-              textAlign: TextAlign.center,
             ),
           );
         }).toList(),

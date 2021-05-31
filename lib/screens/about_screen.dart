@@ -13,7 +13,7 @@ class AboutScreen extends StatelessWidget {
       ),
       Text(
         'تريت-من هو مشروع تخرج مجموعة من الطلاب المقيدين'
-        ' بكلية الهندسة جامعة عين شمس. دفعة 2021.\n\n'
+        ' بكلية الهندسة جامعة عين شمس، دفعة 2021.\n\n'
         'تريت-من هو خدمة تهدف إلى تسهيل عملية إيجاد العيادات بمختلف التخصصات '
         'والخدمات الطبية الأخري بجميع أنحاء مصر. وايضا يعطي معلومات عن أقرب'
         ' المستشفيات في حالة الطوارئ.\n\n'
@@ -47,7 +47,7 @@ class AboutScreen extends StatelessWidget {
       ),
       Text(
         'Treat-min is the graduation project of a group of students of '
-        'Faculty of Engineering, Ain Shams University. Class of 2021\n\n'
+        'Faculty of Engineering, Ain Shams University, Class of 2021.\n\n'
         'Treat-min is a service that aims to facilitate the process of '
         'finding clinics of different specialities and other medical services '
         'all over Egypt. It also provides information about nearest hospitals '

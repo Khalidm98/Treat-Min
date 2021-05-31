@@ -18,6 +18,7 @@ class ClinicCard extends StatefulWidget {
   final ClinicDetail clinicCardData;
   final Entity entity;
   final int entityId;
+
   ClinicCard({@required this.clinicCardData, this.entity, this.entityId});
 
   @override
@@ -57,15 +58,17 @@ class _ClinicCardState extends State<ClinicCard> {
         context,
         BookNowScreen.routeName,
         arguments: BookNowScreenData(
-            entityId: widget.entityId.toString(),
-            entity: widget.entity,
-            cardDetail: ClinicDetail(
-                doctor: widget.clinicCardData.doctor,
-                id: widget.clinicCardData.id,
-                hospital: widget.clinicCardData.hospital,
-                price: widget.clinicCardData.price,
-                ratingTotal: widget.clinicCardData.ratingTotal,
-                ratingUsers: widget.clinicCardData.ratingUsers)),
+          entityId: widget.entityId.toString(),
+          entity: widget.entity,
+          cardDetail: ClinicDetail(
+            doctor: widget.clinicCardData.doctor,
+            id: widget.clinicCardData.id,
+            hospital: widget.clinicCardData.hospital,
+            price: widget.clinicCardData.price,
+            ratingTotal: widget.clinicCardData.ratingTotal,
+            ratingUsers: widget.clinicCardData.ratingUsers,
+          ),
+        ),
       );
     }
   }
