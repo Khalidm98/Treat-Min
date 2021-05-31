@@ -353,8 +353,6 @@ class _InfoScreenState extends State<InfoScreen> {
                 const SizedBox(height: 20),
                 Row(
                   children: [
-                    Text(t('gender'), style: theme.textTheme.subtitle1),
-                    Spacer(),
                     Radio(
                       value: 'M',
                       groupValue: _gender,

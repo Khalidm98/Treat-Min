@@ -138,7 +138,6 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       );
     }
 
-    print('maps');
     return Scaffold(
       appBar: AppBar(
         title: Text(t('emergency')),
@@ -185,10 +184,10 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           _hospitalDetails
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.healing),
+        label: Text(t('first_aid')),
         onPressed: () {},
-        tooltip: t('first_aid'),
-        child: const Icon(Icons.healing),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
