@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/widgets/background_image.dart';
 
 import './available_screen.dart';
 import '../api/entities.dart';
 import '../localizations/app_localizations.dart';
+import '../models/screens_data.dart';
 import '../providers/app_data.dart';
 import '../utils/enumerations.dart';
-import '../models/screens_data.dart';
+import '../widgets/background_image.dart';
 
 class SelectScreen extends StatelessWidget {
   static const String routeName = '/select';

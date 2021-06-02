@@ -1,13 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:treat_min/utils/enumerations.dart';
+
 import './rating_hearts.dart';
-import '../screens/auth_screen.dart';
+import '../localizations/app_localizations.dart';
 import '../models/card_data.dart';
 import '../models/screens_data.dart';
-import '../localizations/app_localizations.dart';
+import '../screens/auth_screen.dart';
 import '../screens/booking_screen.dart';
+import '../utils/enumerations.dart';
 
 const EdgeInsetsGeometry doctorCardIconsPadding = const EdgeInsets.all(2.0);
 const double doctorCardIconsWidth = 12.0;
@@ -53,18 +54,19 @@ class _SORCardState extends State<SORCard> {
         ),
       );
     } else {
-      Navigator.pushNamed(
-        context,
+      Navigator.of(context).pushNamed(
         BookNowScreen.routeName,
         arguments: BookNowScreenData(
-            entityId: widget.entityId.toString(),
-            entity: widget.entity,
-            cardDetail: SORDetail(
-                id: widget.sorCardData.id,
-                hospital: widget.sorCardData.hospital,
-                price: widget.sorCardData.price,
-                ratingTotal: widget.sorCardData.ratingTotal,
-                ratingUsers: widget.sorCardData.ratingUsers)),
+          entityId: widget.entityId.toString(),
+          entity: widget.entity,
+          cardDetail: SORDetail(
+            id: widget.sorCardData.id,
+            hospital: widget.sorCardData.hospital,
+            price: widget.sorCardData.price,
+            ratingTotal: widget.sorCardData.ratingTotal,
+            ratingUsers: widget.sorCardData.ratingUsers,
+          ),
+        ),
       );
     }
   }
@@ -79,7 +81,7 @@ class _SORCardState extends State<SORCard> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 7),
+            margin: const EdgeInsets.symmetric(horizontal: 7),
             decoration: BoxDecoration(
               color: theme.primaryColor,
               border: Border(bottom: BorderSide(color: Colors.white)),
@@ -102,7 +104,7 @@ class _SORCardState extends State<SORCard> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 7),
+            margin: const EdgeInsets.symmetric(horizontal: 7),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(top: BorderSide(color: Colors.white)),
@@ -121,7 +123,7 @@ class _SORCardState extends State<SORCard> {
                   Expanded(
                     flex: 1,
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       color: theme.primaryColor,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,7 +193,7 @@ class _SORCardState extends State<SORCard> {
                   Expanded(
                     flex: 2,
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
                       child: ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(

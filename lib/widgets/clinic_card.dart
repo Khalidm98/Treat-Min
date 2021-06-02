@@ -1,13 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:treat_min/models/screens_data.dart';
-import 'package:treat_min/utils/enumerations.dart';
+
 import './rating_hearts.dart';
-import '../screens/auth_screen.dart';
-import '../models/card_data.dart';
 import '../localizations/app_localizations.dart';
+import '../models/card_data.dart';
+import '../models/screens_data.dart';
+import '../screens/auth_screen.dart';
 import '../screens/booking_screen.dart';
+import '../utils/enumerations.dart';
 
 const EdgeInsetsGeometry doctorCardIconsPadding =
     const EdgeInsets.symmetric(vertical: 4, horizontal: 5);
@@ -54,8 +55,7 @@ class _ClinicCardState extends State<ClinicCard> {
         ),
       );
     } else {
-      Navigator.pushNamed(
-        context,
+      Navigator.of(context).pushNamed(
         BookNowScreen.routeName,
         arguments: BookNowScreenData(
           entityId: widget.entityId.toString(),
@@ -85,7 +85,7 @@ class _ClinicCardState extends State<ClinicCard> {
           Container(
             decoration: BoxDecoration(color: theme.primaryColor),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-            margin: EdgeInsets.symmetric(horizontal: 7),
+            margin: const EdgeInsets.symmetric(horizontal: 7),
             width: double.infinity,
             child: Text(
               widget.clinicCardData.hospital.name,
@@ -95,7 +95,7 @@ class _ClinicCardState extends State<ClinicCard> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 0),
+            margin: EdgeInsets.zero,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(2.0),
@@ -126,7 +126,7 @@ class _ClinicCardState extends State<ClinicCard> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 7),
+            margin: const EdgeInsets.symmetric(horizontal: 7),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
@@ -149,7 +149,7 @@ class _ClinicCardState extends State<ClinicCard> {
                   Expanded(
                     flex: 1,
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       color: theme.primaryColor,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,7 +220,7 @@ class _ClinicCardState extends State<ClinicCard> {
                   Expanded(
                     flex: 2,
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
                       child: ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(

@@ -24,10 +24,10 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 0), () async {
+    Future.delayed(Duration.zero, () async {
       final current = await getLocation();
       if (current == null) {
-        Navigator.of(context).pop();
+        Navigator.pop(context);
       } else {
         _currentLocation = LatLng(current.latitude, current.longitude);
         _location = _currentLocation;

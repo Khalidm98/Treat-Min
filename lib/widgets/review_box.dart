@@ -12,8 +12,8 @@ class ReviewBox extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 7),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 7),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(5)),

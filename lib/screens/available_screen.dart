@@ -1,20 +1,20 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/api/entities.dart';
-import 'package:treat_min/models/cities_areas.dart';
 
 import '../api/actions.dart';
+import '../api/entities.dart';
 import '../localizations/app_localizations.dart';
 import '../models/card_data.dart';
+import '../models/cities_areas.dart';
 import '../models/screens_data.dart';
 import '../providers/app_data.dart';
 import '../utils/enumerations.dart';
 import '../widgets/background_image.dart';
 import '../widgets/clinic_card.dart';
 import '../widgets/input_field.dart';
-import '../widgets/sor_card.dart';
 import '../widgets/modal_sheet_list_tile.dart';
+import '../widgets/sor_card.dart';
 
 class AvailableScreen extends StatefulWidget {
   static const String routeName = '/available';
@@ -604,8 +604,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
               ),
               if (filterOn)
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: theme.primaryColor)),
@@ -626,7 +626,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                   color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                     dropdownColor: theme.primaryColor,
@@ -672,7 +672,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                   color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: DropdownButtonHideUnderline(
                                     child: DropdownButton(
                                   dropdownColor: theme.primaryColor,
@@ -724,7 +724,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                 color: theme.primaryColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
                                   dropdownColor: theme.primaryColor,

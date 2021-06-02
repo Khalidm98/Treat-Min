@@ -46,7 +46,7 @@ class _BookNowDropDownListState extends State<BookNowDropDownList> {
     setAppLocalization(context);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 9),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 9),
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           dropdownColor: Colors.white,

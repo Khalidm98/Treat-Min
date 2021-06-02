@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:treat_min/models/card_data.dart';
-import 'package:treat_min/models/cities_areas.dart';
 
 // import '../localizations/app_localizations.dart';
+import '../models/card_data.dart';
+import '../models/cities_areas.dart';
 import '../providers/app_data.dart';
 import '../utils/dialogs.dart';
 import '../utils/enumerations.dart';

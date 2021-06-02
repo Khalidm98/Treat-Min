@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:treat_min/models/card_data.dart';
-import 'package:treat_min/models/cities_areas.dart';
 
+import '../models/card_data.dart';
+import '../models/cities_areas.dart';
 import '../utils/enumerations.dart';
 import '../main.dart';
 

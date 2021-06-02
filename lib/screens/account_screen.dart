@@ -27,9 +27,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   noReservation(ThemeData theme) {
     return Card(
-      margin: EdgeInsets.all(0),
+      margin: EdgeInsets.zero,
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15),
         trailing: Icon(
           Icons.book,
           color: theme.accentColor,

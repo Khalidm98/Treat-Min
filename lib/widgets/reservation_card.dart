@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:treat_min/utils/enumerations.dart';
+import '../api/actions.dart';
 import '../localizations/app_localizations.dart';
 import '../models/reservations.dart';
-import '../api/actions.dart';
+import '../utils/enumerations.dart';
 import 'clickable_rating_hearts.dart';
 import 'input_field.dart';
 
@@ -178,13 +177,13 @@ class _ReservationCardState extends State<ReservationCard> {
     setAppLocalization(context);
 
     return Card(
-      margin: EdgeInsets.only(bottom: 15),
+      margin: const EdgeInsets.only(bottom: 15),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 5),
               child: RotatedBox(
                 child: Text(
                   widget.reservedEntityDetails.status == "W"
@@ -313,7 +312,7 @@ class _ReservationCardState extends State<ReservationCard> {
                         )
                       ],
                     ),
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     // decoration: BoxDecoration(
                     //     border: Border(
                     //   right: BorderSide(color: theme.accentColor, width: 2),

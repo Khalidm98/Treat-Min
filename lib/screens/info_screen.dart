@@ -93,8 +93,8 @@ class _InfoScreenState extends State<InfoScreen> {
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: _date,
-      firstDate: DateTime.now().subtract(Duration(days: 365 * 80 + 20)),
-      lastDate: DateTime.now().subtract(Duration(days: 365 * 12 + 3)),
+      firstDate: DateTime.now().subtract(const Duration(days: 365 * 80 + 20)),
+      lastDate: DateTime.now().subtract(const Duration(days: 365 * 12 + 3)),
       helpText: t('select_date'),
     );
     if (picked != null) {

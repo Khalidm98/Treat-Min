@@ -8,11 +8,11 @@ import './google_api_key.dart';
 import '../localizations/app_localizations.dart';
 
 
-double distance(LatLng location_1, LatLng location_2) {
-  final lat1 = location_1.latitude;
-  final lon1 = location_1.longitude;
-  final lat2 = location_2.latitude;
-  final lon2 = location_2.longitude;
+double distance(LatLng location1, LatLng location2) {
+  final lat1 = location1.latitude;
+  final lon1 = location1.longitude;
+  final lat2 = location2.latitude;
+  final lon2 = location2.longitude;
   const p = 0.017453292519943295;
   final a = 0.5 -
       cos((lat2 - lat1) * p) / 2 +

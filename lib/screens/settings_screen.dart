@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/utils/dialogs.dart';
 
 import './about_screen.dart';
 import './auth_screen.dart';
@@ -10,6 +9,7 @@ import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
 import '../providers/app_data.dart';
 import '../providers/user_data.dart';
+import '../utils/dialogs.dart';
 import '../widgets/background_image.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -66,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
             //   shape: RoundedRectangleBorder(
             //     borderRadius: BorderRadius.circular(10),
             //   ),
-            //   margin: EdgeInsets.all(0),
+            //   margin: EdgeInsets.zero,
             //   color: Colors.grey[300],
             //   child: SwitchListTile(
             //     value: appData.notifications,
@@ -93,7 +93,7 @@ class SettingsScreen extends StatelessWidget {
                 trailing: Stack(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       child: CircleAvatar(
                         radius: 15,
                         backgroundColor: Colors.white,

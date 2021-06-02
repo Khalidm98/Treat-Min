@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:treat_min/widgets/background_image.dart';
 
 import './tabs_screen.dart';
 import '../api/actions.dart';
@@ -9,6 +8,7 @@ import '../models/reviews.dart';
 import '../models/schedule.dart';
 import '../models/screens_data.dart';
 import '../utils/enumerations.dart';
+import '../widgets/background_image.dart';
 import '../widgets/book_now_dropdown_list.dart';
 import '../widgets/review_box.dart';
 import '../widgets/rating_hearts.dart';
@@ -199,7 +199,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
         context: context,
         initialDate: defineInitialDate(),
         firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(Duration(days: 365)));
+        lastDate: DateTime.now().add(const Duration(days: 365)));
     if (picked != null)
       setState(() {
         pickedDate = true;
@@ -286,12 +286,12 @@ class _BookNowScreenState extends State<BookNowScreen> {
       appBar: AppBar(title: Text(t('book_now'))),
       body: BackgroundImage(
         child: ListView(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           children: [
             Column(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Column(
                     children: [
                       Padding(
@@ -506,10 +506,9 @@ class _BookNowScreenState extends State<BookNowScreen> {
                                             reviews.reviews[index]);
                                       })
                                   : Card(
-                                      margin: EdgeInsets.all(0),
+                                      margin: EdgeInsets.zero,
                                       child: ListTile(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 15),
+                                        contentPadding: const EdgeInsets.symmetric(horizontal: 15),
                                         trailing: Icon(
                                           Icons.rate_review,
                                           color: theme.accentColor,
