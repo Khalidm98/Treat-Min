@@ -20,7 +20,7 @@ class MainScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('assets/images/logo.png'),
-              SizedBox(height: 80),
+              const SizedBox(height: 80),
               ElevatedButton(
                 child: Text(t(entityToString(Entity.clinic))),
                 onPressed: () {
@@ -30,7 +30,7 @@ class MainScreen extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 child: Text(t(entityToString(Entity.service))),
                 onPressed: () {
@@ -40,7 +40,7 @@ class MainScreen extends StatelessWidget {
                   );
                 },
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
                   final hasPermission = await checkPermission();

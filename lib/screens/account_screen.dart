@@ -66,9 +66,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Image.asset('assets/images/logo.png'),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               Text(t('not_logged_in'), style: theme.textTheme.headline5),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: ElevatedButton(

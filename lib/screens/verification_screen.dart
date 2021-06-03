@@ -166,7 +166,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset('assets/images/logo.png'),
-                      SizedBox(height: 50),
+                      const SizedBox(height: 50),
                       Text(
                         t('verify'),
                         style: theme.textTheme.headline5,

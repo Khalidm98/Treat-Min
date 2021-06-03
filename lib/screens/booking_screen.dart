@@ -332,7 +332,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       RatingHearts(
                         iconHeight: 25,
                         iconWidth: 25,
@@ -341,7 +341,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                                 receivedData.cardDetail.ratingUsers)
                             : 0,
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -362,7 +362,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 FutureBuilder(
                   future: schedulesResponse,
                   builder: (_, response) {
@@ -402,7 +402,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                           theme.textTheme.subtitle2.copyWith(color: Colors.red),
                     ),
                   ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                     child: ListTile(
                       leading: Text(
@@ -440,7 +440,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                           theme.textTheme.subtitle2.copyWith(color: Colors.red),
                     ),
                   ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   child: Text(t('book_now')),
                   style: ButtonStyle(

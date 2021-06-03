@@ -393,7 +393,7 @@ class _InfoScreenState extends State<InfoScreen> {
                           color: theme.errorColor,
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 30),
                   child: ElevatedButton(

@@ -19,7 +19,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   final _controller = Completer<GoogleMapController>();
   LatLng _currentLocation, _location;
   Set<Marker> _markers = {};
-  Widget _hospitalDetails = SizedBox();
+  Widget _hospitalDetails = const SizedBox();
 
   @override
   void initState() {
@@ -89,7 +89,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     icon: const Icon(Icons.close),
                     onPressed: () {
                       setState(() {
-                        _hospitalDetails = SizedBox();
+                        _hospitalDetails = const SizedBox();
                       });
                     },
                   ),
@@ -106,13 +106,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       hospital.rating == null
-                          ? SizedBox()
+                          ? const SizedBox()
                           : RatingHearts(
                               rating: (hospital.rating).round(),
                               iconHeight: 20,
                             ),
                       hospital.openingHours == null
-                          ? SizedBox()
+                          ? const SizedBox()
                           : Text(hospital.openingHours.openNow
                               ? t('open')
                               : t('closed')),

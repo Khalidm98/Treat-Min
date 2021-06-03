@@ -61,7 +61,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             // Card(
             //   shape: RoundedRectangleBorder(
             //     borderRadius: BorderRadius.circular(10),
@@ -81,7 +81,7 @@ class SettingsScreen extends StatelessWidget {
             //     inactiveTrackColor: Colors.white,
             //   ),
             // ),
-            // SizedBox(height: 15),
+            // const SizedBox(height: 15),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: ListTile(
@@ -104,7 +104,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: ListTile(

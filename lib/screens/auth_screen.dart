@@ -196,10 +196,6 @@ class _AuthScreenState extends State<AuthScreen>
                                         return null;
                                       } else if (value.isEmpty) {
                                         return t('password_empty');
-                                      } else if (value.length < 8) {
-                                        return t('password_length');
-                                      } else if (int.tryParse(value) != null) {
-                                        return t('password_numbers');
                                       }
                                       return null;
                                     },

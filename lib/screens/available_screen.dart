@@ -549,7 +549,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Expanded(
                       child: ElevatedButton(
                         child: FittedBox(
@@ -575,7 +575,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Expanded(
                       child: ElevatedButton(
                         child: FittedBox(
@@ -620,7 +620,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                 t("city"),
                                 style: theme.textTheme.headline6,
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Container(
                                 decoration: BoxDecoration(
                                   color: theme.primaryColor,
@@ -666,7 +666,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                 t("area"),
                                 style: theme.textTheme.headline6,
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Container(
                                 decoration: BoxDecoration(
                                   color: theme.primaryColor,
@@ -708,14 +708,14 @@ class _AvailableScreenState extends State<AvailableScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Column(
                         children: [
                           Text(
                             t("hospital"),
                             style: theme.textTheme.headline6,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 32.0),
@@ -755,7 +755,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                         ],
                       ),
                       Padding(

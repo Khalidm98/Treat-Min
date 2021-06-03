@@ -47,7 +47,7 @@ class GetStartedScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: ElevatedButton(
                         child: Text(t('explore')),

@@ -93,7 +93,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                     child: Column(
                       children: [
                         !isLoggedIn
-                            ? SizedBox()
+                            ? const SizedBox()
                             : InputField(
                                 label: t('current_password'),
                                 textFormField: TextFormField(
@@ -113,7 +113,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                   obscureText: _passObscure[0],
                                   textInputAction: TextInputAction.next,
                                   onSaved: (value) => _data['old'] = value,
-                                  validator: _validator,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return t('password_empty');
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                         SizedBox(height: !isLoggedIn ? 0 : 30),
