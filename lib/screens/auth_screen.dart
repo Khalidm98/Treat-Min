@@ -23,6 +23,7 @@ class _AuthScreenState extends State<AuthScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final Map<String, String> _data = Map();
+  final _forgetController = TextEditingController();
   AuthMode _mode = AuthMode.login;
   AnimationController _controller;
   Animation<double> _animation;
@@ -57,9 +58,23 @@ class _AuthScreenState extends State<AuthScreen>
 
   @override
   void dispose() {
+    _forgetController.dispose();
     _controller.dispose();
     _switchMode.dispose();
     super.dispose();
+  }
+
+  String _emailValidator(String email) {
+    if (email.isEmpty) {
+      return t('email_empty');
+    } else if (!email.contains('.') ||
+        !email.contains('@') ||
+        email.indexOf('@') !=
+            email.lastIndexOf('@') ||
+        email.indexOf('@') > email.lastIndexOf('.')) {
+      return t('email_valid');
+    }
+    return null;
   }
 
   Future<void> _signUp() async {
@@ -90,22 +105,46 @@ class _AuthScreenState extends State<AuthScreen>
   }
 
   Future<void> _forgotPassword() async {
-    _mode = AuthMode.signUp;
-    if (!_formKey.currentState.validate()) {
-      _mode = AuthMode.login;
-      return;
-    }
-    _formKey.currentState.save();
-    _mode = AuthMode.login;
-
-    prompt(context, t('forgot_password_message'), onYes: () async {
-      final response = await AccountAPI.passwordEmail(context, _data['email']);
-      if (response) {
-        Navigator.of(context).pushNamed(
-          VerificationScreen.routeName,
-          arguments: {'mode': _mode, 'email': _data['email']},
-        );
-      }
+    prompt(context, t('forgot_password_message'), onYes: () {
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text(t('email')),
+          content: TextField(controller: _forgetController),
+          actions: [
+            TextButton(
+              child: Text(t('cancel')),
+              onPressed: () {
+                Navigator.pop(context);
+                _forgetController.clear();
+              },
+            ),
+            TextButton(
+              child: Text(t('send_code')),
+              onPressed: () async {
+                Navigator.pop(context);
+                final validate = _emailValidator(_forgetController.text);
+                if (validate != null) {
+                  alert(context, validate);
+                } else {
+                  final response = await AccountAPI.passwordEmail(
+                      context, _forgetController.text);
+                  if (response) {
+                    Navigator.of(context).pushNamed(
+                      VerificationScreen.routeName,
+                      arguments: {
+                        'mode': _mode,
+                        'email': _forgetController.text
+                      },
+                    );
+                  }
+                }
+                _forgetController.clear();
+              },
+            ),
+          ],
+        ),
+      );
     });
   }
 
@@ -145,18 +184,7 @@ class _AuthScreenState extends State<AuthScreen>
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             onSaved: (value) => _data['email'] = value,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return t('email_empty');
-                              } else if (!value.contains('.') ||
-                                  !value.contains('@') ||
-                                  value.indexOf('@') !=
-                                      value.lastIndexOf('@') ||
-                                  value.indexOf('@') > value.lastIndexOf('.')) {
-                                return t('email_valid');
-                              }
-                              return null;
-                            },
+                            validator: _emailValidator
                           ),
                         ),
                       ),
@@ -222,9 +250,7 @@ class _AuthScreenState extends State<AuthScreen>
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: ElevatedButton(
                     child: Text(
-                      t(
-                        _mode == AuthMode.signUp ? 'sign_up' : 'log_in',
-                      ),
+                      t(_mode == AuthMode.signUp ? 'sign_up' : 'log_in'),
                     ),
                     onPressed: () {
                       FocusScope.of(context).unfocus();

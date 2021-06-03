@@ -20,6 +20,7 @@
   "google": "with Google",
   "forgot_password": "Forgot your password?",
   "forgot_password_message": "Are you sure you forgot your password?",
+  "send_code": "Send code",
   "already_registered": "Already have an account? ",
   "not_registered": "Don't have an account? ",
   "email": "Email Address",

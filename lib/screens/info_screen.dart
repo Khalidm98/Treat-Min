@@ -134,37 +134,36 @@ class _InfoScreenState extends State<InfoScreen> {
         context: context,
         child: AlertDialog(
           title: Text(t('current_password')),
-          content: TextField(
-            controller: _passController,
-            obscureText: true,
-          ),
+          content: TextField(controller: _passController, obscureText: true),
           actions: [
             TextButton(
-              onPressed: () {
-                _account['password'] = _passController.text;
-                Navigator.pop(context);
-              },
               child: Text(t('ok')),
+              onPressed: () async {
+                Navigator.pop(context);
+                if (_passController.text.isEmpty) {
+                  alert(context, t('confirm_password_empty'));
+                } else {
+                  _account['password'] = _passController.text;
+                  final response =
+                      await AccountAPI.editAccount(context, _account);
+                  if (response) {
+                    if (_imageChanged) {
+                      final response =
+                          await AccountAPI.changePhoto(context, _image);
+                      if (response) {
+                        Navigator.pop(context);
+                      }
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  }
+                }
+              },
             ),
           ],
         ),
       );
-
-      if (_account['password'] == null || _account['password'].isEmpty) {
-        alert(context, t('confirm_password_empty'));
-      } else {
-        final response = await AccountAPI.editAccount(context, _account);
-        if (response) {
-          if (_imageChanged) {
-            final response = await AccountAPI.changePhoto(context, _image);
-            if (response) {
-              Navigator.pop(context);
-            }
-          } else {
-            Navigator.pop(context);
-          }
-        }
-      }
+      _passController.clear();
     } else {
       _account['email'] = ModalRoute.of(context).settings.arguments;
       final response = await AccountAPI.register(context, _account);
