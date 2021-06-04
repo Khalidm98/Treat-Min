@@ -279,35 +279,38 @@ class _ReservationCardState extends State<ReservationCard> {
                                   },
                                   child: Text(t('cancel'), maxLines: 1),
                                 )
-                              : OutlinedButton(
-                                  style: ButtonStyle(
-                                    side: MaterialStateProperty.all<BorderSide>(
-                                      BorderSide(color: theme.primaryColor),
-                                    ),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                      theme.primaryColor.withOpacity(0.2),
-                                    ),
-                                    overlayColor:
-                                        MaterialStateProperty.all<Color>(
-                                      theme.primaryColor.withOpacity(0.4),
-                                    ),
-                                    foregroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            theme.primaryColor),
-                                    textStyle:
-                                        MaterialStateProperty.all<TextStyle>(
-                                      const TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.w700,
+                              : widget.reservedEntityDetails.status == "A"
+                                  ? OutlinedButton(
+                                      style: ButtonStyle(
+                                        side: MaterialStateProperty.all<
+                                            BorderSide>(
+                                          BorderSide(color: theme.primaryColor),
+                                        ),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                          theme.primaryColor.withOpacity(0.2),
+                                        ),
+                                        overlayColor:
+                                            MaterialStateProperty.all<Color>(
+                                          theme.primaryColor.withOpacity(0.4),
+                                        ),
+                                        foregroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                theme.primaryColor),
+                                        textStyle: MaterialStateProperty.all<
+                                            TextStyle>(
+                                          const TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    rateBox(context, theme);
-                                  },
-                                  child: Text(t('rate'), maxLines: 1),
-                                ),
+                                      onPressed: () {
+                                        rateBox(context, theme);
+                                      },
+                                      child: Text(t('rate'), maxLines: 1),
+                                    )
+                                  : Container(),
                           flex: 1,
                         )
                       ],

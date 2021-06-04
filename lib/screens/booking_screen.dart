@@ -12,6 +12,8 @@ import '../widgets/background_image.dart';
 import '../widgets/book_now_dropdown_list.dart';
 import '../widgets/review_box.dart';
 import '../widgets/rating_hearts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../screens/auth_screen.dart';
 
 class BookNowScreen extends StatefulWidget {
   static const String routeName = '/booking';
@@ -216,38 +218,66 @@ class _BookNowScreenState extends State<BookNowScreen> {
 
   void checkToBook(String entity, String entityId, String detailId,
       ThemeData theme, BuildContext context) async {
-    if (dropDownValue.start == null) {
-      setState(() {
-        ddvExists = false;
-      });
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text(t('must_log_in')),
+          actions: [
+            TextButton(
+              child: Text(t('cancel')),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: Text(t('log_in')),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  AuthScreen.routeName,
+                  (route) => false,
+                );
+              },
+            ),
+          ],
+        ),
+      );
     } else {
-      setState(() {
-        ddvExists = true;
-      });
-      if (pickedDate == true) {
+      if (dropDownValue.start == null) {
         setState(() {
-          pickedDateCheck = true;
+          ddvExists = false;
         });
       } else {
         setState(() {
-          pickedDateCheck = false;
+          ddvExists = true;
         });
+        if (pickedDate == true) {
+          setState(() {
+            pickedDateCheck = true;
+          });
+        } else {
+          setState(() {
+            pickedDateCheck = false;
+          });
+        }
       }
-    }
-    if (ddvExists == true && pickedDate == true) {
-      scheduleId = dropDownValue.id.toString();
-      reserveResponse = await ActionAPI.reserveAppointment(
-          context,
-          entity,
-          entityId,
-          detailId,
-          scheduleId,
-          appointmentDate.toString().substring(0, 10));
-      if (reserveResponse == "Your appointment was reserved successfully.") {
-        _bookSuccess(theme, context);
-      } else if (reserveResponse ==
-          "User cannot reserve the same schedule twice in the same day!") {
-        _bookFail(theme, context);
+      if (ddvExists == true && pickedDate == true) {
+        scheduleId = dropDownValue.id.toString();
+        reserveResponse = await ActionAPI.reserveAppointment(
+            context,
+            entity,
+            entityId,
+            detailId,
+            scheduleId,
+            appointmentDate.toString().substring(0, 10));
+        if (reserveResponse == "Your appointment was reserved successfully.") {
+          _bookSuccess(theme, context);
+        } else if (reserveResponse ==
+            "User cannot reserve the same schedule twice in the same day!") {
+          _bookFail(theme, context);
+        }
       }
     }
   }
@@ -508,7 +538,9 @@ class _BookNowScreenState extends State<BookNowScreen> {
                                   : Card(
                                       margin: EdgeInsets.zero,
                                       child: ListTile(
-                                        contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 15),
                                         trailing: Icon(
                                           Icons.rate_review,
                                           color: theme.accentColor,

@@ -110,7 +110,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
   }
 
   String removeWhitespace(String text) {
-    return text.replaceAll(' ', '');
+    String newText = text.replaceAll(" ", "");
+    return newText;
   }
 
   List<ClinicCard> clinicListSorter(
@@ -123,7 +124,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
       entityDetailsList.sort(
           (a, b) => a.clinicCardData.price.compareTo(b.clinicCardData.price));
       return entityDetailsList.reversed.toList();
-    } 
+    }
     // else if (Provider.of<AppData>(context).sortingVars[2] == true) {
     //   entityDetailsList.sort((a, b) {
     //     final distA = distance(
@@ -137,7 +138,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
     //     return distA.compareTo(distB);
     //   });
     //   return entityDetailsList;
-    // } 
+    // }
     else {
       return entityDetailsList;
     }
@@ -153,7 +154,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
       entityDetailsList
           .sort((a, b) => a.sorCardData.price.compareTo(b.sorCardData.price));
       return entityDetailsList.reversed.toList();
-    } 
+    }
     // else if (Provider.of<AppData>(context).sortingVars[2] == true) {
     //   entityDetailsList.sort((a, b) {
     //     final distA = distance(
@@ -167,7 +168,7 @@ class _AvailableScreenState extends State<AvailableScreen> {
     //     return distA.compareTo(distB);
     //   });
     //   return entityDetailsList;
-    // } 
+    // }
     else {
       return entityDetailsList;
     }
@@ -604,7 +605,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
               ),
               if (filterOn)
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -626,7 +628,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                   color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
                                     dropdownColor: theme.primaryColor,
@@ -672,7 +675,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                   color: theme.primaryColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: DropdownButtonHideUnderline(
                                     child: DropdownButton(
                                   dropdownColor: theme.primaryColor,
@@ -724,7 +728,8 @@ class _AvailableScreenState extends State<AvailableScreen> {
                                 color: theme.primaryColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
                                   dropdownColor: theme.primaryColor,
@@ -811,7 +816,9 @@ class _AvailableScreenState extends State<AvailableScreen> {
                       controller: myController,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          hintText: t('search'),
+                          hintText: selectScreenData.entity == Entity.clinic
+                              ? t('search_clinic')
+                              : t('search_service'),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
                             icon: Icon(Icons.cancel),

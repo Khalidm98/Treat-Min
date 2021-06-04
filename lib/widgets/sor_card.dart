@@ -1,12 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import './rating_hearts.dart';
 import '../localizations/app_localizations.dart';
 import '../models/card_data.dart';
 import '../models/screens_data.dart';
-import '../screens/auth_screen.dart';
 import '../screens/booking_screen.dart';
 import '../utils/enumerations.dart';
 
@@ -26,49 +24,21 @@ class SORCard extends StatefulWidget {
 }
 
 class _SORCardState extends State<SORCard> {
-  checkLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('userData')) {
-      showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text(t('must_log_in')),
-          actions: [
-            TextButton(
-              child: Text(t('cancel')),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: Text(t('log_in')),
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  AuthScreen.routeName,
-                  (route) => false,
-                );
-              },
-            ),
-          ],
+  goToBooking() {
+    Navigator.of(context).pushNamed(
+      BookNowScreen.routeName,
+      arguments: BookNowScreenData(
+        entityId: widget.entityId.toString(),
+        entity: widget.entity,
+        cardDetail: SORDetail(
+          id: widget.sorCardData.id,
+          hospital: widget.sorCardData.hospital,
+          price: widget.sorCardData.price,
+          ratingTotal: widget.sorCardData.ratingTotal,
+          ratingUsers: widget.sorCardData.ratingUsers,
         ),
-      );
-    } else {
-      Navigator.of(context).pushNamed(
-        BookNowScreen.routeName,
-        arguments: BookNowScreenData(
-          entityId: widget.entityId.toString(),
-          entity: widget.entity,
-          cardDetail: SORDetail(
-            id: widget.sorCardData.id,
-            hospital: widget.sorCardData.hospital,
-            price: widget.sorCardData.price,
-            ratingTotal: widget.sorCardData.ratingTotal,
-            ratingUsers: widget.sorCardData.ratingUsers,
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   @override
@@ -208,7 +178,7 @@ class _SORCardState extends State<SORCard> {
                                 .copyWith(color: Colors.white),
                           ),
                         ),
-                        onPressed: checkLoggedIn,
+                        onPressed: goToBooking,
                       ),
                     ),
                   ),

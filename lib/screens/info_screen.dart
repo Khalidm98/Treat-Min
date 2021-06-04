@@ -180,6 +180,7 @@ class _InfoScreenState extends State<InfoScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final langCode = Localizations.localeOf(context).languageCode;
     final userData = Provider.of<UserData>(context, listen: false);
     final isLoggedIn = userData.isLoggedIn;
     setAppLocalization(context);
@@ -304,7 +305,9 @@ class _InfoScreenState extends State<InfoScreen> {
                         label: t('phone'),
                         textFormField: TextFormField(
                           decoration: InputDecoration(
-                            hintText: '01## ### ####',
+                            hintText: langCode == 'ar'
+                                ? '#### ### 01##'
+                                : '01## ### ####',
                             counterText: '',
                           ),
                           initialValue: isLoggedIn ? userData.phone : '',

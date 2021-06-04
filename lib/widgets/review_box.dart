@@ -30,9 +30,20 @@ class ReviewBox extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                child: Image.asset('assets/images/placeholder.png'),
-                radius: 20,
+              ClipOval(
+                child: CircleAvatar(
+                  child: Image.network(
+                    "http://treat-min.com/media/photos/users/${review.userId}.png",
+                    fit: BoxFit.fill,
+                    errorBuilder: (_, __, ___) {
+                      return Image.asset(
+                        'assets/icons/default.png',
+                        fit: BoxFit.fill,
+                      );
+                    },
+                  ),
+                  radius: 20,
+                ),
               ),
               SizedBox(width: 15),
               Expanded(
