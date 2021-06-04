@@ -34,7 +34,7 @@ class AboutScreen extends StatelessWidget {
         'تحت إشراف:\n'
         'أ. د. أحمد حسن محمد يوسف\n'
         'م. سارة عبد العزيز محمود عبده\n\n'
-        'رقم الإصدار: 1.0.0\n',
+        'رقم الإصدار: 1.0.1\n',
       ),
     ];
   }
@@ -69,7 +69,7 @@ class AboutScreen extends StatelessWidget {
         'Under the supervision of:\n'
         'Prof. Dr. Ahmed Hassan Muhammad Yousef\n'
         'Eng. Sarah Abdulaziz Mahmoud Abdu\n\n'
-        'Version Number: 1.0.0\n',
+        'Version Number: 1.0.1\n',
       ),
     ];
   }
