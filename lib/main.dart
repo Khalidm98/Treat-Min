@@ -158,11 +158,14 @@ class _MyAppState extends State<MyApp> {
           textTheme: const TextTheme(
             button: const TextStyle(fontWeight: FontWeight.w700),
             headline4: const TextStyle(
-                fontWeight: FontWeight.w700, color: Colors.black),
-            headline5:
-                const TextStyle(fontWeight: FontWeight.w700, color: blue),
-            subtitle1: const TextStyle(fontWeight: FontWeight.w700),
-            bodyText2: const TextStyle(fontWeight: FontWeight.w500),
+                fontWeight: FontWeight.w700, color: Colors.black, height: 1.2),
+            headline5: const TextStyle(
+                fontWeight: FontWeight.w700, color: blue, height: 1.2),
+            headline6: const TextStyle(fontWeight: FontWeight.w500),
+            subtitle1:
+                const TextStyle(fontWeight: FontWeight.w700, height: 1.2),
+            bodyText2:
+                const TextStyle(fontWeight: FontWeight.w500, height: 1.2),
             caption: const TextStyle(fontWeight: FontWeight.w500),
           ),
           textSelectionTheme: const TextSelectionThemeData(
