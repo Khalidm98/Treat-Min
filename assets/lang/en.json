@@ -28,6 +28,7 @@
   "email_valid": "Email address must be valid!",
   "password": "Password",
   "verification_screen": "--------------------------------------------------",
+  "email_delay": "Email takes around 30 seconds to be sent. Please be patient.",
   "verify": "Verify your email with code sent to you",
   "no_code": "Didn't receive the code? ",
   "resend": "Resend",

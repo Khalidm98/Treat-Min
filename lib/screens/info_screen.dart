@@ -266,6 +266,7 @@ class _InfoScreenState extends State<InfoScreen> {
                                   ),
                                 ),
                                 textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.text,
                                 obscureText: _passObscure,
                                 onSaved: (value) =>
                                     _account['password'] = value,
@@ -291,6 +292,7 @@ class _InfoScreenState extends State<InfoScreen> {
                           initialValue: isLoggedIn ? userData.name : '',
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.name,
                           onSaved: (value) => _account['name'] = value,
                           validator: (value) {
                             if (value.isEmpty) {

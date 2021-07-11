@@ -38,11 +38,24 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ? await AccountAPI.registerEmail(context, email)
                 : await AccountAPI.passwordEmail(context, email);
             if (response) {
-              alert(context, t('resend_success'));
+              await showDialog(
+                context: context,
+                child: AlertDialog(
+                  title: Text(t('resend_success')),
+                  actions: [
+                    TextButton(
+                      child: Text(t('ok')),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              );
+              alert(context, t('email_delay'));
             }
           },
         );
       };
+    Future.delayed(Duration.zero, () => alert(context, t('email_delay')));
   }
 
   @override
