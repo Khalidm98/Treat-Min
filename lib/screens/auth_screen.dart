@@ -92,7 +92,7 @@ class _AuthScreenState extends State<AuthScreen>
     }
   }
 
-  Future<void> _logIn() async {
+  Future<void> _login() async {
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -254,7 +254,7 @@ class _AuthScreenState extends State<AuthScreen>
                     ),
                     onPressed: () {
                       FocusScope.of(context).unfocus();
-                      _mode == AuthMode.signUp ? _signUp() : _logIn();
+                      _mode == AuthMode.signUp ? _signUp() : _login();
                     },
                   ),
                 ),

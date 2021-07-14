@@ -2,24 +2,76 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../api/actions.dart';
+import '../models/reservations.dart';
+
 class UserData with ChangeNotifier {
+  bool isLoggedIn = false;
+
+  // Token
   String token;
+  DateTime expiry;
+
+  // Info
   String name;
   String email;
   String gender;
   String phone;
   String photo;
   DateTime birth;
-  bool isLoggedIn = false;
 
-  Future<void> tryAutoLogin() async {
+  // User Appointments
+  List<ReservedEntityDetails> current;
+  List<ReservedEntityDetails> past;
+
+  void setAppointments(String jsonData) {
+    final appointments = reservationsFromJson(jsonData);
+    current = appointments.current.clinics + appointments.current.services;
+    past = appointments.past.clinics + appointments.past.services;
+    notifyListeners();
+  }
+
+  Future<void> refreshToken() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
       return;
     }
+
+    final userData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
+    userData['expiry'] = DateTime.now().add(const Duration(days: 182));
+    expiry = userData['expiry'];
+  }
+
+  Future<void> tryAutoLogin(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      return;
+    }
+
+    final userData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
+    expiry = DateTime.parse(userData['expiry']);
+    if (expiry.isBefore(DateTime.now())) {
+      prefs.remove('userData');
+      return;
+    }
+    token = userData['token'];
+
+    await ActionAPI.getUserAppointments(context);
+    login();
+  }
+
+  Future<void> login() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey('userData')) {
+      return;
+    }
+
     final userData =
         json.decode(prefs.getString('userData')) as Map<String, Object>;
     token = userData['token'];
+    expiry = DateTime.parse(userData['expiry']);
     name = userData['name'];
     email = userData['email'];
     gender = userData['gender'];
@@ -37,7 +89,7 @@ class UserData with ChangeNotifier {
       prefs.remove('userData');
     }
     prefs.setString('userData', userData);
-    tryAutoLogin();
+    login();
     notifyListeners();
   }
 

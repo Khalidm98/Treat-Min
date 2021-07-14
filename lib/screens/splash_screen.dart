@@ -33,12 +33,11 @@ class _SplashScreenState extends State<SplashScreen>
     _opacity = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
-  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_width == null) {
+    _width = Tween(begin: 0.0, end: 100.0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+
+    Future.delayed(Duration.zero, () async {
       _width = Tween(begin: 0.0, end: MediaQuery.of(context).size.width * 0.8)
           .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
       _width.addListener(_expand);
@@ -51,12 +50,13 @@ class _SplashScreenState extends State<SplashScreen>
                 .pushReplacementNamed(GetStartedScreen.routeName);
           } else {
             MyApp.setLocale(context, Locale(appData.language));
-            await Provider.of<UserData>(context, listen: false).tryAutoLogin();
+            await Provider.of<UserData>(context, listen: false)
+                .tryAutoLogin(context);
             Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
           }
         });
       });
-    }
+    });
   }
 
   @override

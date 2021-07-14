@@ -1,11 +1,22 @@
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/user_data.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import '../localizations/app_localizations.dart';
+import '../providers/user_data.dart';
+import '../utils/dialogs.dart';
 
 class ActionAPI {
   static final String _baseURL = 'https://www.treat-min.com/api';
+
+  static String token(BuildContext context) {
+    return Provider.of<UserData>(context, listen: false).token;
+  }
+
+  static void refreshToken(BuildContext context) async {
+    await Provider.of<UserData>(context, listen: false).refreshToken();
+  }
 
   static Future<String> getEntityDetail(String entity, String entityId) async {
     final response = await http.get(
@@ -46,17 +57,17 @@ class ActionAPI {
       String entityDetailId,
       String scheduleId,
       String appointmentDate) async {
-    final token = Provider.of<UserData>(context, listen: false).token;
     final response = await http.post(
       '$_baseURL/$entity/$entityId/details/$entityDetailId/reserve/',
       headers: {
-        "Authorization": "Token $token",
+        "Authorization": "Token ${token(context)}",
         "content-type": "application/json",
         "accept": "application/json"
       },
       body: json.encode(
           {"schedule": scheduleId, "appointment_date": appointmentDate}),
     );
+    refreshToken(context);
     Map<String, dynamic> jsonResponse = json.decode(response.body);
     if (response.statusCode == 401) {
       return "Invalid Token";
@@ -64,37 +75,40 @@ class ActionAPI {
     return jsonResponse["details"];
   }
 
-  static Future getUserAppointments(BuildContext context) async {
-    final token = Provider.of<UserData>(context, listen: false).token;
+  static Future<bool> getUserAppointments(BuildContext context) async {
     final response = await http.get(
       '$_baseURL/user/appointments/',
       headers: {
-        "Authorization": "Token $token",
+        "Authorization": "Token ${token(context)}",
         "content-type": "application/json",
         "accept": "application/json"
       },
     );
+    refreshToken(context);
 
-    if (response.statusCode == 401) {
-      return "Invalid Token";
-    }
     if (response.statusCode == 200) {
-      return utf8.decode(response.bodyBytes);
+      Provider.of<UserData>(context, listen: false)
+          .setAppointments(utf8.decode(response.bodyBytes));
+      return true;
+    } else if (response.statusCode == 401) {
+      alert(context, t('invalid_token'));
+    } else {
+      somethingWentWrong(context);
     }
-    return "Something went wrong";
+    return false;
   }
 
   static Future cancelAppointment(
       BuildContext context, String entity, int appointmentId) async {
-    final token = Provider.of<UserData>(context, listen: false).token;
     final response = await http.delete(
       '$_baseURL/user/appointments/$entity/$appointmentId/cancel/',
       headers: {
-        "Authorization": "Token $token",
+        "Authorization": "Token ${token(context)}",
         "content-type": "application/json",
         "accept": "application/json"
       },
     );
+    refreshToken(context);
 
     if (response.statusCode == 401) {
       return "Invalid Token";
@@ -112,15 +126,16 @@ class ActionAPI {
       String entityDetailId,
       String rating,
       String review) async {
-    final token = Provider.of<UserData>(context, listen: false).token;
     final response = await http.post(
-        '$_baseURL/$entity/$entityId/details/$entityDetailId/rate/',
-        headers: {
-          "Authorization": "Token $token",
-          "content-type": "application/json",
-          "accept": "application/json"
-        },
-        body: json.encode({"rating": rating, "review": review}));
+      '$_baseURL/$entity/$entityId/details/$entityDetailId/rate/',
+      headers: {
+        "Authorization": "Token ${token(context)}",
+        "content-type": "application/json",
+        "accept": "application/json"
+      },
+      body: json.encode({"rating": rating, "review": review}),
+    );
+    refreshToken(context);
     Map<String, dynamic> jsonResponse = json.decode(response.body);
     if (response.statusCode == 401) {
       return "Invalid Token";

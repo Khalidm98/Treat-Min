@@ -62,7 +62,7 @@ class SelectScreen extends StatelessWidget {
                       height: 40,
                       errorBuilder: (_, __, ___) {
                         return Image.asset(
-                          'assets/icons/heart_outlined.png',
+                          'assets/icons/nav_bar/heart_outlined.png',
                           width: 40,
                           height: 40,
                         );

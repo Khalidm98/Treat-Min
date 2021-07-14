@@ -21,6 +21,10 @@ class AccountAPI {
     return Provider.of<UserData>(context, listen: false).token;
   }
 
+  static void refreshToken(BuildContext context) async {
+    await Provider.of<UserData>(context, listen: false).refreshToken();
+  }
+
   static Future<bool> registerEmail(BuildContext context, String email) async {
     loading(context);
     final response = await http.post(
@@ -78,7 +82,9 @@ class AccountAPI {
     if (response.statusCode == 201) {
       userData.remove('password');
       userData['token'] = json.decode(response.body)['token'];
+      userData['expiry'] = json.decode(response.body)['expiry'];
       await Provider.of<UserData>(context, listen: false).saveData(userData);
+      await Provider.of<UserData>(context, listen: false).tryAutoLogin(context);
       return true;
     } else if (response.statusCode == 400) {
       alert(context, t('first_verify'));
@@ -109,6 +115,7 @@ class AccountAPI {
 
       final userData = Map<String, String>.from(jsonResponse['user']);
       userData['token'] = jsonResponse['token'];
+      userData['expiry'] = jsonResponse['expiry'];
       if (photo.statusCode == 404) {
         userData['photo'] = '';
       } else {
@@ -122,9 +129,12 @@ class AccountAPI {
         Navigator.pop(context);
       }
       await Provider.of<UserData>(context, listen: false).saveData(userData);
+      await Provider.of<UserData>(context, listen: false).tryAutoLogin(context);
       return true;
     } else if (response.statusCode == 400) {
       alert(context, t('login_error'));
+    } else if (response.statusCode == 404) {
+      alert(context, t('admin_login'));
     } else {
       somethingWentWrong(context);
     }
@@ -222,6 +232,7 @@ class AccountAPI {
       body: {"old": old, "password": password},
       headers: {"Authorization": "Token ${token(context)}"},
     );
+    refreshToken(context);
     Navigator.pop(context);
 
     if (response.statusCode == 202) {
@@ -244,6 +255,7 @@ class AccountAPI {
     request.headers["Authorization"] = "Token ${token(context)}";
     request.files.add(file);
     final response = await request.send();
+    refreshToken(context);
     Navigator.pop(context);
 
     if (response.statusCode == 202) {
@@ -264,6 +276,7 @@ class AccountAPI {
       body: userData,
       headers: {"Authorization": "Token ${token(context)}"},
     );
+    refreshToken(context);
     Navigator.pop(context);
 
     if (response.statusCode == 202) {

@@ -102,7 +102,8 @@ class _BookNowScreenState extends State<BookNowScreen> {
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: GestureDetector(
-            onTap: () {
+            onTap: () async {
+              await ActionAPI.getUserAppointments(context);
               Navigator.pop(context);
               Navigator.of(context).pushNamedAndRemoveUntil(
                   TabsScreen.routeName, (route) => false,
