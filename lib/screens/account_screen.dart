@@ -93,10 +93,11 @@ class _AccountScreenState extends State<AccountScreen> {
               alignment: Alignment.topRight,
               child: IconButton(
                 icon: const Icon(Icons.edit),
-                splashRadius: 20,
                 onPressed: () {
                   Navigator.of(context).pushNamed(InfoScreen.routeName);
                 },
+                tooltip: t('edit'),
+                splashRadius: 20,
               ),
             ),
             const Divider(height: 0),

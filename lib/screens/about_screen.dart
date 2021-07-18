@@ -77,7 +77,6 @@ class AboutScreen extends StatelessWidget {
               ),
               langCode == 'ar' ? _arabicContent() : _englishContent(),
             ],
-            // children: langCode == 'ar' ? _arabicContent() : _englishContent(),
           ),
         ),
       ),

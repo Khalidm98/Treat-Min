@@ -5,7 +5,7 @@ import '../localizations/app_localizations.dart';
 import '../widgets/background_image.dart';
 
 class ContactUsScreen extends StatelessWidget {
-  static const String routeName = '/contact_us';
+  static const String routeName = '/contact-us';
 
   static const treatMinEmail = "noreply@treat-min.com";
   static const khalidEmail = "khalid.refaat98@gmail.com";
@@ -28,25 +28,18 @@ class ContactUsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(t('contact_us'))),
       body: BackgroundImage(
-        child: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (OverscrollIndicatorNotification overScroll) {
-            overScroll.disallowGlow();
-            return;
-          },
-          child: ListView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
             children: [
               Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius: BorderRadius.circular(15),
                   color: Colors.indigo[600],
                 ),
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: ListTile(
-                  leading: Image.asset(
-                    'assets/icons/facebook.png',
-                    height: 35,
-                    width: 40,
-                  ),
+                  leading: Image.asset('assets/icons/facebook.png', height: 35),
                   title: Text(
                     t('visit_us'),
                     style: const TextStyle(color: Colors.white),
@@ -55,11 +48,11 @@ class ContactUsScreen extends StatelessWidget {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius: BorderRadius.circular(15),
                   color: Colors.cyan[500],
                 ),
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                 child: ListTile(
                   leading: const Icon(Icons.alternate_email, size: 40),
                   title: Text(
@@ -67,7 +60,7 @@ class ContactUsScreen extends StatelessWidget {
                     style: const TextStyle(color: Colors.white),
                   ),
                   subtitle: Text(
-                    "noreply@treat-min.com",
+                    treatMinEmail,
                     style: const TextStyle(color: Colors.white),
                   ),
                   onTap: () {
@@ -76,11 +69,11 @@ class ContactUsScreen extends StatelessWidget {
                 ),
               ),
               Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  borderRadius: BorderRadius.circular(15),
                   color: Colors.grey,
                 ),
-                margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 child: ListTile(
                   leading: Image.asset(
                     'assets/icons/dev_clean.png',
@@ -99,112 +92,52 @@ class ContactUsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  _launchEmail(ahmedEmail);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: theme.primaryColorDark,
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: theme.primaryColor,
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(10),
+                  leading: Image.asset('assets/images/ahmed.png'),
+                  title: Text(
+                    t("ahmed_name"),
+                    style: theme.textTheme.subtitle1
+                        .copyWith(fontSize: 17, color: Colors.white),
                   ),
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
+                  subtitle: Text(
+                    ahmedEmail,
+                    style: theme.textTheme.subtitle1
+                        .copyWith(fontSize: 11, color: Colors.white),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/icons/ahmed.png',
-                          width: 65,
-                          height: 65,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t("ahmed_name"),
-                            style: theme.textTheme.subtitle1
-                                .copyWith(fontSize: 17, color: Colors.white),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.email,
-                                color: theme.primaryColorLight,
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                ahmedEmail,
-                                style: theme.textTheme.subtitle1.copyWith(
-                                    fontSize: 11, color: Colors.white),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                  onTap: () {
+                    _launchEmail(ahmedEmail);
+                  },
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  _launchEmail(khalidEmail);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: theme.primaryColorDark,
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: theme.primaryColor,
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(10),
+                  leading: Image.asset('assets/images/khalid.png'),
+                  title: Text(
+                    t("khalid_name"),
+                    style: theme.textTheme.subtitle1
+                        .copyWith(fontSize: 17, color: Colors.white),
                   ),
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
+                  subtitle: Text(
+                    khalidEmail,
+                    style: theme.textTheme.subtitle1
+                        .copyWith(fontSize: 11, color: Colors.white),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/icons/khalid.png',
-                          width: 65,
-                          height: 65,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            t("khalid_name"),
-                            style: theme.textTheme.subtitle1
-                                .copyWith(fontSize: 17, color: Colors.white),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.email,
-                                color: theme.primaryColorLight,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                khalidEmail,
-                                style: theme.textTheme.subtitle1.copyWith(
-                                    fontSize: 11, color: Colors.white),
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                  onTap: () {
+                    _launchEmail(khalidEmail);
+                  },
                 ),
               ),
             ],

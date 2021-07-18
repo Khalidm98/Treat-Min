@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import './first_aid_screen.dart';
 import '../localizations/app_localizations.dart';
 import '../utils/location.dart';
 import '../utils/maps.dart';
@@ -144,6 +145,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         title: Text(t('emergency')),
         actions: [
           IconButton(
+            icon: const Icon(Icons.healing),
+            onPressed: () {
+              Navigator.of(context).pushNamed(FirstAidScreen.routeName);
+            },
+            tooltip: t('first_aid'),
+          ),
+          IconButton(
             icon: const Icon(Icons.search),
             onPressed: () async {
               final location = await searchPlace(context);
@@ -151,6 +159,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 _setMarkers(location);
               }
             },
+            tooltip: t('search'),
           ),
         ],
       ),
@@ -185,15 +194,22 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           _hospitalDetails
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.call_rounded),
-        label: Text(t('ambulance')),
-        onPressed: () async {
-          await launch('tel:123');
-        },
-        backgroundColor: Theme.of(context).primaryColor,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton.extended(
+          icon: const Icon(Icons.call_rounded),
+          label: Text(t('ambulance')),
+          onPressed: () async {
+            await launch('tel:123');
+          },
+          backgroundColor: Theme.of(context).primaryColor,
+          foregroundColor: Colors.white,
+        ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation:
+          Localizations.localeOf(context).languageCode == 'en'
+              ? FloatingActionButtonLocation.startFloat
+              : FloatingActionButtonLocation.endFloat,
     );
   }
 }
