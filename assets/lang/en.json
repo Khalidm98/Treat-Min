@@ -159,5 +159,12 @@
   "fri": "Friday",
   "from": "From",
   "to": "to",
-  "reserve_twice": "Cannot reserve the same schedule twice in the same day!"
+  "reserve_twice": "Cannot reserve the same schedule twice in the same day!",
+  "contact_us": "Contact Us",
+  "visit_us": "Visit Our Facebook Fan Page",
+  "send_us_email": "Send us an E-mail",
+  "developers": "Developers",
+  "ahmed_name": "Ahmed Khaled Sayed",
+  "khalid_name" : "Khalid Mohammed Refaat"
+
 }

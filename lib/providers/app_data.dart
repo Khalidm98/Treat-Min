@@ -22,10 +22,14 @@ class AppData with ChangeNotifier {
 
   String entityTranslation(String multilingualString, String langCode) {
     int dashIndex = multilingualString.indexOf("-");
-    if (langCode == 'ar') {
-      return multilingualString.substring(dashIndex + 2);
+    if (dashIndex == -1) {
+      return multilingualString;
     } else {
-      return multilingualString.substring(0, dashIndex);
+      if (langCode == 'ar') {
+        return multilingualString.substring(dashIndex + 2);
+      } else {
+        return multilingualString.substring(0, dashIndex);
+      }
     }
   }
 

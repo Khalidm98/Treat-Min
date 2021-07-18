@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
+import 'package:treat_min/screens/contact_us_screen.dart';
 
 import './about_screen.dart';
 import './auth_screen.dart';
@@ -93,13 +94,37 @@ class SettingsScreen extends StatelessWidget {
                 trailing: Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
                       child: CircleAvatar(
                         radius: 15,
                         backgroundColor: Colors.white,
                       ),
                     ),
                     Icon(Icons.help, size: 45, color: theme.primaryColorLight),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed(ContactUsScreen.routeName);
+                },
+                tileColor: Colors.grey[300],
+                title: Text(t('contact_us'), style: theme.textTheme.headline6),
+                trailing: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Container(
+                      height: 30,
+                      width: 35,
+                      color: Colors.white,
+                    ),
+                    Icon(Icons.contact_mail,
+                        size: 40, color: theme.primaryColorLight),
                   ],
                 ),
               ),

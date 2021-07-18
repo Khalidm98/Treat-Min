@@ -23,9 +23,7 @@ class AboutScreen extends StatelessWidget {
         'خالد محمد رفعت',
         textAlign: TextAlign.justify,
       ),
-      Text('khalid.refaat98@gmail.com', textAlign: TextAlign.end),
-      Text('أحمد خالد سيد'),
-      Text('ahmedkhaled11119999@gmail.com\n', textAlign: TextAlign.end),
+      Text('أحمد خالد سيد\n'),
       Text(
         'مطورين موقع الويب:\n'
         'منة علاء نعيم\n'
@@ -58,9 +56,7 @@ class AboutScreen extends StatelessWidget {
         'Khalid Muhammad Refaat',
         textAlign: TextAlign.justify,
       ),
-      Text('khalid.refaat98@gmail.com', textAlign: TextAlign.end),
-      Text('Ahmed Khalid Sayed'),
-      Text('ahmedkhaled11119999@gmail.com\n', textAlign: TextAlign.end),
+      Text('Ahmed Khalid Sayed\n'),
       Text(
         'Website developers:\n'
         'Menna Alaa Naeim\n'
