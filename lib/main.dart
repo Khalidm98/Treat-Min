@@ -11,6 +11,7 @@ import './screens/about_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/available_screen.dart';
 import './screens/booking_screen.dart';
+import './screens/contact_us_screen.dart';
 import './screens/emergency_screen.dart';
 import './screens/get_started_screen.dart';
 import './screens/info_screen.dart';
@@ -19,7 +20,6 @@ import './screens/select_screen.dart';
 import './screens/splash_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/verification_screen.dart';
-import './screens/contact_us_screen.dart';
 
 void main() {
   // Set device orientation to only Portrait up
@@ -168,11 +168,11 @@ class _MyAppState extends State<MyApp> {
         ),
         home: SplashScreen(),
         routes: {
-          ContactUsScreen.routeName: (_) => ContactUsScreen(),
           AboutScreen.routeName: (_) => AboutScreen(),
           AuthScreen.routeName: (_) => AuthScreen(),
           AvailableScreen.routeName: (_) => AvailableScreen(),
           BookNowScreen.routeName: (_) => BookNowScreen(),
+          ContactUsScreen.routeName: (_) => ContactUsScreen(),
           EmergencyScreen.routeName: (_) => EmergencyScreen(),
           GetStartedScreen.routeName: (_) => GetStartedScreen(),
           InfoScreen.routeName: (_) => InfoScreen(),

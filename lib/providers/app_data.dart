@@ -213,7 +213,7 @@ class AppData with ChangeNotifier {
       case Entity.clinic:
         return 29;
       case Entity.service:
-        return 3;
+        return 40;
       default:
         return 0;
     }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../localizations/app_localizations.dart';
 import '../utils/location.dart';
@@ -184,13 +185,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           _hospitalDetails
         ],
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   icon: const Icon(Icons.healing),
-      //   label: Text(t('first_aid')),
-      //   onPressed: () {},
-      //   backgroundColor: Theme.of(context).primaryColor,
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.call_rounded),
+        label: Text(t('ambulance')),
+        onPressed: () async {
+          await launch('tel:123');
+        },
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -5,69 +5,53 @@ import '../widgets/background_image.dart';
 class AboutScreen extends StatelessWidget {
   static const String routeName = '/about';
 
-  List<Widget> _arabicContent() {
-    return <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-        child: Image.asset('assets/images/logo.png'),
-      ),
-      Text(
-        'تريت-من هو مشروع تخرج مجموعة من الطلاب المقيدين'
-        ' بكلية الهندسة جامعة عين شمس، دفعة 2021.\n\n'
-        'تريت-من هو خدمة تهدف إلى تسهيل عملية إيجاد العيادات بمختلف التخصصات '
-        'والخدمات الطبية الأخري بجميع أنحاء مصر. وايضا يعطي معلومات عن أقرب'
-        ' المستشفيات في حالة الطوارئ.\n\n'
-        'الفكرة خلف الاسم (تريت-من) هي أن المستخدم يمكنه إيجاد العلاج المناسب'
-        ' له في دقيقة واحدة فقط :)\n\n'
-        'مطورين تطبيق المحمول والواجهة الخلفية:\n'
-        'خالد محمد رفعت',
-        textAlign: TextAlign.justify,
-      ),
-      Text('أحمد خالد سيد\n'),
-      Text(
-        'مطورين موقع الويب:\n'
-        'منة علاء نعيم\n'
-        'محمد رمضان سيد\n'
-        'جرجس وجيه ثابت\n\n'
-        'تحت إشراف:\n'
-        'أ. د. أحمد حسن محمد يوسف\n'
-        'م. سارة عبد العزيز محمود عبده\n\n'
-        'رقم الإصدار: 1.0.2\n',
-      ),
-    ];
+  Widget _arabicContent() {
+    return Text(
+      'تريت-من هو مشروع تخرج مجموعة من الطلاب المقيدين'
+      ' بكلية الهندسة جامعة عين شمس، دفعة 2021.\n\n'
+      'تريت-من هو خدمة تهدف إلى تسهيل عملية إيجاد العيادات بمختلف التخصصات '
+      'والخدمات الطبية الأخري بجميع أنحاء مصر. وايضا يعطي معلومات عن أقرب'
+      ' المستشفيات في حالة الطوارئ.\n\n'
+      'الفكرة خلف الاسم (تريت-من) هي أن المستخدم يمكنه إيجاد العلاج المناسب'
+      ' له في دقيقة واحدة فقط :)\n\n'
+      'مطورين تطبيق المحمول والواجهة الخلفية:\n'
+      'خالد محمد رفعت\n'
+      'أحمد خالد سيد\n\n'
+      'مطورين موقع الويب:\n'
+      'منة علاء نعيم\n'
+      'محمد رمضان سيد\n'
+      'جرجس وجيه ثابت\n\n'
+      'تحت إشراف:\n'
+      'أ. د. أحمد حسن محمد يوسف\n'
+      'م. سارة عبد العزيز محمود عبده\n\n'
+      'رقم الإصدار: 1.0.2\n',
+      textAlign: TextAlign.justify,
+    );
   }
 
-  List<Widget> _englishContent() {
-    return <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-        child: Image.asset('assets/images/logo.png'),
-      ),
-      Text(
-        'Treat-min is the graduation project of a group of students of '
-        'Faculty of Engineering, Ain Shams University, Class of 2021.\n\n'
-        'Treat-min is a service that aims to facilitate the process of '
-        'finding clinics of different specialities and other medical services '
-        'all over Egypt. It also provides information about nearest hospitals '
-        'in case of emergency.\n\n'
-        'The idea behind the name (Treat-min) is that users can find their '
-        'appropriate treatment in just one minute :)\n\n'
-        'Mobile application and backend developers:\n'
-        'Khalid Muhammad Refaat',
-        textAlign: TextAlign.justify,
-      ),
-      Text('Ahmed Khalid Sayed\n'),
-      Text(
-        'Website developers:\n'
-        'Menna Alaa Naeim\n'
-        'Muhammad Ramadan Sayed\n'
-        'Gerges Wageh Thabet\n\n'
-        'Under the supervision of:\n'
-        'Prof. Dr. Ahmed Hassan Muhammad Yousef\n'
-        'Eng. Sarah Abdulaziz Mahmoud Abdu\n\n'
-        'Version Number: 1.0.2\n',
-      ),
-    ];
+  Widget _englishContent() {
+    return Text(
+      'Treat-min is the graduation project of a group of students of '
+      'Faculty of Engineering, Ain Shams University, Class of 2021.\n\n'
+      'Treat-min is a service that aims to facilitate the process of '
+      'finding clinics of different specialities and other medical services '
+      'all over Egypt. It also provides information about nearest hospitals '
+      'in case of emergency.\n\n'
+      'The idea behind the name (Treat-min) is that users can find their '
+      'appropriate treatment in just one minute :)\n\n'
+      'Mobile application and backend developers:\n'
+      'Khalid Muhammad Refaat\n'
+      'Ahmed Khalid Sayed\n\n'
+      'Website developers:\n'
+      'Menna Alaa Naeim\n'
+      'Muhammad Ramadan Sayed\n'
+      'Gerges Wageh Thabet\n\n'
+      'Under the supervision of:\n'
+      'Prof. Dr. Ahmed Hassan Muhammad Yousef\n'
+      'Eng. Sarah Abdulaziz Mahmoud Abdu\n\n'
+      'Version Number: 1.0.2\n',
+      textAlign: TextAlign.justify,
+    );
   }
 
   @override
@@ -85,7 +69,15 @@ class AboutScreen extends StatelessWidget {
           },
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            children: langCode == 'ar' ? _arabicContent() : _englishContent(),
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
+                child: Image.asset('assets/images/logo.png'),
+              ),
+              langCode == 'ar' ? _arabicContent() : _englishContent(),
+            ],
+            // children: langCode == 'ar' ? _arabicContent() : _englishContent(),
           ),
         ),
       ),

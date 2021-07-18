@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
-import 'package:treat_min/screens/contact_us_screen.dart';
 
 import './about_screen.dart';
 import './auth_screen.dart';
+import './contact_us_screen.dart';
 import './tabs_screen.dart';
 import '../api/accounts.dart';
 import '../localizations/app_localizations.dart';
