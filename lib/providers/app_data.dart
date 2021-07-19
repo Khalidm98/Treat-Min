@@ -110,21 +110,23 @@ class AppData with ChangeNotifier {
     }
 
     final langCode = Localizations.localeOf(context).languageCode;
-    if (langCode == 'en') {
-      list.forEach((entity) {
-        if (entity['name'].contains('-')) {
-          entity['name'] =
-              entity['name'].substring(0, entity['name'].lastIndexOf('-') - 1);
-        }
-      });
-    } else {
-      list.forEach((entity) {
-        if (entity['name'].contains('-')) {
-          entity['name'] =
-              entity['name'].substring(entity['name'].lastIndexOf('-') + 2);
-        }
-      });
-      list.sort((a, b) => a['name'].compareTo(b['name']));
+    if (entity == Entity.clinic) {
+      if (langCode == 'en') {
+        list.forEach((entity) {
+          if (entity['name'].contains('-')) {
+            entity['name'] = entity['name']
+                .substring(0, entity['name'].lastIndexOf('-') - 1);
+          }
+        });
+      } else {
+        list.forEach((entity) {
+          if (entity['name'].contains('-')) {
+            entity['name'] =
+                entity['name'].substring(entity['name'].lastIndexOf('-') + 2);
+          }
+        });
+        list.sort((a, b) => a['name'].compareTo(b['name']));
+      }
     }
     return list;
   }
