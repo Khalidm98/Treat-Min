@@ -56,14 +56,14 @@ class _BookNowScreenState extends State<BookNowScreen> {
     "SUN": 6,
   };
   List<Schedule> scheduleSorter(List<Schedule> schList) {
-    List<Schedule> test_list = schList;
+    List<Schedule> testList = schList;
     for (int i = 1; i < 8; i++) {
       Schedule temp =
-          test_list.firstWhere((element) => DaysValues[element.day] == i);
-      test_list.remove(temp);
-      test_list.insert(i - 1, temp);
+          testList.firstWhere((element) => DaysValues[element.day] == i);
+      testList.remove(temp);
+      testList.insert(i - 1, temp);
     }
-    return test_list.reversed.toList();
+    return testList.reversed.toList();
   }
 
   String getDaysTranslated(Schedule schedule) {
@@ -660,6 +660,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                         address != null
                             ? Text(
                                 address,
+                                textDirection: TextDirection.rtl,
                                 textAlign: TextAlign.center,
                                 style: theme.textTheme.headline6,
                               )
