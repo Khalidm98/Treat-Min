@@ -51,13 +51,18 @@ class UserData with ChangeNotifier {
 
     final userData =
         json.decode(prefs.getString('userData')) as Map<String, Object>;
+    if (!userData.containsKey('expiry')) {
+      prefs.remove('userData');
+      return;
+    }
+
     expiry = DateTime.parse(userData['expiry']);
     if (expiry.isBefore(DateTime.now())) {
       prefs.remove('userData');
       return;
     }
-    token = userData['token'];
 
+    token = userData['token'];
     await ActionAPI.getUserAppointments(context);
     login();
   }

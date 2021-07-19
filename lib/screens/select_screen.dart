@@ -31,11 +31,14 @@ class _SelectScreenState extends State<SelectScreen> {
     Future.delayed(Duration.zero, () async {
       entity = ModalRoute.of(context).settings.arguments;
       appData = Provider.of<AppData>(context, listen: false);
-      final response = await EntityAPI.getEntities(context, entity);
-      if (!response) {
-        Navigator.pop(context);
-      }
       list = appData.getEntities(context, entity);
+      if (list.isEmpty) {
+        final response = await EntityAPI.getEntities(context, entity);
+        if (!response) {
+          Navigator.pop(context);
+        }
+        list = appData.getEntities(context, entity);
+      }
       searchList = json.decode(json.encode(list));
       setState(() {});
     });
@@ -156,7 +159,8 @@ class _SelectScreenState extends State<SelectScreen> {
                         onTap: () {
                           Navigator.of(context).pushNamed(
                             AvailableScreen.routeName,
-                            arguments: AvailableScreenData(searchList[index], entity),
+                            arguments:
+                                AvailableScreenData(searchList[index], entity),
                           );
                         },
                       );
