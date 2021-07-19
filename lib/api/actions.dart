@@ -34,7 +34,7 @@ class ActionAPI {
       '$_baseURL/$entity/$entityId/details/$entityDetailId/schedules/',
     );
     if (response.statusCode == 200) {
-      return response.body;
+      return utf8.decode(response.bodyBytes);
     }
     return "Something went wrong";
   }

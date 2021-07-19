@@ -127,6 +127,8 @@
   "price_high": "Price High to Low",
   "nearest": "Nearest",
   "book_now": "Book now",
+  "details": "Details",
+  "working_hours":"Working Hours",
   "view_details": "View Details",
   "must_log_in": "You must log in to book an appointment",
   "price": "Price",

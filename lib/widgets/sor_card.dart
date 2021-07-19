@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-import './rating_hearts.dart';
 import '../localizations/app_localizations.dart';
 import '../models/card_data.dart';
 import '../models/screens_data.dart';
@@ -107,14 +106,6 @@ class _SORCardState extends State<SORCard> {
                           ),
                           SizedBox(height: 10),
                           Container(
-                            child: Text(
-                              t("rating"),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
                               child: Text(
                             t("phone_hospital"),
                             textAlign: TextAlign.center,
@@ -143,14 +134,6 @@ class _SORCardState extends State<SORCard> {
                                   .copyWith(color: theme.primaryColor),
                             ),
                           ],
-                        ),
-                        RatingHearts(
-                          iconHeight: doctorCardIconsHeight,
-                          iconWidth: doctorCardIconsWidth,
-                          rating: widget.sorCardData.ratingUsers != 0
-                              ? (widget.sorCardData.ratingTotal ~/
-                                  widget.sorCardData.ratingUsers)
-                              : 0,
                         ),
                         Text(
                           "${widget.sorCardData.hospital.phone}",
