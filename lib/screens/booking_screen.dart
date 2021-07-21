@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
   Reviews reviews;
   Schedules schedules;
   String scheduleId;
+  String address;
   DateTime appointmentDate = DateTime.now();
 
   static const Map<int, String> weekDays = {
@@ -364,6 +366,15 @@ class _BookNowScreenState extends State<BookNowScreen> {
                           ),
                         ),
                       const SizedBox(height: 10),
+                      address == null
+                          ? const SizedBox()
+                          : Text(
+                              address,
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
+                              style: theme.textTheme.headline6,
+                            ),
+                      const SizedBox(height: 10),
                       RatingHearts(
                         iconHeight: 25,
                         iconWidth: 25,
@@ -408,6 +419,7 @@ class _BookNowScreenState extends State<BookNowScreen> {
                       );
                     }
                     if (response.hasData) {
+                      address = json.decode(response.data.toString())['address'];
                       schedules = schedulesFromJson(response.data);
                       return Container(
                         child: BookNowDropDownList(
