@@ -39,7 +39,11 @@ class ContactUsScreen extends StatelessWidget {
                   color: Colors.indigo[600],
                 ),
                 child: ListTile(
-                  leading: Image.asset('assets/icons/facebook.png', height: 35),
+                  leading: Image.asset(
+                    'assets/icons/facebook.png',
+                    height: 35,
+                    width: 40,
+                  ),
                   title: Text(
                     t('visit_us'),
                     style: const TextStyle(color: Colors.white),
