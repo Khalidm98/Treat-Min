@@ -283,6 +283,7 @@ class AccountAPI {
       final account = Provider.of<UserData>(context, listen: false);
       userData.remove('password');
       userData['token'] = token(context);
+      userData['expiry'] = account.expiry.toIso8601String().substring(0, 10);
       userData['email'] = account.email;
       await account.saveData(userData);
       return true;

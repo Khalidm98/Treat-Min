@@ -97,7 +97,7 @@
   "not_logged_in": "أنت غير مسجل",
   "condition": "الحالة الصحية",
   "current_reservations": "الحجوزات الحالية",
-  "past_reservations": "تاريخ الحجوزات",
+  "past_reservations": "الحجوزات السابقة",
   "no_reservations": "لا يوجد حجوزات حالية",
   "cancel": "إلغاء",
   "cancel_message": "هل تريد إلغاء هذا الحجز؟",

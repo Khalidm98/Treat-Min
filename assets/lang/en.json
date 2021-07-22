@@ -97,7 +97,7 @@
   "not_logged_in": "You are not logged in",
   "condition": "Health Condition",
   "current_reservations": "Current Reservations",
-  "past_reservations": "History Reservations",
+  "past_reservations": "Past Reservations",
   "no_reservations": "There are no reservations",
   "cancel": "Cancel",
   "cancel_message": "Are you sure that you want to cancel this reservation?",
